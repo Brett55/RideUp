@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Ride Spots</title>
+
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+     <!--[if lte IE 8]>
+         <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
+     <![endif]-->
+    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    
+  </head>
+          
+  <body>
+      <div id="form-div" style="height: 600px; width: 100%;">
+        <br>
+        <p><em>*All fields are required</em></p>                
+        <form method="POST" id="post-form">{% csrf_token %}
+            <div class="fieldWrapper">
+                <div id="map" style="height:400px; width:80%; padding-top:100px;"></div>
+                <input id="coordinates" name="coordinates" value="" type="hidden" />
+            </div>
+            <p>Place the marker where you want to ride</p>
+            <div class="fieldWrapper" id="nameSpot">
+                <label>1) Name of Ride Spot</label>
+                {{ form.name }}
+            </div>
+            <div class="fieldWrapper" id="nameUser">
+                <label>2) Riders User Name</label>
+                {{ form.username }}
+            </div>
+              <div class="fieldWrapper" id="namePassword">
+                <label>3) Riders Password</label>
+                {{ form.password }}
+            </div>
+            <div class="fieldWrapper" id="nameType">
+                <label>4) Type of group Ride</label>
+                {{ form.rideTypeMTB }}
+            </div>
+            <div class="fieldWrapper" id="nameDirtRoad">
+                <label>5) Road or Dirt</label>
+                {{ form.roadOrDirt }}
+            </div>   
+            <div class="fieldWrapper" id="nameLevel">
+                <label>6) Ride Level</label>
+                {{ form.rideLevel }}
+            </div>          
+            <div>                  
+              <input type="submit" name="submit" class="btn" value="Add Ride Spot">
+            </div>
+        </form>
+        <br></br>
+    </div>
+
+    <script>
+
+      //set map
+      var map = L.map('map').setView([51.505, -0.09], 10);
+              
+      L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+          '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+          'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        id: 'examples.map-i875mjb7'
+      }).addTo(map);
+
+      //grab form on submit
+      var frm = $('#post-form');
+      frm.submit(function () {
+        $.ajax({
+          type: "POST",
+          url: "/bike/add_point/",
+          data: frm.serialize(),
+          
+          success : function(json) {
+            // remove the value from the input
+            $('#id_rideLevel').val('');
+            $('#id_rideTypeMTB').val(''); 
+            $('#id_username').val('');
+            $('#id_password').val('');
+            $('#id_roadOrDirt').val('');
+            $('#id_name').val(''); 
+
+            //Reload geoJSON
+            loadGeoJSON();
+            map.removeLayer(newMarker);
+          },
+
+          error : function(xhr,errmsg,err) {
+            console.log("ERROR!");
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+          }              
+        });
+        return false;
+      });
+
+      function loadGeoJSON() {
+        //call stored geoJSON in DB
+        $.ajax({
+        dataType: "json",
+        url: "http://127.0.0.1:8000/bike/data.geojson/",
+        success: function(data) {
+            $(data.features).each(function(key, data) {
+              L.geoJson(data, {onEachFeature:onEachFeature}).addTo(map);
+            });
+          }
+        }).error(function() {});
+      }
+
+      //Marker click handler
+      function onEachFeature(feature, layer) {
+          // does this feature have a property named popupContent?
+        layer.on('click', onClick);;
+      }
+
+      //Marker click handler
+      function onClick(e) {
+        var marker = this;
+        $.ajax({
+          dataType: "json",
+          url: "http://127.0.0.1:8000/bike/" + this.feature.id,
+          success: function(data) {
+            $(data).each(function(key, data) {
+                marker.bindPopup(
+                  '<b>' + data.fields.rideTypeMTB + '</b><br>' +
+                  '<b>' + data.fields.rideLevel + '</b><br>' +
+                  '<b>' + data.fields.ridetime + '</b><br>' +
+                  '<b>' + data.fields.roadOrDirt + '</b><br>').openPopup();
+              });
+            }        
+        });                
+      }
+
+      //Drop point and get coordinates handler
+      function onMapClick(e) {
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
+
+        // Every time when user click on map we want to delete previous marker and create new marker on the new position where the user clicked      
+        if (typeof newMarker != 'undefined') {
+            map.removeLayer(newMarker);  // delete previous marker
+            newMarker = L.marker([lat, lng]).addTo(map);  // add new marker
+        }
+        else {
+            newMarker = L.marker([lat, lng]).addTo(map);  // add new marker
+        }
+        
+        // we want to pass value of longitued and latitude to input field with id 'coordinates'
+        // note that we set that field as hidden because we don't want user to type the coordinates there. We want him to set marker on map 
+        $('#coordinates').val(lng + ',' + lat)          
+      }
+
+      // call the onMapClick function when user click on map
+      map.on('click', onMapClick);
+      $( document ).ready(function() {
+        loadGeoJSON();
+      });
+    </script>
+  </body>
+</html>
