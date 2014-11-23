@@ -13,10 +13,31 @@ class RideLocation(models.Model):
 class Ride(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
-    rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=100)
-    ridetime = models.DateTimeField('Ride Time',auto_now=True)
-    roadOrDirt = models.CharField('Road or Dirt', max_length=100)
-    rideLevel = models.CharField('Ride Difficulty', max_length=100)
+
+    SURFACE_CHOICE = (
+        ('DIRT', 'Dirt'),
+        ('ROAD', 'Road')
+    )
+    roadOrDirt = models.CharField('Road or Dirt', max_length=4,choices=SURFACE_CHOICE)  
+
+    MOUNTAIN_CHOICE = (
+        ('XC' , "Cross Country"),
+        ('DH' , "Down Hill"),    
+        ('FR', "Free Ride"),
+        ('DJ' , "Dirt Jump")
+    )
+    rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=2,choices=MOUNTAIN_CHOICE)
+
+    ridetime = models.DateTimeField(null=True)
+
+    LEVEL_CHOICE = (
+        ('GREEN' , "Green"),
+        ('BLUE' , "Blue"),
+        ('BLACK' , "Black"),
+        ('DBL_BLACK' , "Double Black")
+    )
+    rideLevel = models.CharField('Ride Difficulty', max_length=20,choices=LEVEL_CHOICE)
+
     objects = models.GeoManager()
  
 # Auto-generated `LayerMapping` dictionary for bike_hud model

@@ -35,6 +35,9 @@ def add_point(request):
             new_ride.rideTypeMTB = cd['rideTypeMTB']
             new_ride.roadOrDirt = cd['roadOrDirt']
             new_ride.rideLevel = cd['rideLevel']
+            
+            new_ride.ridetime = str(cd['ridetime'])
+
             new_ride.save()
             
             return HttpResponseRedirect('/bike/add_point/success')

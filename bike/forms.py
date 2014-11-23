@@ -1,22 +1,44 @@
 from django import forms
+from django.forms.extras.widgets import SelectDateWidget
 from django.forms import ModelForm
 from models import *
+import datetime
+
+LEVEL_CHOICE = (
+    ('GREEN' , "Green"),
+    ('BLUE' , "Blue"),
+    ('BLACK' , "Black"),
+    ('DBL_BLACK' , "Double Black")
+)
+
+MOUNTAIN_CHOICE = (
+    ('XC' , "Cross Country"),
+    ('DH' , "Down Hill"),    
+    ('FR' , "Free Ride"),
+    ('DJ' , "Dirt Jump")
+)
+
+SURFACE_CHOICE = (
+    ('DIRT', 'Dirt'),
+    ('ROAD', 'Road')
+)
 
 # main form
 class AddRideSpot(forms.Form):
     coordinates = forms.CharField(max_length=200, required=True)
-    name = forms.CharField(max_length=100, required=True)
-    # riders = models.ManyToManyField(User)
-    username = forms.CharField(max_length=100, required=True)
-    password = forms.CharField(max_length=100, required=True)
-    rideTypeMTB = forms.CharField(max_length=100)
-    roadOrDirt = forms.CharField(max_length=50, required=True)
-    rideLevel = forms.CharField(max_length=50, required=True)
+    name = forms.CharField(max_length=100,widget=forms.TextInput(attrs={'style':'height:30px'}), required=True)
+    ridetime = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M'], widget=forms.DateTimeInput(format='%Y-%m-%d %H:%M',attrs={'style':'height:30px'}))
+    username = forms.CharField(max_length=100,widget=forms.TextInput(attrs={'style':'height:30px'}), required=True)
+    password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style':'height:30px'}), required=True)
+    rideTypeMTB = forms.ChoiceField(choices=MOUNTAIN_CHOICE,required=True)
+    roadOrDirt = forms.ChoiceField(choices=SURFACE_CHOICE,required=True)
+    rideLevel = forms.ChoiceField(choices=LEVEL_CHOICE,required=True)
 
     def clean(self):
         cleaned_data = self.cleaned_data
         coordinates = cleaned_data.get("coordinates")
         name = cleaned_data.get("name")
+        ridetime = cleaned_data.get("ridetime")
         username = cleaned_data.get("username")
         password = cleaned_data.get("password")
         rideTypeMTB = cleaned_data.get("rideTypeMTB")
