@@ -4,7 +4,18 @@ from django.contrib.auth.models import User
 
 class RideLocation(models.Model):
     name = models.CharField('Ride Spot/Event', max_length=50)
-    rideType = models.CharField('Type of Ride/Event', max_length=50)
+
+    EVENT_TYPE = (
+        ('RACE', "RACE"),
+        ('GROUP RIDE', "Group Ride"),
+        ('TRAIL WORK DAY', "Trail Work Day"),
+        ('BIKE SWAP', "Bike Swap"),
+        ('SPECIAL EVENT', "Special Event"),
+        ('CONFERENCE', "Conference")
+    )
+
+    rideType = models.CharField('Type of Ride/Event', max_length=50, choices=EVENT_TYPE)
+
     geom = models.PointField(srid=4326)
     objects = models.GeoManager()
 
@@ -43,21 +54,11 @@ class Ride(models.Model):
     objects = models.GeoManager()
 
 
-class RideEvent(models.Model):
+class RideSpecialEvent(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
 
-    EVENT_TYPE = (
-        ('TRAIL HEAD', "Trail Head"),
-        ('RACE', "Race"),
-        ('TRAIL WORK DAY', "Trail Work Day"),
-        ('BIKE SWAP', "Bike Swap"),
-        ('LARGE GROUP RIDE', "Large Group Ride"),
-        ('SPECIAL EVENT', "Special Event"),
-        ('CONFERENCE', "Conference")
-    )
-
-    eventType = models.CharField(max_length=50, choices=EVENT_TYPE)
+    roadOrDirt = models.CharField('Road or Dirt', max_length=4, choices=SURFACE_CHOICE)
     hostedBy = models.CharField(max_length=50, null=True)
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
@@ -66,8 +67,54 @@ class RideEvent(models.Model):
     website = models.CharField(max_length=100, null=True)
     objects = models.GeoManager()
 
-# Auto-generated `LayerMapping` dictionary for bike_hud model
-bike_hud_mapping = {
-    'name': 'Name',
-    'geom': 'POINT',
-}
+class Race(models.Model):
+    location = models.ForeignKey(RideLocation)
+    riders = models.ManyToManyField(User)
+
+    roadOrDirt = models.CharField('Road or Dirt', max_length=4, choices=SURFACE_CHOICE)
+
+    MOUNTAIN_CHOICE = (
+        ('XC', "Cross Country"),
+        ('DH', "Down Hill"),
+        ('FR', "Free Ride"),
+        ('DJ', "Dirt Jump")
+    )
+    rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=2, choices=MOUNTAIN_CHOICE, null=True)
+
+    hostedBy = models.CharField(max_length=50, null=True)
+    locationAddress = models.CharField(max_length=50, null=True)
+    description = models.CharField(max_length=300, null=False)
+    cost = models.CharField(max_length=50, null=True)
+    eventTime = models.DateTimeField(null=False)
+    website = models.CharField(max_length=100, null=True)
+    objects = models.GeoManager()
+
+class TrailWorkDay(models.Model):
+    location = models.ForeignKey(RideLocation)
+    riders = models.ManyToManyField(User)
+
+    locationAddress = models.CharField(max_length=50, null=True)
+    description = models.CharField(max_length=300, null=False)
+    eventTime = models.DateTimeField(null=False)
+    objects = models.GeoManager()
+
+class BikeSwap(models.Model):
+    location = models.ForeignKey(RideLocation)
+    riders = models.ManyToManyField(User)
+
+    locationAddress = models.CharField(max_length=50, null=True)
+    description = models.CharField(max_length=300, null=False)
+    eventTime = models.DateTimeField(null=False)
+    objects = models.GeoManager()
+
+class Conference(models.Model):
+    location = models.ForeignKey(RideLocation)
+    riders = models.ManyToManyField(User)
+
+    hostedBy = models.CharField(max_length=50, null=True)
+    locationAddress = models.CharField(max_length=50, null=True)
+    description = models.CharField(max_length=300, null=False)
+    cost = models.CharField(max_length=50, null=True)
+    eventTime = models.DateTimeField(null=False)
+    website = models.CharField(max_length=100, null=True)
+    objects = models.GeoManager()
