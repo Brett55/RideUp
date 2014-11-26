@@ -42,12 +42,17 @@ def add_point(request):
 
         else:
             return HttpResponseRedirect('/bike/add_point/error')
-    else:
-        form = forms.AddRideSpot()
 
     args = {}
     args.update(csrf(request))
-    args['form'] = forms.AddRideSpot()
+    args['kickoff'] = forms.KickOff()
+    args['ride'] = forms.AddRideSpot()
+    args['event'] = forms.RideSpecialEvent()
+    args['race'] = forms.Race()
+    args['trailwork'] = forms.TrailWorkDay()
+    args['bikeswap'] = forms.BikeSwap()
+    args['conference'] = forms.Conference()
+
 
     return render_to_response('bike/add_point.html', args)
 

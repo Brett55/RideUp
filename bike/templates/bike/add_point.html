@@ -6,9 +6,8 @@
 
     <link rel="stylesheet" type="text/css" href="../../static/datetimepicker-master/jquery.datetimepicker.css"/ >    
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css"  />
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-    <link href="../../static/css/bootstrap.min.css" rel="stylesheet">
+    {#    <link href="../../static/css/bootstrap.min.css" rel="stylesheet">#}
 
     <!-- may remove this below -->
 
@@ -24,10 +23,20 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="../../static/js/bootstrap.min.js"></script>
 
+    {# Load the tag library #}
+    {% load bootstrap3 %}
+
+    {# Load CSS and JavaScript from Django #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
     <style>    
       body {
         padding-top: 70px;
-        /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+
+      }
+      .control-label {
+          text-align: left
       }
     </style>
 
@@ -72,48 +81,18 @@
       </div>
       <!-- /.container -->
     </nav>
-
+    {% load bootstrap3 %}
     <div class="container">
       <div class="row">
         <div class="col-lg-3 text-left">
           <div>
             {% block content %}
             <form class="form-horizontal" role="form" method="POST" id="post-form">{% csrf_token %}
-              <div class="fieldWrapper">
-                  <input id="coordinates" name="coordinates" value="" type="hidden" />
-              </div>
-              <div class="fieldWrapper form-group">
-              <label> Name of Ride Spot</label>
-                  {{ form.name }}
-              </div>
-              <div class="fieldWrapper form-group">
-              <label> Time of Ride</label>
-                  {{ form.ridetime }}
-              </div>
-              <div class="fieldWrapper form-group" id="nameUser">
-              <label> Riders User Name</label>
-                  {{ form.username }}
-              </div>
-              <div class="fieldWrapper form-group" id="namePassword">
-              <label> Riders Password</label>
-                  {{ form.password }}
-              </div>
-              <div class="fieldWrapper form-group" id="nameType">
-              <label> Type of Group Ride</label>
-                  {{ form.rideTypeMTB }}
-              </div>
-              <div class="fieldWrapper form-group" id="nameDirtRoad">
-              <label> Road or Dirt</label>
-                  {{ form.roadOrDirt }}
-              </div>
-              <div class="fieldWrapper form-group" id="nameLevel">
-              <label> Ride Level</label>
-                  {{ form.rideLevel }}
-              </div>
-              <input type="submit" name="submit" class="btn btn-default form-group btn-primary" value="Add Ride Spot">
+                {% bootstrap_form kickoff %}
+                <input type="submit" name="submit" class="btn btn-default form-group btn-primary" value="Submit Event">
             </form>
           </div>
-          {% endblock %}
+            {% endblock %}
         </div>
         <div class="col-lg-9 text-right">
           <div id="map" style="height:500px;"></div>
@@ -227,7 +206,7 @@
         
         // we want to pass value of longitued and latitude to input field with id 'coordinates'
         // note that we set that field as hidden because we don't want user to type the coordinates there. We want him to set marker on map 
-        $('#coordinates').val(lng + ',' + lat)          
+        $('#id_coordinates').val(lng + ',' + lat)
       }
 
       // call the onMapClick function when user click on map
