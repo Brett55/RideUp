@@ -1,6 +1,17 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 
+MOUNTAIN_CHOICE = (
+    ('XC', "Cross Country"),
+    ('DH', "Down Hill"),
+    ('FR', "Free Ride"),
+    ('DJ', "Dirt Jump")
+)
+
+SURFACE_CHOICE = (
+    ('DIRT', 'Dirt'),
+    ('ROAD', 'Road')
+)
 
 class RideLocation(models.Model):
     name = models.CharField('Ride Spot/Event', max_length=50)
@@ -27,18 +38,7 @@ class Ride(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
 
-    SURFACE_CHOICE = (
-        ('DIRT', 'Dirt'),
-        ('ROAD', 'Road')
-    )
     roadOrDirt = models.CharField('Road or Dirt', max_length=4, choices=SURFACE_CHOICE)
-
-    MOUNTAIN_CHOICE = (
-        ('XC', "Cross Country"),
-        ('DH', "Down Hill"),
-        ('FR', "Free Ride"),
-        ('DJ', "Dirt Jump")
-    )
     rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=2, choices=MOUNTAIN_CHOICE, null=True)
 
     ridetime = models.DateTimeField('Ride Time', null=True)
@@ -63,7 +63,7 @@ class RideSpecialEvent(models.Model):
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
     cost = models.CharField(max_length=50, null=True)
-    eventTime = models.DateTimeField(null=False)
+    eventTime = models.DateTimeField(null=True)
     website = models.CharField(max_length=100, null=True)
     objects = models.GeoManager()
 
@@ -72,22 +72,16 @@ class Race(models.Model):
     riders = models.ManyToManyField(User)
 
     roadOrDirt = models.CharField('Road or Dirt', max_length=4, choices=SURFACE_CHOICE)
-
-    MOUNTAIN_CHOICE = (
-        ('XC', "Cross Country"),
-        ('DH', "Down Hill"),
-        ('FR', "Free Ride"),
-        ('DJ', "Dirt Jump")
-    )
     rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=2, choices=MOUNTAIN_CHOICE, null=True)
 
     hostedBy = models.CharField(max_length=50, null=True)
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
     cost = models.CharField(max_length=50, null=True)
-    eventTime = models.DateTimeField(null=False)
+    eventTime = models.DateTimeField(null=True)
     website = models.CharField(max_length=100, null=True)
     objects = models.GeoManager()
+
 
 class TrailWorkDay(models.Model):
     location = models.ForeignKey(RideLocation)
@@ -98,14 +92,16 @@ class TrailWorkDay(models.Model):
     eventTime = models.DateTimeField(null=False)
     objects = models.GeoManager()
 
+
 class BikeSwap(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
 
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
-    eventTime = models.DateTimeField(null=False)
+    eventTime = models.DateTimeField(null=True)
     objects = models.GeoManager()
+
 
 class Conference(models.Model):
     location = models.ForeignKey(RideLocation)
@@ -115,6 +111,6 @@ class Conference(models.Model):
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
     cost = models.CharField(max_length=50, null=True)
-    eventTime = models.DateTimeField(null=False)
+    eventTime = models.DateTimeField(null=True)
     website = models.CharField(max_length=100, null=True)
     objects = models.GeoManager()
