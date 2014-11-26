@@ -1,14 +1,12 @@
 import models
 import forms
-import json as simplejson
-from django.shortcuts import render_to_response, get_object_or_404, render
+from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.context_processors import csrf
 from django.core import serializers
-from django.views import generic
 from django.contrib.gis.geos import Point
-from django.utils import timezone
-from django.contrib.auth.models import User,UserManager
+from django.contrib.auth.models import User
+
 
 def add_point(request):
 
@@ -16,7 +14,7 @@ def add_point(request):
         form = forms.AddRideSpot(request.POST)
         if form.is_valid():
             new_point = models.RideLocation()
-            
+
             cd = form.cleaned_data
             coordinates = cd['coordinates'].split(',')
             new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
@@ -29,7 +27,7 @@ def add_point(request):
 
             username = cd['username']
             password = cd['password']
-            newGuy = User.objects.create_user(username,"adwa@gmail.com", password)
+            newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
             new_ride.riders.add(newGuy)
 
             new_ride.rideTypeMTB = cd['rideTypeMTB']
@@ -53,28 +51,31 @@ def add_point(request):
 
     return render_to_response('bike/add_point.html', args)
 
+
 def form_error(request):
     return render_to_response('bike/form_error.html')
+
 
 def form_success(request):
     return render_to_response('bike/form_success.html')
 
-def moreDataOld(request):
-    ridelocations = models.RideLocation.objects.all()
-    rideInfos = models.Ride.objects.all()
-    to_Json = {}
-    x = 0
-    for info in rideInfos:
-        infoDict = {}
-        infoDict['location'] = str(info.location)
-        infoDict['rideTypeMTB'] = info.rideTypeMTB
-        infoDict['roadOrDirt'] = info.roadOrDirt
-        infoDict['rideLevel'] = info.rideLevel
-        infoDict['riders'] = str(info.riders.all()[0])
-        to_Json['obj' + str(x)] = infoDict
-        x += 1
-    response_data = simplejson.dumps(to_Json)
-    return HttpResponse(response_data,content_type="application/json")
+# def moreDataOld(request):
+#     ridelocations = models.RideLocation.objects.all()
+#     rideInfos = models.Ride.objects.all()
+#     to_Json = {}
+#     x = 0
+#     for info in rideInfos:
+#         infoDict = {}
+#         infoDict['location'] = str(info.location)
+#         infoDict['rideTypeMTB'] = info.rideTypeMTB
+#         infoDict['roadOrDirt'] = info.roadOrDirt
+#         infoDict['rideLevel'] = info.rideLevel
+#         infoDict['riders'] = str(info.riders.all()[0])
+#         to_Json['obj' + str(x)] = infoDict
+#         x += 1
+#     response_data = simplejson.dumps(to_Json)
+#     return HttpResponse(response_data, content_type="application/json")
+
 
 def moreData(request, pk):
     tasks = models.Ride.objects.filter(pk=pk)
