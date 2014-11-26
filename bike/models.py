@@ -13,6 +13,7 @@ SURFACE_CHOICE = (
     ('ROAD', 'Road')
 )
 
+
 class RideLocation(models.Model):
     name = models.CharField('Ride Spot/Event', max_length=50)
 
@@ -50,7 +51,6 @@ class Ride(models.Model):
         ('DBL_BLACK', "Double Black")
     )
     rideLevel = models.CharField('Ride Difficulty', max_length=20, choices=LEVEL_CHOICE, null=True)
-
     objects = models.GeoManager()
 
 
@@ -63,9 +63,10 @@ class RideSpecialEvent(models.Model):
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
     cost = models.CharField(max_length=50, null=True)
-    eventTime = models.DateTimeField(null=True)
+    ridetime = models.DateTimeField(null=True)
     website = models.CharField(max_length=100, null=True)
     objects = models.GeoManager()
+
 
 class Race(models.Model):
     location = models.ForeignKey(RideLocation)
@@ -78,7 +79,7 @@ class Race(models.Model):
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
     cost = models.CharField(max_length=50, null=True)
-    eventTime = models.DateTimeField(null=True)
+    ridetime = models.DateTimeField(null=True)
     website = models.CharField(max_length=100, null=True)
     objects = models.GeoManager()
 
@@ -89,7 +90,7 @@ class TrailWorkDay(models.Model):
 
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
-    eventTime = models.DateTimeField(null=False)
+    ridetime = models.DateTimeField(null=False)
     objects = models.GeoManager()
 
 
@@ -99,7 +100,7 @@ class BikeSwap(models.Model):
 
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
-    eventTime = models.DateTimeField(null=True)
+    ridetime = models.DateTimeField(null=True)
     objects = models.GeoManager()
 
 
@@ -111,6 +112,6 @@ class Conference(models.Model):
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
     cost = models.CharField(max_length=50, null=True)
-    eventTime = models.DateTimeField(null=True)
+    ridetime = models.DateTimeField(null=True)
     website = models.CharField(max_length=100, null=True)
     objects = models.GeoManager()
