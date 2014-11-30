@@ -105,7 +105,7 @@
            $("#fill").empty();
            $.ajax({
            dataType: "html",
-            url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase(),
+            url: "http://cryptic-mountain-5756.herokuapp.com/bike/add_point/bike/form/" + typeEvent.toLowerCase(),
             success: function(data) {
               $(data).each(function(key, data) {
                   $(data).appendTo("#fill").hide().fadeIn(1750)
@@ -167,7 +167,7 @@
         //call stored geoJSON in DB
         $.ajax({
         dataType: "json",
-        url: "http://127.0.0.1:8000/bike/data.geojson/",
+        url: "http://cryptic-mountain-5756.herokuapp.com/bike/add_point/bike/data.geojson/",
         success: function(data) {
             $(data.features).each(function(key, data) {
               L.geoJson(data, {onEachFeature:onEachFeature}).addTo(map);
@@ -187,7 +187,7 @@
         var marker = this;
         $.ajax({
           dataType: "json",
-          url: "http://127.0.0.1:8000/bike/" + marker.feature.id,
+          url: "http://cryptic-mountain-5756.herokuapp.com/bike/add_point/bike/" + marker.feature.id,
           success: function(data) {
             $(data).each(function(key, data) {
                 marker.bindPopup(
