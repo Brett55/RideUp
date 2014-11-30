@@ -86,21 +86,34 @@
       <div class="row">
         <div class="col-lg-3 text-left">
           <div>
-            {% block content %}
             <form class="form-horizontal" role="form" method="POST" id="post-form">{% csrf_token %}
                 {% bootstrap_form kickoff %}
-                <input type="submit" name="submit" class="btn btn-default form-group btn-primary" value="Submit Event">
+                <input type="button" name="submit" id="nextSubmit" class="btn btn-default form-group btn-primary" value="Add the Details">
             </form>
           </div>
-            {% endblock %}
+
         </div>
         <div class="col-lg-9 text-right">
-          <div id="map" style="height:500px;"></div>
+          <div id="map" style="height:500px"></div>
         </div>
       </div>
     </div>
 
     <script>
+       $( "#nextSubmit" ).click(function updateForm() {
+           var typeEvent = $("#id_rideType").val();
+           $.ajax({
+           dataType: "html",
+            url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase(),
+            success: function(data) {
+              $(data).each(function(key, data) {
+                  $("#nextSubmit").before(data);
+                  console.log(data);
+                });
+              }
+          });
+        });
+
 
       // get time from jquery time widget
       jQuery('#id_ridetime').datetimepicker({
@@ -178,7 +191,6 @@
           url: "http://127.0.0.1:8000/bike/" + marker.feature.id,
           success: function(data) {
             $(data).each(function(key, data) {
-                console.log(marker.feature.properties.name);
                 marker.bindPopup(
                   '<b>' + marker.feature.properties.name + '</b><br>' +
                   '<b>' + data.fields.rideTypeMTB + '</b><br>' +

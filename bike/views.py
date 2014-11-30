@@ -6,6 +6,7 @@ from django.core.context_processors import csrf
 from django.core import serializers
 from django.contrib.gis.geos import Point
 from django.contrib.auth.models import User
+from django.template import Context, Template
 
 
 def add_point(request):
@@ -86,3 +87,22 @@ def moreData(request, pk):
     tasks = models.Ride.objects.filter(pk=pk)
     data = serializers.serialize("json", tasks)
     return HttpResponse(data, content_type='application/json')
+
+
+def form_updater(request, type):
+    args = {}
+    args.update(csrf(request))
+    args['kickoff'] = forms.KickOff()
+    args['group_ride'] = forms.AddRideSpot()
+    args['special_event'] = forms.RideSpecialEvent()
+    args['race'] = forms.Race()
+    args['trail_work_day'] = forms.TrailWorkDay()
+    args['bike_swap'] = forms.BikeSwap()
+    args['conference'] = forms.Conference()
+
+    t = Template('{% load bootstrap3 %}' +
+                '{% bootstrap_form ' + type + ' %}')
+    c = Context({str(type): args[str(type)]})
+    html = t.render(c)
+
+    return HttpResponse(html)
