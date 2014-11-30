@@ -101,7 +101,9 @@ def form_updater(request, type):
     args['conference'] = forms.Conference()
 
     t = Template('{% load bootstrap3 %}' +
-                '{% bootstrap_form ' + type + ' %}')
+                '{% bootstrap_form ' + type + ' %}' +
+                '<input type="submit" name="submit" id="nextSubmit" class="btn btn-default form-group btn-primary" value="Submit">'
+    )
     c = Context({str(type): args[str(type)]})
     html = t.render(c)
 
