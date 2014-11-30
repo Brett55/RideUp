@@ -88,6 +88,7 @@
           <div>
             <form class="form-horizontal" role="form" method="POST" id="post-form">{% csrf_token %}
                 {% bootstrap_form kickoff %}
+                <div id="fill"></div>
                 <input type="button" name="submit" id="nextSubmit" class="btn btn-default form-group btn-primary" value="Add the Details">
             </form>
           </div>
@@ -102,18 +103,17 @@
     <script>
        $( "#nextSubmit" ).click(function updateForm() {
            var typeEvent = $("#id_rideType").val();
+           $("#fill").empty();
            $.ajax({
            dataType: "html",
             url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase(),
             success: function(data) {
               $(data).each(function(key, data) {
-                  $("#nextSubmit").before(data);
-                  console.log(data);
+                  $(data).appendTo("#fill").hide().fadeIn(2000)
                 });
               }
           });
-        });
-
+       });
 
       // get time from jquery time widget
       jQuery('#id_ridetime').datetimepicker({

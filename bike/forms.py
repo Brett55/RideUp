@@ -85,7 +85,7 @@ class Race(forms.Form):
     description = forms.CharField(max_length=300,widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
     cost = forms.CharField(max_length=100,widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
     website = forms.CharField(max_length=100,widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    postRideBeer = forms.ChoiceField(label='Post Ride Beer & Food Spot', required=False)
+    postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
 
 
 
@@ -98,7 +98,7 @@ class TrailWorkDay(forms.Form):
     password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
 
     description = forms.CharField(max_length=300,widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    postRideBeer = forms.ChoiceField(label='Post Ride Beer & Food Spot', required=False)
+    postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
 
 
 class BikeSwap(forms.Form):
