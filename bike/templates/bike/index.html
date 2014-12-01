@@ -176,18 +176,14 @@
     frm.submit(function () {
         $.ajax({
             type: "POST",
-            url: "/bike/add_point/",
+            url: "/bike/group_ride_trail/",
             data: frm.serialize(),
-
             success: function (json) {
-                // remove the value from the input
-                $('#id_rideLevel').val('');
-                $('#id_rideTypeMTB').val('');
-                $('#id_username').val('');
-                $('#id_password').val('');
-                $('#id_roadOrDirt').val('');
+                //Remove the values from the input
+                $("#fill").empty();
+                $("#fill_last").empty();
                 $('#id_name').val('');
-                $('#id_ridetime').val('');
+                $('id_rideType').selected = "BLANK";
 
                 //Reload geoJSON
                 loadGeoJSON();
@@ -237,7 +233,7 @@
                             '<b>' + data.fields.rideTypeMTB + '</b><br>' +
                             '<b>' + data.fields.rideLevel + '</b><br>' +
                             '<b>' + data.fields.ridetime + '</b><br>' +
-                            '<b>' + data.fields.roadOrDirt + '</b><br>').openPopup();
+                            '<b>' + data.fields.postRideBeer + '</b><br>').openPopup();
                 });
             }
         });
