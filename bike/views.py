@@ -10,7 +10,6 @@ from django.template import Context, Template
 
 
 def add_point(request):
-
     if request.method == 'POST':
         form = forms.AddRideSpot(request.POST)
         if form.is_valid():
@@ -24,7 +23,7 @@ def add_point(request):
 
             new_ride = models.Ride()
             new_ride.location = new_point
-            new_ride.save()       
+            new_ride.save()
 
             username = cd['username']
             password = cd['password']
@@ -34,11 +33,11 @@ def add_point(request):
             new_ride.rideTypeMTB = cd['rideTypeMTB']
             new_ride.roadOrDirt = cd['roadOrDirt']
             new_ride.rideLevel = cd['rideLevel']
-            
+
             new_ride.ridetime = str(cd['ridetime'])
 
             new_ride.save()
-            
+
             return HttpResponseRedirect('/bike/add_point/success')
 
         else:
@@ -47,13 +46,6 @@ def add_point(request):
     args = {}
     args.update(csrf(request))
     args['kickoff'] = forms.KickOff()
-    args['ride'] = forms.AddRideSpot()
-    args['event'] = forms.RideSpecialEvent()
-    args['race'] = forms.Race()
-    args['trailwork'] = forms.TrailWorkDay()
-    args['bikeswap'] = forms.BikeSwap()
-    args['conference'] = forms.Conference()
-
 
     return render_to_response('bike/add_point.html', args)
 
@@ -65,8 +57,9 @@ def form_error(request):
 def form_success(request):
     return render_to_response('bike/form_success.html')
 
+
 # def moreDataOld(request):
-#     ridelocations = models.RideLocation.objects.all()
+# ridelocations = models.RideLocation.objects.all()
 #     rideInfos = models.Ride.objects.all()
 #     to_Json = {}
 #     x = 0
@@ -101,8 +94,8 @@ def form_updater(request, type):
     args['conference'] = forms.Conference()
 
     t = Template('{% load bootstrap3 %}' +
-                '{% bootstrap_form ' + type + ' %}' +
-                '<input type="submit" name="submit" id="nextSubmit" class="btn btn-default form-group btn-primary" value="Submit">'
+                 '{% bootstrap_form ' + type + ' %}' +
+                 '<input type="submit" name="submit" id="nextSubmit" class="btn btn-default form-group btn-primary" value="Submit">'
     )
     c = Context({str(type): args[str(type)]})
     html = t.render(c)
