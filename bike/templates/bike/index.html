@@ -31,7 +31,6 @@
             padding-top: 70px;
 
         }
-
     </style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -95,6 +94,9 @@
 </div>
 
 <script>
+    //Keep track of which form is being used to submit
+    var whichForm = "";
+
     //add more fields for dirt or road group rides or races
     function detailedUpdateForm() {
         var typeSurface = $("#id_roadOrDirt").val();
@@ -106,12 +108,13 @@
             url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase() + "_" + typeSurface.toLowerCase(),
             success: function (data) {
                 $(data).each(function (key, data) {
-                    $(data).appendTo("#fill_last").hide().fadeIn(1250)
+                    $(data).appendTo("#fill_last").hide().fadeIn(1250);
                     // get time from jquery time widget
                     jQuery('#id_ridetime').datetimepicker({
                         format: 'Y-m-d H:i',
                         theme: 'dark'
                     });
+                    whichForm = typeEvent.toLowerCase() + "_" + typeSurface.toLowerCase();
                 });
             }
         });
@@ -147,6 +150,7 @@
                                 format: 'Y-m-d H:i',
                                 theme: 'dark'
                             });
+                            whichForm = typeEvent.toLowerCase();
                         });
                     }
                 });
@@ -176,14 +180,14 @@
     frm.submit(function () {
         $.ajax({
             type: "POST",
-            url: "/bike/group_ride_trail/",
+            url: "/bike/" + whichForm + "/", //Use whichForm to set the URL for the API
             data: frm.serialize(),
-            success: function (json) {
+            success: function () {
                 //Remove the values from the input
                 $("#fill").empty();
                 $("#fill_last").empty();
                 $('#id_name').val('');
-                $('id_rideType').selected = "BLANK";
+                $('id_rideType').val("BLANK");
 
                 //Reload geoJSON
                 loadGeoJSON();
@@ -225,10 +229,11 @@
         var marker = this;
         $.ajax({
             dataType: "json",
-            url: "http://127.0.0.1:8000/bike/" + marker.feature.id,
+            url: "http://127.0.0.1:8000/bike/" + marker.feature.properties.rideType + "/" + marker.feature.id,
             success: function (data) {
                 $(data).each(function (key, data) {
                     marker.bindPopup(
+                            '<b>' + marker.feature.properties.rideType + '</b><br>' +
                             '<b>' + marker.feature.properties.name + '</b><br>' +
                             '<b>' + data.fields.rideTypeMTB + '</b><br>' +
                             '<b>' + data.fields.rideLevel + '</b><br>' +

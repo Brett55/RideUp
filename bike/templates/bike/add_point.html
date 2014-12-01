@@ -234,10 +234,12 @@
                 $(data).each(function (key, data) {
                     marker.bindPopup(
                             '<b>' + marker.feature.properties.name + '</b><br>' +
+                            '<b>' + marker.feature.properties.name + '</b><br>' +
                             '<b>' + data.fields.rideTypeMTB + '</b><br>' +
                             '<b>' + data.fields.rideLevel + '</b><br>' +
                             '<b>' + data.fields.ridetime + '</b><br>' +
                             '<b>' + data.fields.roadOrDirt + '</b><br>').openPopup();
+
                 });
             }
         });

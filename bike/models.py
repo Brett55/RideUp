@@ -32,12 +32,14 @@ class RideLocation(models.Model):
     name = models.CharField('Ride Spot/Event', max_length=50)
 
     EVENT_TYPE = (
-        ('RACE', "RACE"),
-        ('GROUP_RIDE', "Group Ride"),
-        ('TRAIL_WORK DAY', "Trail Work Day"),
-        ('BIKE_SWAP', "Bike Swap"),
-        ('SPECIAL_EVENT', "Special Event"),
-        ('CONFERENCE', "Conference")
+        ('race_road', "Road Race"),
+        ('group_ride_trail', "Group Ride Dirt"),
+        ('group_ride_road', "Group Ride Road"),
+        ('special_event', "Special Event"),
+        ('race_trail', "Trail Race"),
+        ('trail_work_day', "Trail Work"),
+        ('conference', "Conference"),
+        ('bike_swap', "Bike Swap")
     )
 
     rideType = models.CharField('Type of Ride/Event', max_length=50, choices=EVENT_TYPE)
@@ -89,11 +91,10 @@ class RideSpecialEvent(models.Model):
     objects = models.GeoManager()
 
 
-class Race(models.Model):
+class TrailRace(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
 
-    roadOrDirt = models.CharField('Road or Dirt', max_length=4, choices=SURFACE_CHOICE)
     rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=2, choices=MOUNTAIN_CHOICE, null=True)
 
     hostedBy = models.CharField(max_length=50, null=True)
@@ -105,6 +106,19 @@ class Race(models.Model):
     postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
     objects = models.GeoManager()
 
+
+class RoadRace(models.Model):
+    location = models.ForeignKey(RideLocation)
+    riders = models.ManyToManyField(User)
+
+    hostedBy = models.CharField(max_length=50, null=True)
+    locationAddress = models.CharField(max_length=50, null=True)
+    description = models.CharField(max_length=300, null=False)
+    cost = models.CharField(max_length=50, null=True)
+    ridetime = models.DateTimeField(null=True)
+    website = models.CharField(max_length=100, null=True)
+    postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
+    objects = models.GeoManager()
 
 class TrailWorkDay(models.Model):
     location = models.ForeignKey(RideLocation)

@@ -28,13 +28,15 @@ SURFACE_CHOICE = (
 )
 
 EVENT_TYPE = (
-    ('BLANK', "Select Event"),
-    ('RACE', "Race"),
-    ('GROUP_RIDE', "Group Ride"),
-    ('TRAIL_WORK_DAY', "Trail Work Day"),
-    ('BIKE_SWAP', "Bike Swap"),
-    ('SPECIAL_EVENT', "Special Event"),
-    ('CONFERENCE', "Conference")
+    ('BLANK', "Select Type"),
+    ('race_road', "Road Race"),
+    ('group_ride_trail', "Group Ride Dirt"),
+    ('group_ride_road', "Group Ride Road"),
+    ('special_event', "Special Event"),
+    ('race_trail', "Trail Race"),
+    ('trail_work_day', "Trail Work"),
+    ('conference', "Conference"),
+    ('bike_swap', "Bike Swap")
 )
 
 ROAD_CHOICE = (
@@ -100,7 +102,7 @@ class RideSpecialEvent(forms.Form):
     website = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
 
 
-class DirtRace(forms.Form):
+class TrailRace(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(label='Time of the Race', input_formats=['%Y-%m-%d %H:%M'],
                                    widget=forms.DateTimeInput(format='%Y-%m-%d %H:%M', attrs={'style': 'height:30px'}))
