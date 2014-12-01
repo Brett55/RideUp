@@ -1,6 +1,20 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 
+LEVEL_CHOICE = (
+    ('GREEN', "Green"),
+    ('BLUE', "Blue"),
+    ('BLACK', "Black"),
+    ('DBL_BLACK', "Double Black")
+)
+
+ROAD_CHOICE = (
+    ('10MPH', "10Mph"),
+    ('15MPH', "15Mph"),
+    ('20MPH', "20Mph"),
+    ('25MPH', "25Mph")
+)
+
 MOUNTAIN_CHOICE = (
     ('XC', "Cross Country"),
     ('DH', "Down Hill"),
@@ -35,30 +49,28 @@ class RideLocation(models.Model):
         return self.name
 
 
-class Ride(models.Model):
+class GroupRideDirt(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
 
-    roadOrDirt = models.CharField('Road or Dirt', max_length=4, choices=SURFACE_CHOICE)
     rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=2, choices=MOUNTAIN_CHOICE, null=True)
 
     ridetime = models.DateTimeField('Ride Time', null=True)
 
-    LEVEL_CHOICE = (
-        ('GREEN', "Green"),
-        ('BLUE', "Blue"),
-        ('BLACK', "Black"),
-        ('DBL_BLACK', "Double Black")
-    )
-
-    ROAD_CHOICE = (
-        ('10MPH', "10Mph"),
-        ('15MPH', "15Mph"),
-        ('20MPH', "20Mph"),
-        ('25MPH', "25Mph")
-    )
     rideLevel = models.CharField('MTB Ride Difficulty', max_length=20, choices=LEVEL_CHOICE, null=True)
-    roadPace = models.CharField('Road Ride Difficulty', max_length=20, choices=ROAD_CHOICE, null=True)
+    postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
+    objects = models.GeoManager()
+
+
+class GroupRideRoad(models.Model):
+    location = models.ForeignKey(RideLocation)
+    riders = models.ManyToManyField(User)
+
+    rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=2, choices=MOUNTAIN_CHOICE, null=True)
+
+    ridetime = models.DateTimeField('Ride Time', null=True)
+
+    rideLevel = models.CharField('Road Ride Difficulty', max_length=20, choices=ROAD_CHOICE, null=True)
     postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
     objects = models.GeoManager()
 

@@ -83,6 +83,7 @@
                 <form class="form-horizontal" role="form" method="POST" id="post-form">{% csrf_token %}
                     {% bootstrap_form kickoff %}
                     <div id="fill"></div>
+                    <div id="fill_last"></div>
                 </form>
             </div>
 
@@ -94,31 +95,62 @@
 </div>
 
 <script>
+    function detailedUpdateForm() {
+        var typeSurface = $("#id_roadOrDirt").val();
+        var typeEvent = $("#id_rideType").val();
+        $("#fill_last").empty();
+        $.ajax({
+            dataType: "html",
+            url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase() + "_" + typeSurface.toLowerCase(),
+            success: function (data) {
+                $(data).each(function (key, data) {
+                    $(data).appendTo("#fill_last").hide().fadeIn(1250)
+                    // get time from jquery time widget
+                    jQuery('#id_ridetime').datetimepicker({
+                        format: 'Y-m-d H:i',
+                        theme: 'dark'
+                    });
+                });
+            }
+        });
+    }
+
+    //Adding subtype for Races and Group Rides
     $("#id_rideType").change(function updateForm() {
         var typeEvent = $("#id_rideType").val();
-        if (typeEvent.toLowerCase() != "") {
-            $("#fill").empty();
-            $.ajax({
-                dataType: "html",
-                url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase(),
-                success: function (data) {
-                    $(data).each(function (key, data) {
-                        $(data).appendTo("#fill").hide().fadeIn(1250)
-                        // get time from jquery time widget
-                        jQuery('#id_ridetime').datetimepicker({
-                            format: 'Y-m-d H:i',
-                            theme: 'dark'
+        if (typeEvent.toLowerCase() != "blank") {
+            if (typeEvent === "RACE" || typeEvent === "GROUP_RIDE") {
+                $("#fill").empty();
+                $('<div class="form-group"><label class="control-label" for="id_roadOrDirt">Trail or Road</label>' +
+                '<select class="form-control" id="id_roadOrDirt" name="roadOrDirt" required="required" title="">' +
+                '<option value="SURFACE">Select Surface</option>' +
+                '<option value="TRAIL">Trail</option>' +
+                '<option value="ROAD">Road</option></select></div>').appendTo("#fill").hide().fadeIn(1250);
+                $("#id_roadOrDirt").change(detailedUpdateForm);
+            }
+            else {
+                $("#fill").empty();
+                $.ajax({
+                    dataType: "html",
+                    url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase(),
+                    success: function (data) {
+                        $(data).each(function (key, data) {
+                            $(data).appendTo("#fill").hide().fadeIn(1250)
+                            // get time from jquery time widget
+                            jQuery('#id_ridetime').datetimepicker({
+                                format: 'Y-m-d H:i',
+                                theme: 'dark'
+                            });
                         });
-                    });
-                }
-            });
+                    }
+                });
+            }
         }
         else {
             //Empty form if 'select type' is selected
             $("#fill").empty();
         }
     });
-
 
 
     //set map

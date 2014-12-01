@@ -8,6 +8,13 @@ LEVEL_CHOICE = (
     ('DBL_BLACK', "Double Black")
 )
 
+LEVEL_CHOICE = (
+    ('GREEN', "Green"),
+    ('BLUE', "Blue"),
+    ('BLACK', "Black"),
+    ('DBL_BLACK', "Double Black")
+)
+
 MOUNTAIN_CHOICE = (
     ('XC', "Cross Country"),
     ('DH', "Down Hill"),
@@ -21,13 +28,20 @@ SURFACE_CHOICE = (
 )
 
 EVENT_TYPE = (
-    ('', ""),
+    ('BLANK', "Select Event"),
     ('RACE', "Race"),
     ('GROUP_RIDE', "Group Ride"),
     ('TRAIL_WORK_DAY', "Trail Work Day"),
     ('BIKE_SWAP', "Bike Swap"),
     ('SPECIAL_EVENT', "Special Event"),
     ('CONFERENCE', "Conference")
+)
+
+ROAD_CHOICE = (
+    ('10MPH', "10Mph"),
+    ('15MPH', "15Mph"),
+    ('20MPH', "20Mph"),
+    ('25MPH', "25Mph")
 )
 
 
@@ -40,7 +54,7 @@ class KickOff(forms.Form):
     rideType = forms.ChoiceField(label='Type of Event', choices=EVENT_TYPE, required=True, initial='BLANK')
 
 
-class AddRideSpot(forms.Form):
+class AddRideSpotTrail(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(label='Time of the Ride', input_formats=['%Y-%m-%d %H:%M'],
                                    widget=forms.DateTimeInput(format='%Y-%m-%d %H:%M', attrs={'style': 'height:30px'}),
@@ -48,9 +62,22 @@ class AddRideSpot(forms.Form):
 
     username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
     password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    rideTypeMTB = forms.ChoiceField(label='Type', choices=MOUNTAIN_CHOICE, required=True)
-    roadOrDirt = forms.ChoiceField(label='Road or Trail', choices=SURFACE_CHOICE, required=True)
+    rideTypeMTB = forms.ChoiceField(label='Discipline', choices=MOUNTAIN_CHOICE, required=True)
+
     rideLevel = forms.ChoiceField(label='Skill Level', choices=LEVEL_CHOICE, required=True)
+    postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
+
+
+class AddRideSpotRoad(forms.Form):
+    # Ride Class parmams
+    ridetime = forms.DateTimeField(label='Time of the Ride', input_formats=['%Y-%m-%d %H:%M'],
+                                   widget=forms.DateTimeInput(format='%Y-%m-%d %H:%M', attrs={'style': 'height:30px'}),
+                                   required=True)
+
+    username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+    password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+
+    rideLevel = forms.ChoiceField(label='Average Pace', choices=ROAD_CHOICE, required=True)
     postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
 
 
@@ -61,8 +88,6 @@ class RideSpecialEvent(forms.Form):
 
     username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
     password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    rideTypeMTB = forms.ChoiceField(label='Type', choices=MOUNTAIN_CHOICE, required=True)
-    roadOrDirt = forms.ChoiceField(label='Road or Trail', choices=SURFACE_CHOICE, required=True)
     rideLevel = forms.ChoiceField(label='Ride Level', choices=LEVEL_CHOICE, required=True)
 
     hostedBy = forms.CharField(label='Hosted By', max_length=100,
@@ -75,14 +100,33 @@ class RideSpecialEvent(forms.Form):
     website = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
 
 
-class Race(forms.Form):
+class DirtRace(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(label='Time of the Race', input_formats=['%Y-%m-%d %H:%M'],
                                    widget=forms.DateTimeInput(format='%Y-%m-%d %H:%M', attrs={'style': 'height:30px'}))
 
     username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
     password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    rideTypeMTB = forms.ChoiceField(label='Type', choices=MOUNTAIN_CHOICE, required=True)
+    rideTypeMTB = forms.ChoiceField(label='Discipline', choices=MOUNTAIN_CHOICE, required=True)
+
+    hostedBy = forms.CharField(label='Hosted By', max_length=100,
+                               widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+    locationAddress = forms.CharField(label='Address', max_length=100,
+                                      widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+    description = forms.CharField(max_length=300, widget=forms.TextInput(attrs={'style': 'height:30px'}),
+                                  required=False)
+    cost = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+    website = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+    postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
+
+
+class RoadRace(forms.Form):
+    # Ride Class parmams
+    ridetime = forms.DateTimeField(label='Time of the Race', input_formats=['%Y-%m-%d %H:%M'],
+                                   widget=forms.DateTimeInput(format='%Y-%m-%d %H:%M', attrs={'style': 'height:30px'}))
+
+    username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+    password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
 
     hostedBy = forms.CharField(label='Hosted By', max_length=100,
                                widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)

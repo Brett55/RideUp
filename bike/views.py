@@ -11,7 +11,7 @@ from django.template import Context, Template
 
 def add_point(request):
     if request.method == 'POST':
-        form = forms.AddRideSpot(request.POST)
+        form = forms.AddRideSpotTrail(request.POST)
         if form.is_valid():
             new_point = models.RideLocation()
 
@@ -21,7 +21,7 @@ def add_point(request):
             new_point.name = cd['name']
             new_point.save()
 
-            new_ride = models.Ride()
+            new_ride = models.GroupRideDirt()
             new_ride.location = new_point
             new_ride.save()
 
@@ -77,7 +77,7 @@ def form_success(request):
 
 
 def moreData(request, pk):
-    tasks = models.Ride.objects.filter(pk=pk)
+    tasks = models.GroupRideDirt.objects.filter(pk=pk)
     data = serializers.serialize("json", tasks)
     return HttpResponse(data, content_type='application/json')
 
@@ -86,9 +86,11 @@ def form_updater(request, type):
     args = {}
     args.update(csrf(request))
     args['kickoff'] = forms.KickOff()
-    args['group_ride'] = forms.AddRideSpot()
+    args['group_ride_trail'] = forms.AddRideSpotTrail()
+    args['group_ride_road'] = forms.AddRideSpotRoad()
+    args['race_trail'] = forms.DirtRace()
+    args['race_road'] = forms.RoadRace()
     args['special_event'] = forms.RideSpecialEvent()
-    args['race'] = forms.Race()
     args['trail_work_day'] = forms.TrailWorkDay()
     args['bike_swap'] = forms.BikeSwap()
     args['conference'] = forms.Conference()

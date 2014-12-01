@@ -1,9 +1,9 @@
 from django.contrib.gis import admin
 from django.contrib.gis.admin import OSMGeoAdmin
-from models import RideLocation, Ride
+from models import RideLocation, GroupRideDirt
  
 class RideInline(admin.TabularInline):
-    model = Ride
+    model = GroupRideDirt
     extra = 3
  
 class RideLocationAdmin(OSMGeoAdmin):
