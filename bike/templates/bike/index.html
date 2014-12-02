@@ -227,6 +227,7 @@
     //Marker click handler
     function onClick(e) {
         var marker = this;
+        console.log(marker.feature.properties.id);
         $.ajax({
             dataType: "json",
             url: "http://127.0.0.1:8000/bike/" + marker.feature.properties.rideType + "/" + marker.feature.id,

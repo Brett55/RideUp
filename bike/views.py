@@ -119,7 +119,6 @@ def race_trail(request):
             new_ride.riders.add(newGuy) #2
 
             new_ride.rideTypeMTB = cd['rideTypeMTB'] #3
-            new_ride.rideLevel = cd['rideLevel'] #4
 
             new_ride.ridetime = str(cd['ridetime']) #5
             new_ride.hostedBy = cd['hostedBy']
@@ -145,8 +144,24 @@ def form_success(request):
     return render_to_response('bike/form_success.html')
 
 
-def more_data(request, key):
-    tasks = models.GroupRideRoad.objects.filter(pk=key)
+def more_data(request, group, key):
+    if group == "race_trail":
+        tasks = models.TrailRace.objects.filter(location_id=key)
+    elif group == "group_ride_road":
+        tasks = models.GroupRideRoad.objects.filter(location_id=key)
+    elif group == "group_ride_trail":
+        tasks = models.GroupRideDirt.objects.filter(location_id=key)
+    elif group == "race_road":
+        tasks = models.RoadRace.objects.filter(location_id=key)
+    elif group == "special_event":
+        tasks = models.RideSpecialEvent.objects.filter(location_id=key)
+    elif group == "trail_work_day":
+        tasks = models.TrailWorkDay.objects.filter(location_id=key)
+    elif group == "bike_swap":
+        tasks = models.BikeSwap.objects.filter(location_id=key)
+    elif group == "conference":
+        tasks = models.Conference.objects.filter(location_id=key)
+
     data = serializers.serialize("json", tasks)
     return HttpResponse(data, content_type='application/json')
 
