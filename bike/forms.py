@@ -22,21 +22,14 @@ MOUNTAIN_CHOICE = (
     ('DJ', "Dirt Jump")
 )
 
-SURFACE_CHOICE = (
-    ('TRAIL', 'Trail'),
-    ('ROAD', 'Road')
-)
-
 EVENT_TYPE = (
     ('BLANK', "Select Type"),
-    ('race_road', "Road Race"),
-    ('group_ride_trail', "Group Ride Dirt"),
-    ('group_ride_road', "Group Ride Road"),
-    ('special_event', "Special Event"),
-    ('race_trail', "Trail Race"),
-    ('trail_work_day', "Trail Work"),
-    ('conference', "Conference"),
-    ('bike_swap', "Bike Swap")
+    ('RACE', "Race"),
+    ('GROUP_RIDE', "Group Ride"),
+    ('SPECIAL_EVENT', "Special Event"),
+    ('TRAIL_WORK_DAY', "Trail Work"),
+    ('CONFERENCE', "Conference"),
+    ('BIKE_SWAP', "Bike Swap")
 )
 
 ROAD_CHOICE = (
@@ -44,6 +37,11 @@ ROAD_CHOICE = (
     ('15MPH', "15Mph"),
     ('20MPH', "20Mph"),
     ('25MPH', "25Mph")
+)
+
+SURFACE_CHOICE = (
+    ('TRAIL', 'Trail'),
+    ('ROAD', 'Road')
 )
 
 
@@ -54,6 +52,7 @@ class KickOff(forms.Form):
         attrs={'style': 'height:30px'}), required=True)
 
     rideType = forms.ChoiceField(label='Type of Event', choices=EVENT_TYPE, required=True, initial='BLANK')
+    roadOrDirt = forms.CharField(widget=forms.TextInput(attrs={'type': "hidden"}), required=True)
 
 
 class AddRideSpotTrail(forms.Form):

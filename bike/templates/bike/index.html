@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>Ride Spots</title>
-
-    <link rel="stylesheet" type="text/css" href="../../static/datetimepicker-master/jquery.datetimepicker.css"/>
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href={% static "datetimepicker-master/jquery.datetimepicker.css" %}/>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
     {#    <link href="../../static/css/bootstrap.min.css" rel="stylesheet">#}
@@ -12,12 +12,12 @@
     <!-- may remove this below -->
 
     <!--[if lte IE 8]>
-         <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css"/>
      <![endif]-->
 
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-    <script src="../../static/datetimepicker-master/jquery.js"></script>
-    <script src="../../static/datetimepicker-master/jquery.datetimepicker.js"></script>
+    <script src={% static "datetimepicker-master/jquery.js" %}></script>
+    <script src={%  static "datetimepicker-master/jquery.datetimepicker.js" %}></script>
 
     {# Load the tag library #}
     {% load bootstrap3 %}
@@ -128,11 +128,11 @@
                 $("#fill").empty();
                 $("#fill_last").empty();
                 //add sub field for race or group rides, dirt or road, then attach handler (detailedUpdateForm)
-                $('<div class="form-group"><label class="control-label" for="id_roadOrDirt">Trail or Road</label>' +
+                $("#id_roadOrDirt").replaceWith('<div class="form-group"><label class="control-label" for="id_roadOrDirt">Trail or Road</label>' +
                 '<select class="form-control" id="id_roadOrDirt" name="roadOrDirt" required="required" title="">' +
                 '<option value="SURFACE">Select Surface</option>' +
                 '<option value="TRAIL">Trail</option>' +
-                '<option value="ROAD">Road</option></select></div>').appendTo("#fill").hide().fadeIn(1250);
+                '<option value="ROAD">Road</option></select></div>').hide().fadeIn(1250);
                 $("#id_roadOrDirt").change(detailedUpdateForm);
             }
             else {
@@ -230,11 +230,14 @@
         console.log(marker.feature.properties.id);
         $.ajax({
             dataType: "json",
-            url: "http://127.0.0.1:8000/bike/" + marker.feature.properties.rideType + "/" + marker.feature.id,
+            url: "http://127.0.0.1:8000/bike/" + marker.feature.properties.rideType.toLowerCase() + "_" +
+            marker.feature.properties.roadOrDirt.toLowerCase() + "/" +
+            marker.feature.id,
             success: function (data) {
                 $(data).each(function (key, data) {
                     marker.bindPopup(
-                            '<b>' + marker.feature.properties.rideType + '</b><br>' +
+                            '<b>' + marker.feature.properties.rideType.toLowerCase() + "_" +
+            marker.feature.properties.roadOrDirt.toLowerCase()+ '</b><br>' +
                             '<b>' + marker.feature.properties.name + '</b><br>' +
                             '<b>' + data.fields.rideTypeMTB + '</b><br>' +
                             '<b>' + data.fields.rideLevel + '</b><br>' +

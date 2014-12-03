@@ -22,27 +22,27 @@ MOUNTAIN_CHOICE = (
     ('DJ', "Dirt Jump")
 )
 
-SURFACE_CHOICE = (
-    ('DIRT', 'Dirt'),
-    ('ROAD', 'Road')
-)
-
 
 class RideLocation(models.Model):
     name = models.CharField('Ride Spot/Event', max_length=50)
 
     EVENT_TYPE = (
-        ('race_road', "Road Race"),
-        ('group_ride_trail', "Group Ride Dirt"),
-        ('group_ride_road', "Group Ride Road"),
-        ('special_event', "Special Event"),
-        ('race_trail', "Trail Race"),
-        ('trail_work_day', "Trail Work"),
-        ('conference', "Conference"),
-        ('bike_swap', "Bike Swap")
+        ('BLANK', "Select Type"),
+        ('RACE', "Race"),
+        ('GROUP_RIDE', "Group Ride"),
+        ('SPECIAL_EVENT', "Special Event"),
+        ('TRAIL_WORK_DAY', "Trail Work"),
+        ('CONFERENCE', "Conference"),
+        ('BIKE_SWAP', "Bike Swap")
+    )
+
+    SURFACE_CHOICE = (
+        ('TRAIL', 'Trail'),
+        ('ROAD', 'Road')
     )
 
     rideType = models.CharField('Type of Ride/Event', max_length=50, choices=EVENT_TYPE)
+    roadOrDirt = models.CharField('Surface Type', max_length=50, choices=SURFACE_CHOICE)
 
     geom = models.PointField(srid=4326)
     objects = models.GeoManager()
@@ -81,7 +81,6 @@ class RideSpecialEvent(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
 
-    roadOrDirt = models.CharField('Road or Dirt', max_length=4, choices=SURFACE_CHOICE)
     hostedBy = models.CharField(max_length=50, null=True)
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
@@ -119,6 +118,7 @@ class RoadRace(models.Model):
     website = models.CharField(max_length=100, null=True)
     postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
     objects = models.GeoManager()
+
 
 class TrailWorkDay(models.Model):
     location = models.ForeignKey(RideLocation)

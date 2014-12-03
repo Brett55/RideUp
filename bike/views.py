@@ -30,6 +30,7 @@ def group_ride_trail(request):
             new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
             new_point.name = cd_form_kickoff['name']
             new_point.rideType = cd_form_kickoff['rideType']
+            print new_point.roadOrDirt
             new_point.save()
 
             new_ride = models.GroupRideDirt()
@@ -69,6 +70,7 @@ def group_ride_road(request):
             new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
             new_point.name = cd_form_kickoff['name']
             new_point.rideType = cd_form_kickoff['rideType']
+            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
 
             new_ride = models.GroupRideRoad()
