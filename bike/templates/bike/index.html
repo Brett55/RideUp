@@ -108,7 +108,7 @@
         $("#fill_last").empty();
         $.ajax({
             dataType: "html",
-            url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase() + "_" + typeSurface.toLowerCase(),
+            url: "http://cryptic-mountain-5756.herokuapp.com/bike/form/" + typeEvent.toLowerCase() + "_" + typeSurface.toLowerCase(),
             success: function (data) {
                 $(data).each(function (key, data) {
                     $(data).appendTo("#fill_last").hide().fadeIn(1250);
@@ -142,6 +142,11 @@
                 //Clear and call django API for respective fields
                 $("#fill").empty();
                 $("#fill_last").empty();
+                $('<div class="form-group"><label class="control-label" for="id_roadOrDirt">Trail or Road</label>' +
+                '<select class="form-control" id="id_roadOrDirt" name="roadOrDirt" type="hidden" required="required" title="">' +
+                '<option value="SURFACE">Select Surface</option>' +
+                '<option value="TRAIL" selected>NA</option>' +
+                '<option value="ROAD">Road</option></select></div>').appendTo("#fill").hide();
                 $.ajax({
                     dataType: "html",
                     url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase(),
@@ -211,7 +216,7 @@
         //call stored geoJSON in DB
         $.ajax({
             dataType: "json",
-            url: "http://127.0.0.1:8000/bike/data.geojson/",
+            url: "http://cryptic-mountain-5756.herokuapp.com/bike/data.geojson/",
             success: function (data) {
                 $(data.features).each(function (key, data) {
                     L.geoJson(data, {onEachFeature: onEachFeature}).addTo(map);
@@ -227,23 +232,65 @@
         layer.on('click', onClick);
     }
 
+    var convertNames = {
+        "description":"Details",
+        "locationAddress":"Address",
+        "ridetime":"Time",
+        "postRideBeer":"Post-Ride Food & Beer Spot",
+        "cost":"Cost",
+        "website":"Website",
+        "hostedBy":"Hosted By",
+        "rideTypeMTB":"MTB Discipline",
+        "rideLevelTrail":"Skill Level",
+        "rideLevelRoad":"Road Pace",
+        "roadOrDirt":"Road Or Trail",
+        "rideType":"Event Type",
+        "name":"Name",
+        "coordinates":"Coordinates",
+        "riders":"Riders",
+        "race_trail":"Mountain Bike Race",
+        "group_ride_road":"Group Ride - Road",
+        "group_ride_trail":"Group Ride - MTB",
+        "race_road":"Road Race",
+        "special_event":"Special Event",
+        "trail_work_day":"Trail Work Day",
+        "bike_swap":"Swap Meet",
+        "conference":"Conference"
+    }
+
     //Marker click handler
     function onClick(e) {
         var marker = this;
-        console.log(marker.feature.properties.id);
+        var ajaxUrl = "";
+        var popUpHtml = "";
+
+        // If/else condition is based on if the more details are needed to query the object, trail or road.
+        if (marker.feature.properties.rideType === "RACE" || marker.feature.properties.rideType === "GROUP_RIDE") {
+
+            ajaxUrl = "http://cryptic-mountain-5756.herokuapp.com/bike/" + marker.feature.properties.rideType.toLowerCase() + "_" +
+            marker.feature.properties.roadOrDirt.toLowerCase() + "/" +
+            marker.feature.id;
+
+            popUpHtml =  '<b><u>' + convertNames[marker.feature.properties.rideType.toLowerCase() + "_" +
+                            marker.feature.properties.roadOrDirt.toLowerCase()] + '</u></b><br>' +
+                            "<b>Name: </b>" + marker.feature.properties.name + '<br>';
+        }
+        else {
+            ajaxUrl = "http://cryptic-mountain-5756.herokuapp.com/bike/" + marker.feature.properties.rideType.toLowerCase() + "/" +
+            marker.feature.id;
+
+            popUpHtml =  '<b><u>' + convertNames[marker.feature.properties.rideType.toLowerCase()] + '</u></b><br>' +
+                            "<b>Name: </b>" + marker.feature.properties.name + '<br>';
+        }
         $.ajax({
             dataType: "json",
-            url: "http://127.0.0.1:8000/bike/" + marker.feature.properties.rideType.toLowerCase() + "_" +
-            marker.feature.properties.roadOrDirt.toLowerCase() + "/" +
-            marker.feature.id,
+            url: ajaxUrl,
             success: function (data) {
                 $(data).each(function (key, data) {
-                    var popUpHtml =  '<b>' + marker.feature.properties.rideType.toLowerCase() + "_" +
-                            marker.feature.properties.roadOrDirt.toLowerCase()+ '</b><br>' +
-                            '<b>' + marker.feature.properties.name + '</b><br>';
-
                     for (var fld in data.fields) {
-                        popUpHtml += '<b>' + fld + '</b>' + " " + data.fields[fld] + '<br>';
+                        if ((data.fields[fld] != undefined) && (convertNames[fld] != undefined)) {
+                            popUpHtml += '<b>' + convertNames[fld] + '</b>' + ":  " + data.fields[fld] + '<br>';
+                        }
                     }
                     marker.bindPopup(popUpHtml).openPopup();
                 });

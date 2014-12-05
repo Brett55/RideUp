@@ -2,10 +2,10 @@ from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 
 LEVEL_CHOICE = (
-    ('GREEN', "Green"),
-    ('BLUE', "Blue"),
-    ('BLACK', "Black"),
-    ('DBL_BLACK', "Double Black")
+    ('Green', "Green"),
+    ('Blue', "Blue"),
+    ('Black', "Black"),
+    ('Double Black', "Double Black")
 )
 
 ROAD_CHOICE = (
@@ -16,10 +16,10 @@ ROAD_CHOICE = (
 )
 
 MOUNTAIN_CHOICE = (
-    ('XC', "Cross Country"),
-    ('DH', "Down Hill"),
-    ('FR', "Free Ride"),
-    ('DJ', "Dirt Jump")
+    ('Cross Country', "Cross Country"),
+    ('Down Hill', "Down Hill"),
+    ('Free Ride', "Free Ride"),
+    ('Dirt Jump', "Dirt Jump")
 )
 
 
@@ -38,7 +38,7 @@ class RideLocation(models.Model):
 
     SURFACE_CHOICE = (
         ('TRAIL', 'Trail'),
-        ('ROAD', 'Road')
+        ('ROAD', 'Road'),
     )
 
     rideType = models.CharField('Type of Ride/Event', max_length=50, choices=EVENT_TYPE)
@@ -55,11 +55,11 @@ class GroupRideDirt(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
 
-    rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=2, choices=MOUNTAIN_CHOICE, null=True)
+    rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=50, choices=MOUNTAIN_CHOICE, null=True)
 
     ridetime = models.DateTimeField('Ride Time', null=True)
 
-    rideLevel = models.CharField('MTB Ride Difficulty', max_length=20, choices=LEVEL_CHOICE, null=True)
+    rideLevelTrail = models.CharField('MTB Ride Difficulty', max_length=20, choices=LEVEL_CHOICE, null=True)
     postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
     objects = models.GeoManager()
 
@@ -68,11 +68,11 @@ class GroupRideRoad(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
 
-    rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=2, choices=MOUNTAIN_CHOICE, null=True)
+    rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=50, choices=MOUNTAIN_CHOICE, null=True)
 
     ridetime = models.DateTimeField('Ride Time', null=True)
 
-    rideLevel = models.CharField('Road Ride Difficulty', max_length=20, choices=ROAD_CHOICE, null=True)
+    rideLevelRoad = models.CharField('Road Ride Difficulty', max_length=20, choices=ROAD_CHOICE, null=True)
     postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
     objects = models.GeoManager()
 
@@ -94,7 +94,7 @@ class TrailRace(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
 
-    rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=2, choices=MOUNTAIN_CHOICE, null=True)
+    rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=50, choices=MOUNTAIN_CHOICE, null=True)
 
     hostedBy = models.CharField(max_length=50, null=True)
     locationAddress = models.CharField(max_length=50, null=True)

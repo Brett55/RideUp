@@ -16,10 +16,10 @@ LEVEL_CHOICE = (
 )
 
 MOUNTAIN_CHOICE = (
-    ('XC', "Cross Country"),
-    ('DH', "Down Hill"),
-    ('FR', "Free Ride"),
-    ('DJ', "Dirt Jump")
+    ('Cross Country', "Cross Country"),
+    ('Down Hill', "Down Hill"),
+    ('Free Ride', "Free Ride"),
+    ('Dirt Jump', "Dirt Jump")
 )
 
 EVENT_TYPE = (
@@ -65,7 +65,7 @@ class AddRideSpotTrail(forms.Form):
     password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
     rideTypeMTB = forms.ChoiceField(label='Discipline', choices=MOUNTAIN_CHOICE, required=True)
 
-    rideLevel = forms.ChoiceField(label='Skill Level', choices=LEVEL_CHOICE, required=True)
+    rideLevelTrail = forms.ChoiceField(label='Skill Level', choices=LEVEL_CHOICE, required=True)
     postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
 
 
@@ -78,7 +78,7 @@ class AddRideSpotRoad(forms.Form):
     username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
     password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
 
-    rideLevel = forms.ChoiceField(label='Average Pace', choices=ROAD_CHOICE, required=True)
+    rideLevelRoad = forms.ChoiceField(label='Average Pace', choices=ROAD_CHOICE, required=True)
     postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
 
 

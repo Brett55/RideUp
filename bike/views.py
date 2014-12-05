@@ -43,7 +43,7 @@ def group_ride_trail(request):
             new_ride.riders.add(newGuy) #2
 
             new_ride.rideTypeMTB = cd['rideTypeMTB'] #3
-            new_ride.rideLevel = cd['rideLevel'] #4
+            new_ride.rideLevelTrail = cd['rideLevelTrail'] #4
 
             new_ride.ridetime = str(cd['ridetime']) #5
             new_ride.postRideBeer = cd['postRideBeer'] #6
@@ -82,7 +82,7 @@ def group_ride_road(request):
             newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
             new_ride.riders.add(newGuy) #2
 
-            new_ride.rideLevel = cd['rideLevel'] #4
+            new_ride.rideLevelRoad = cd['rideLevelRoad'] #4
 
             new_ride.ridetime = str(cd['ridetime']) #5
             new_ride.postRideBeer = cd['postRideBeer'] #6
@@ -237,6 +237,7 @@ def trail_work_day(request):
             coordinates = cd_form_kickoff['coordinates'].split(',')
             new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
             new_point.name = cd_form_kickoff['name']
+            new_point.rideType = cd_form_kickoff['rideType']
             new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
 
@@ -249,11 +250,86 @@ def trail_work_day(request):
             newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
             new_ride.riders.add(newGuy) #2
 
-
             new_ride.ridetime = str(cd['ridetime']) #5
             new_ride.locationAddress = cd['locationAddress']
             new_ride.description = cd['description']
             new_ride.postRideBeer = cd['postRideBeer'] #6
+
+            new_ride.save()
+
+            return HttpResponseRedirect('/bike/add_point/success')
+
+        else:
+            return HttpResponseRedirect('/bike/add_point/error')
+
+
+def bike_swap(request):
+    if request.method == 'POST':
+        form_kickoff = forms.KickOff(request.POST) # change
+        form = forms.BikeSwap(request.POST)
+        if form.is_valid() and form_kickoff.is_valid():
+            new_point = models.RideLocation()
+
+            cd = form.cleaned_data
+            cd_form_kickoff = form_kickoff.cleaned_data
+
+            coordinates = cd_form_kickoff['coordinates'].split(',')
+            new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
+            new_point.name = cd_form_kickoff['name']
+            new_point.rideType = cd_form_kickoff['rideType']
+            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
+            new_point.save()
+
+            new_ride = models.BikeSwap() #change
+            new_ride.location = new_point #1
+            new_ride.save()
+
+            username = cd['username']
+            password = cd['password']
+            newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
+            new_ride.riders.add(newGuy) #2
+
+            new_ride.ridetime = str(cd['ridetime']) #5
+            new_ride.locationAddress = cd['locationAddress']
+            new_ride.description = cd['description']
+
+            new_ride.save()
+
+            return HttpResponseRedirect('/bike/add_point/success')
+
+        else:
+            return HttpResponseRedirect('/bike/add_point/error')
+
+
+def conference(request):
+    if request.method == 'POST':
+        form_kickoff = forms.KickOff(request.POST) # change
+        form = forms.Conference(request.POST)
+        if form.is_valid() and form_kickoff.is_valid():
+            new_point = models.RideLocation()
+
+            cd = form.cleaned_data
+            cd_form_kickoff = form_kickoff.cleaned_data
+
+            coordinates = cd_form_kickoff['coordinates'].split(',')
+            new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
+            new_point.name = cd_form_kickoff['name']
+            new_point.rideType = cd_form_kickoff['rideType']
+            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
+            new_point.save()
+
+            new_ride = models.Conference() #change
+            new_ride.location = new_point #1
+            new_ride.save()
+
+            username = cd['username']
+            password = cd['password']
+            newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
+            new_ride.riders.add(newGuy) #2
+
+            new_ride.ridetime = str(cd['ridetime']) #5
+            new_ride.locationAddress = cd['locationAddress']
+            new_ride.description = cd['description']
 
             new_ride.save()
 
