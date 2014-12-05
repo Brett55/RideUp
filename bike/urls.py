@@ -22,3 +22,8 @@ urlpatterns = patterns('',
                        url(r'^add_point/error/$', 'bike.views.form_error'),
                        url(r'^add_point/success/$', 'bike.views.form_success'),
 )
+
+if not settings.DEBUG:
+    urlpatterns += patterns('',
+        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+    )
