@@ -52,7 +52,7 @@ class KickOff(forms.Form):
         attrs={'style': 'height:30px'}), required=True)
 
     rideType = forms.ChoiceField(label='Type of Event', choices=EVENT_TYPE, required=True, initial='BLANK')
-    roadOrDirt = forms.CharField(widget=forms.TextInput(attrs={'type': "hidden"}), required=True)
+    roadOrDirt = forms.ChoiceField(label='Trail or Road', choices=SURFACE_CHOICE, required=True)
 
 
 class AddRideSpotTrail(forms.Form):
@@ -89,7 +89,6 @@ class RideSpecialEvent(forms.Form):
 
     username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
     password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    rideLevel = forms.ChoiceField(label='Ride Level', choices=LEVEL_CHOICE, required=True)
 
     hostedBy = forms.CharField(label='Hosted By', max_length=100,
                                widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
@@ -144,6 +143,9 @@ class TrailWorkDay(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(label='Trail Maintenance Time', input_formats=['%Y-%m-%d %H:%M'],
                                    widget=forms.DateTimeInput(format='%Y-%m-%d %H:%M', attrs={'style': 'height:30px'}))
+
+    locationAddress = forms.CharField(label='Address', max_length=100,
+                                      widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
 
     username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
     password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)

@@ -79,8 +79,11 @@
     <div class="row">
         <div class="col-lg-3 text-left">
             <div>
-                <form class="form-horizontal" role="form" method="POST" id="post-form">{% csrf_token %}
-                    {% bootstrap_form kickoff %}
+                <form class="form-horizontal" role="form" method="POST" id="post-form">
+                    {% csrf_token %}
+                    {% bootstrap_field kickoff.coordinates %}
+                    {% bootstrap_field kickoff.name %}
+                    {% bootstrap_field kickoff.rideType %}
                     <div id="fill"></div>
                     <div id="fill_last"></div>
                 </form>
@@ -128,11 +131,11 @@
                 $("#fill").empty();
                 $("#fill_last").empty();
                 //add sub field for race or group rides, dirt or road, then attach handler (detailedUpdateForm)
-                $("#id_roadOrDirt").replaceWith('<div class="form-group"><label class="control-label" for="id_roadOrDirt">Trail or Road</label>' +
+                $('<div class="form-group"><label class="control-label" for="id_roadOrDirt">Trail or Road</label>' +
                 '<select class="form-control" id="id_roadOrDirt" name="roadOrDirt" required="required" title="">' +
                 '<option value="SURFACE">Select Surface</option>' +
                 '<option value="TRAIL">Trail</option>' +
-                '<option value="ROAD">Road</option></select></div>').hide().fadeIn(1250);
+                '<option value="ROAD">Road</option></select></div>').appendTo("#fill").hide().fadeIn(1250);
                 $("#id_roadOrDirt").change(detailedUpdateForm);
             }
             else {
@@ -235,14 +238,14 @@
             marker.feature.id,
             success: function (data) {
                 $(data).each(function (key, data) {
-                    marker.bindPopup(
-                            '<b>' + marker.feature.properties.rideType.toLowerCase() + "_" +
-            marker.feature.properties.roadOrDirt.toLowerCase()+ '</b><br>' +
-                            '<b>' + marker.feature.properties.name + '</b><br>' +
-                            '<b>' + data.fields.rideTypeMTB + '</b><br>' +
-                            '<b>' + data.fields.rideLevel + '</b><br>' +
-                            '<b>' + data.fields.ridetime + '</b><br>' +
-                            '<b>' + data.fields.postRideBeer + '</b><br>').openPopup();
+                    var popUpHtml =  '<b>' + marker.feature.properties.rideType.toLowerCase() + "_" +
+                            marker.feature.properties.roadOrDirt.toLowerCase()+ '</b><br>' +
+                            '<b>' + marker.feature.properties.name + '</b><br>';
+
+                    for (var fld in data.fields) {
+                        popUpHtml += '<b>' + fld + '</b>' + " " + data.fields[fld] + '<br>';
+                    }
+                    marker.bindPopup(popUpHtml).openPopup();
                 });
             }
         });

@@ -30,7 +30,7 @@ def group_ride_trail(request):
             new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
             new_point.name = cd_form_kickoff['name']
             new_point.rideType = cd_form_kickoff['rideType']
-            print new_point.roadOrDirt
+            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
 
             new_ride = models.GroupRideDirt()
@@ -109,6 +109,7 @@ def race_trail(request):
             new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
             new_point.name = cd_form_kickoff['name']
             new_point.rideType = cd_form_kickoff['rideType']
+            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
 
             new_ride = models.TrailRace() #change
@@ -128,6 +129,130 @@ def race_trail(request):
             new_ride.description = cd['description']
             new_ride.cost = cd['cost']
             new_ride.website = cd['website']
+            new_ride.postRideBeer = cd['postRideBeer'] #6
+
+            new_ride.save()
+
+            return HttpResponseRedirect('/bike/add_point/success')
+
+        else:
+            return HttpResponseRedirect('/bike/add_point/error')
+
+
+def race_road(request):
+    if request.method == 'POST':
+        form_kickoff = forms.KickOff(request.POST) # change
+        form = forms.RoadRace(request.POST)
+        if form.is_valid() and form_kickoff.is_valid():
+            new_point = models.RideLocation()
+
+            cd = form.cleaned_data
+            cd_form_kickoff = form_kickoff.cleaned_data
+
+            coordinates = cd_form_kickoff['coordinates'].split(',')
+            new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
+            new_point.name = cd_form_kickoff['name']
+            new_point.rideType = cd_form_kickoff['rideType']
+            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
+            new_point.save()
+
+            new_ride = models.RoadRace() #change
+            new_ride.location = new_point #1
+            new_ride.save()
+
+            username = cd['username']
+            password = cd['password']
+            newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
+            new_ride.riders.add(newGuy) #2
+
+
+            new_ride.ridetime = str(cd['ridetime']) #5
+            new_ride.hostedBy = cd['hostedBy']
+            new_ride.locationAddress = cd['locationAddress']
+            new_ride.description = cd['description']
+            new_ride.cost = cd['cost']
+            new_ride.website = cd['website']
+            new_ride.postRideBeer = cd['postRideBeer'] #6
+
+            new_ride.save()
+
+            return HttpResponseRedirect('/bike/add_point/success')
+
+        else:
+            return HttpResponseRedirect('/bike/add_point/error')
+
+
+def special_event(request):
+    if request.method == 'POST':
+        form_kickoff = forms.KickOff(request.POST) # change
+        form = forms.RideSpecialEvent(request.POST)
+        if form.is_valid() and form_kickoff.is_valid():
+            new_point = models.RideLocation()
+
+            cd = form.cleaned_data
+            cd_form_kickoff = form_kickoff.cleaned_data
+
+            coordinates = cd_form_kickoff['coordinates'].split(',')
+            new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
+            new_point.name = cd_form_kickoff['name']
+            new_point.rideType = cd_form_kickoff['rideType']
+            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
+            new_point.save()
+
+            new_ride = models.RideSpecialEvent() #change
+            new_ride.location = new_point #1
+            new_ride.save()
+
+            username = cd['username']
+            password = cd['password']
+            newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
+            new_ride.riders.add(newGuy) #2
+
+
+            new_ride.ridetime = str(cd['ridetime']) #5
+            new_ride.hostedBy = cd['hostedBy']
+            new_ride.locationAddress = cd['locationAddress']
+            new_ride.description = cd['description']
+            new_ride.cost = cd['cost']
+            new_ride.website = cd['website']
+
+            new_ride.save()
+
+            return HttpResponseRedirect('/bike/add_point/success')
+
+        else:
+            return HttpResponseRedirect('/bike/add_point/error')
+
+
+def trail_work_day(request):
+    if request.method == 'POST':
+        form_kickoff = forms.KickOff(request.POST) # change
+        form = forms.TrailWorkDay(request.POST)
+        if form.is_valid() and form_kickoff.is_valid():
+            new_point = models.RideLocation()
+
+            cd = form.cleaned_data
+            cd_form_kickoff = form_kickoff.cleaned_data
+
+            coordinates = cd_form_kickoff['coordinates'].split(',')
+            new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
+            new_point.name = cd_form_kickoff['name']
+            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
+            new_point.save()
+
+            new_ride = models.TrailWorkDay() #change
+            new_ride.location = new_point #1
+            new_ride.save()
+
+            username = cd['username']
+            password = cd['password']
+            newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
+            new_ride.riders.add(newGuy) #2
+
+
+            new_ride.ridetime = str(cd['ridetime']) #5
+            new_ride.locationAddress = cd['locationAddress']
+            new_ride.description = cd['description']
             new_ride.postRideBeer = cd['postRideBeer'] #6
 
             new_ride.save()
