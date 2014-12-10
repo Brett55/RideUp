@@ -57,9 +57,7 @@ class KickOff(forms.Form):
 
 class AddRideSpotTrail(forms.Form):
     # Ride Class parmams
-    ridetime = forms.DateTimeField(label='Time of the Ride', input_formats=['%Y-%m-%d %H:%M'],
-                                   widget=forms.DateTimeInput(format='%Y-%m-%d %H:%M', attrs={'style': 'height:30px'}),
-                                   required=True)
+    ridetime = forms.DateTimeField(required=True)
 
     username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
     password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
@@ -71,9 +69,7 @@ class AddRideSpotTrail(forms.Form):
 
 class AddRideSpotRoad(forms.Form):
     # Ride Class parmams
-    ridetime = forms.DateTimeField(label='Time of the Ride', input_formats=['%Y-%m-%d %H:%M'],
-                                   widget=forms.DateTimeInput(format='%Y-%m-%d %H:%M', attrs={'style': 'height:30px'}),
-                                   required=True)
+    ridetime = forms.DateTimeField(required=True)
 
     username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
     password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
@@ -84,8 +80,7 @@ class AddRideSpotRoad(forms.Form):
 
 class RideSpecialEvent(forms.Form):
     # Ride Class parmams
-    ridetime = forms.DateTimeField(label='Time of the Event', input_formats=['%Y-%m-%d %H:%M'],
-                                   widget=forms.DateTimeInput(format='%Y-%m-%d %H:%M', attrs={'style': 'height:30px'}))
+    ridetime = forms.DateTimeField(required=True)
 
     username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
     password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
@@ -102,8 +97,7 @@ class RideSpecialEvent(forms.Form):
 
 class TrailRace(forms.Form):
     # Ride Class parmams
-    ridetime = forms.DateTimeField(label='Time of the Race', input_formats=['%Y-%m-%d %H:%M'],
-                                   widget=forms.DateTimeInput(format='%Y-%m-%d %H:%M', attrs={'style': 'height:30px'}))
+    ridetime = forms.DateTimeField(required=True)
 
     username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
     password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
@@ -122,8 +116,7 @@ class TrailRace(forms.Form):
 
 class RoadRace(forms.Form):
     # Ride Class parmams
-    ridetime = forms.DateTimeField(label='Time of the Race', input_formats=['%Y-%m-%d %H:%M'],
-                                   widget=forms.DateTimeInput(format='%Y-%m-%d %H:%M', attrs={'style': 'height:30px'}))
+    ridetime = forms.DateTimeField(required=True)
 
     username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
     password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
@@ -141,8 +134,7 @@ class RoadRace(forms.Form):
 
 class TrailWorkDay(forms.Form):
     # Ride Class parmams
-    ridetime = forms.DateTimeField(label='Trail Maintenance Time', input_formats=['%Y-%m-%d %H:%M'],
-                                   widget=forms.DateTimeInput(format='%Y-%m-%d %H:%M', attrs={'style': 'height:30px'}))
+    ridetime = forms.DateTimeField(required=True)
 
     locationAddress = forms.CharField(label='Address', max_length=100,
                                       widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
@@ -157,8 +149,7 @@ class TrailWorkDay(forms.Form):
 
 class BikeSwap(forms.Form):
     # Ride Class parmams
-    ridetime = forms.DateTimeField(label='Time of the Bike Swap', input_formats=['%Y-%m-%d %H:%M'],
-                                   widget=forms.DateTimeInput(format='%Y-%m-%d %H:%M', attrs={'style': 'height:30px'}))
+    ridetime = forms.DateTimeField(required=True)
 
     username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
     password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
@@ -171,8 +162,7 @@ class BikeSwap(forms.Form):
 
 class Conference(forms.Form):
     # Ride Class parmams
-    ridetime = forms.DateTimeField(label='Time of the Conference', input_formats=['%Y-%m-%d %H:%M'],
-                                   widget=forms.DateTimeInput(format='%Y-%m-%d %H:%M', attrs={'style': 'height:30px'}))
+    ridetime = forms.DateTimeField(required=True)
 
     username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
     password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)

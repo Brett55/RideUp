@@ -45,10 +45,11 @@ class RideLocation(models.Model):
     roadOrDirt = models.CharField('Surface Type', max_length=50, choices=SURFACE_CHOICE)
 
     geom = models.PointField(srid=4326)
-    objects = models.GeoManager()
 
-    def __str__(self):
+    def __unicode__(self):
         return self.name
+
+    objects = models.GeoManager()
 
 
 class GroupRideDirt(models.Model):
@@ -57,7 +58,7 @@ class GroupRideDirt(models.Model):
 
     rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=50, choices=MOUNTAIN_CHOICE, null=True)
 
-    ridetime = models.DateTimeField('Ride Time', null=True)
+    ridetime = models.DateTimeField()
 
     rideLevelTrail = models.CharField('MTB Ride Difficulty', max_length=20, choices=LEVEL_CHOICE, null=True)
     postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
@@ -70,7 +71,7 @@ class GroupRideRoad(models.Model):
 
     rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=50, choices=MOUNTAIN_CHOICE, null=True)
 
-    ridetime = models.DateTimeField('Ride Time', null=True)
+    ridetime = models.DateTimeField()
 
     rideLevelRoad = models.CharField('Road Ride Difficulty', max_length=20, choices=ROAD_CHOICE, null=True)
     postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
@@ -85,7 +86,7 @@ class RideSpecialEvent(models.Model):
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
     cost = models.CharField(max_length=50, null=True)
-    ridetime = models.DateTimeField(null=True)
+    ridetime = models.DateTimeField()
     website = models.CharField(max_length=100, null=True)
     objects = models.GeoManager()
 
@@ -100,7 +101,7 @@ class TrailRace(models.Model):
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
     cost = models.CharField(max_length=50, null=True)
-    ridetime = models.DateTimeField(null=True)
+    ridetime = models.DateTimeField()
     website = models.CharField(max_length=100, null=True)
     postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
     objects = models.GeoManager()
@@ -114,7 +115,7 @@ class RoadRace(models.Model):
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
     cost = models.CharField(max_length=50, null=True)
-    ridetime = models.DateTimeField(null=True)
+    ridetime = models.DateTimeField()
     website = models.CharField(max_length=100, null=True)
     postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
     objects = models.GeoManager()
@@ -126,7 +127,7 @@ class TrailWorkDay(models.Model):
 
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
-    ridetime = models.DateTimeField(null=False)
+    ridetime = models.DateTimeField()
     postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
     objects = models.GeoManager()
 
@@ -137,7 +138,7 @@ class BikeSwap(models.Model):
 
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
-    ridetime = models.DateTimeField(null=True)
+    ridetime = models.DateTimeField()
     objects = models.GeoManager()
 
 
@@ -149,6 +150,6 @@ class Conference(models.Model):
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
     cost = models.CharField(max_length=50, null=True)
-    ridetime = models.DateTimeField(null=True)
+    ridetime = models.DateTimeField()
     website = models.CharField(max_length=100, null=True)
     objects = models.GeoManager()

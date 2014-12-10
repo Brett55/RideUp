@@ -81,9 +81,12 @@
             <div>
                 <form class="form-horizontal" role="form" method="POST" id="post-form">
                     {% csrf_token %}
+                    {{ form.errors }}
+                    {{ form.non_field_errors }}
                     {% bootstrap_field kickoff.coordinates %}
                     {% bootstrap_field kickoff.name %}
                     {% bootstrap_field kickoff.rideType %}
+
                     <div id="fill"></div>
                     <div id="fill_last"></div>
                 </form>
@@ -108,14 +111,14 @@
         $("#fill_last").empty();
         $.ajax({
             dataType: "html",
-            url: "http://cryptic-mountain-5756.herokuapp.com/bike/form/" + typeEvent.toLowerCase() + "_" + typeSurface.toLowerCase(),
+            url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase() + "_" + typeSurface.toLowerCase(),
             success: function (data) {
                 $(data).each(function (key, data) {
                     $(data).appendTo("#fill_last").hide().fadeIn(1250);
                     // get time from jquery time widget
-                    jQuery('#id_ridetime').datetimepicker({
-                        format: 'Y-m-d H:i',
-                        theme: 'dark'
+                      jQuery('#id_ridetime').datetimepicker({
+                        format: 'm-d-Y g:i A',
+                        pick12HourFormat: true
                     });
                     whichForm = typeEvent.toLowerCase() + "_" + typeSurface.toLowerCase();
                 });
@@ -149,14 +152,14 @@
                 '<option value="ROAD">Road</option></select></div>').appendTo("#fill").hide();
                 $.ajax({
                     dataType: "html",
-                    url: "http://cryptic-mountain-5756.herokuapp.com/bike/form/" + typeEvent.toLowerCase(),
+                    url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase(),
                     success: function (data) {
                         $(data).each(function (key, data) {
                             $(data).appendTo("#fill").hide().fadeIn(1250)
                             // get time from jquery time widget
                             jQuery('#id_ridetime').datetimepicker({
-                                format: 'Y-m-d H:i',
-                                theme: 'dark'
+                                format: 'm-d-Y g:i A',
+                                pick12HourFormat: true
                             });
                             whichForm = typeEvent.toLowerCase();
                         });
@@ -216,7 +219,7 @@
         //call stored geoJSON in DB
         $.ajax({
             dataType: "json",
-            url: "http://cryptic-mountain-5756.herokuapp.com/bike/data.geojson/",
+            url: "http://127.0.0.1:8000/bike/data.geojson/",
             success: function (data) {
                 $(data.features).each(function (key, data) {
                     L.geoJson(data, {onEachFeature: onEachFeature}).addTo(map);
@@ -228,7 +231,7 @@
 
     //Marker click handler
     function onEachFeature(feature, layer) {
-        // does this feature have a property named popupContent?
+        // attach click handler to do AJAX call
         layer.on('click', onClick);
     }
 
@@ -263,33 +266,49 @@
         var marker = this;
         var ajaxUrl = "";
         var popUpHtml = "";
+        var rideType = marker.feature.properties.rideType;
+        var rideSurface = marker.feature.properties.roadOrDirt;
 
-        // If/else condition is based on if the more details are needed to query the object, trail or road.
-        if (marker.feature.properties.rideType === "RACE" || marker.feature.properties.rideType === "GROUP_RIDE") {
+        // If/else condition is used to build AJAX url and popup information
+        if (rideType === "RACE" || rideType === "GROUP_RIDE") {
 
-            ajaxUrl = "http://cryptic-mountain-5756.herokuapp.com/bike/" + marker.feature.properties.rideType.toLowerCase() + "_" +
-            marker.feature.properties.roadOrDirt.toLowerCase() + "/" +
+            ajaxUrl = "http://127.0.0.1:8000/bike/" + rideType.toLowerCase() + "_" +
+            rideSurface.toLowerCase() + "/" +
             marker.feature.id;
 
-            popUpHtml =  '<b><u>' + convertNames[marker.feature.properties.rideType.toLowerCase() + "_" +
-                            marker.feature.properties.roadOrDirt.toLowerCase()] + '</u></b><br>' +
+            popUpHtml =  '<b><u>' + convertNames[rideType.toLowerCase() + "_" +
+                            rideSurface.toLowerCase()] + '</u></b><br>' +
                             "<b>Name: </b>" + marker.feature.properties.name + '<br>';
         }
         else {
-            ajaxUrl = "http://cryptic-mountain-5756.herokuapp.com/bike/" + marker.feature.properties.rideType.toLowerCase() + "/" +
+            ajaxUrl = "http://127.0.0.1:8000/bike/" + rideType.toLowerCase() + "/" +
             marker.feature.id;
 
-            popUpHtml =  '<b><u>' + convertNames[marker.feature.properties.rideType.toLowerCase()] + '</u></b><br>' +
+            popUpHtml =  '<b><u>' + convertNames[rideType.toLowerCase()] + '</u></b><br>' +
                             "<b>Name: </b>" + marker.feature.properties.name + '<br>';
         }
+        //Calling ajaxURL to populate marker popup
         $.ajax({
             dataType: "json",
             url: ajaxUrl,
             success: function (data) {
                 $(data).each(function (key, data) {
                     for (var fld in data.fields) {
-                        if ((data.fields[fld] != undefined) && (convertNames[fld] != undefined)) {
-                            popUpHtml += '<b>' + convertNames[fld] + '</b>' + ":  " + data.fields[fld] + '<br>';
+                        var key = convertNames[fld]; //popup key
+                        var value = data.fields[fld]; //popup value
+                        if ((key) && (value)) {
+                            if (fld === "ridetime" ) {
+                                var time = new Date(data.fields[fld]); //convert time to readable format
+                                value = time.toLocaleString(navigator.language, {
+                                //Options for time display
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: '2-digit'
+                                });
+                            }
+                            popUpHtml += '<b>' + key + '</b>' + ":  " + value + '<br>';
                         }
                     }
                     marker.bindPopup(popUpHtml).openPopup();

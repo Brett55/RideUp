@@ -34,20 +34,17 @@ def group_ride_trail(request):
             new_point.save()
 
             new_ride = models.GroupRideDirt()
-            new_ride.location = new_point #1
+            new_ride.location = new_point
+            new_ride.rideTypeMTB = cd['rideTypeMTB']
+            new_ride.rideLevelTrail = cd['rideLevelTrail']
+            new_ride.ridetime = cd['ridetime']
+            new_ride.postRideBeer = cd['postRideBeer']
             new_ride.save()
 
             username = cd['username']
             password = cd['password']
             newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
-            new_ride.riders.add(newGuy) #2
-
-            new_ride.rideTypeMTB = cd['rideTypeMTB'] #3
-            new_ride.rideLevelTrail = cd['rideLevelTrail'] #4
-
-            new_ride.ridetime = str(cd['ridetime']) #5
-            new_ride.postRideBeer = cd['postRideBeer'] #6
-
+            new_ride.riders.add(newGuy)
             new_ride.save()
 
             return HttpResponseRedirect('/bike/add_point/success')
@@ -74,19 +71,16 @@ def group_ride_road(request):
             new_point.save()
 
             new_ride = models.GroupRideRoad()
-            new_ride.location = new_point #1
+            new_ride.location = new_point
+            new_ride.rideLevelRoad = cd['rideLevelRoad']
+            new_ride.ridetime = cd['ridetime']
+            new_ride.postRideBeer = cd['postRideBeer']
             new_ride.save()
 
             username = cd['username']
             password = cd['password']
             newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
-            new_ride.riders.add(newGuy) #2
-
-            new_ride.rideLevelRoad = cd['rideLevelRoad'] #4
-
-            new_ride.ridetime = str(cd['ridetime']) #5
-            new_ride.postRideBeer = cd['postRideBeer'] #6
-
+            new_ride.riders.add(newGuy)
             new_ride.save()
 
             return HttpResponseRedirect('/bike/add_point/success')
@@ -112,25 +106,22 @@ def race_trail(request):
             new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
 
-            new_ride = models.TrailRace() #change
-            new_ride.location = new_point #1
-            new_ride.save()
-
-            username = cd['username']
-            password = cd['password']
-            newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
-            new_ride.riders.add(newGuy) #2
-
-            new_ride.rideTypeMTB = cd['rideTypeMTB'] #3
-
-            new_ride.ridetime = str(cd['ridetime']) #5
+            new_ride = models.TrailRace()
+            new_ride.location = new_point
+            new_ride.rideTypeMTB = cd['rideTypeMTB']
+            new_ride.ridetime = cd['ridetime']
             new_ride.hostedBy = cd['hostedBy']
             new_ride.locationAddress = cd['locationAddress']
             new_ride.description = cd['description']
             new_ride.cost = cd['cost']
             new_ride.website = cd['website']
-            new_ride.postRideBeer = cd['postRideBeer'] #6
+            new_ride.postRideBeer = cd['postRideBeer']
+            new_ride.save()
 
+            username = cd['username']
+            password = cd['password']
+            newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
+            new_ride.riders.add(newGuy)
             new_ride.save()
 
             return HttpResponseRedirect('/bike/add_point/success')
@@ -156,23 +147,21 @@ def race_road(request):
             new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
 
-            new_ride = models.RoadRace() #change
-            new_ride.location = new_point #1
+            new_ride = models.RoadRace()
+            new_ride.location = new_point
+            new_ride.ridetime = cd['ridetime']
+            new_ride.hostedBy = cd['hostedBy']
+            new_ride.locationAddress = cd['locationAddress']
+            new_ride.description = cd['description']
+            new_ride.cost = cd['cost']
+            new_ride.website = cd['website']
+            new_ride.postRideBeer = cd['postRideBeer']
             new_ride.save()
 
             username = cd['username']
             password = cd['password']
             newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
             new_ride.riders.add(newGuy) #2
-
-
-            new_ride.ridetime = str(cd['ridetime']) #5
-            new_ride.hostedBy = cd['hostedBy']
-            new_ride.locationAddress = cd['locationAddress']
-            new_ride.description = cd['description']
-            new_ride.cost = cd['cost']
-            new_ride.website = cd['website']
-            new_ride.postRideBeer = cd['postRideBeer'] #6
 
             new_ride.save()
 
@@ -200,22 +189,19 @@ def special_event(request):
             new_point.save()
 
             new_ride = models.RideSpecialEvent() #change
-            new_ride.location = new_point #1
-            new_ride.save()
-
-            username = cd['username']
-            password = cd['password']
-            newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
-            new_ride.riders.add(newGuy) #2
-
-
-            new_ride.ridetime = str(cd['ridetime']) #5
+            new_ride.location = new_point
+            new_ride.ridetime = cd['ridetime']
             new_ride.hostedBy = cd['hostedBy']
             new_ride.locationAddress = cd['locationAddress']
             new_ride.description = cd['description']
             new_ride.cost = cd['cost']
             new_ride.website = cd['website']
+            new_ride.save()
 
+            username = cd['username']
+            password = cd['password']
+            newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
+            new_ride.riders.add(newGuy)
             new_ride.save()
 
             return HttpResponseRedirect('/bike/add_point/success')
@@ -241,20 +227,18 @@ def trail_work_day(request):
             new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
 
-            new_ride = models.TrailWorkDay() #change
-            new_ride.location = new_point #1
+            new_ride = models.TrailWorkDay()
+            new_ride.location = new_point
+            new_ride.ridetime = cd['ridetime']
+            new_ride.locationAddress = cd['locationAddress']
+            new_ride.description = cd['description']
+            new_ride.postRideBeer = cd['postRideBeer']
             new_ride.save()
 
             username = cd['username']
             password = cd['password']
             newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
             new_ride.riders.add(newGuy) #2
-
-            new_ride.ridetime = str(cd['ridetime']) #5
-            new_ride.locationAddress = cd['locationAddress']
-            new_ride.description = cd['description']
-            new_ride.postRideBeer = cd['postRideBeer'] #6
-
             new_ride.save()
 
             return HttpResponseRedirect('/bike/add_point/success')
@@ -280,25 +264,23 @@ def bike_swap(request):
             new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
 
-            new_ride = models.BikeSwap() #change
-            new_ride.location = new_point #1
+            new_ride = models.BikeSwap()
+            new_ride.ridetime = cd['ridetime']
+            new_ride.location = new_point
+            new_ride.locationAddress = cd['locationAddress']
+            new_ride.description = cd['description']
             new_ride.save()
 
             username = cd['username']
             password = cd['password']
             newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
             new_ride.riders.add(newGuy) #2
-
-            new_ride.ridetime = str(cd['ridetime']) #5
-            new_ride.locationAddress = cd['locationAddress']
-            new_ride.description = cd['description']
-
             new_ride.save()
 
             return HttpResponseRedirect('/bike/add_point/success')
 
         else:
-            return HttpResponseRedirect('/bike/add_point/error')
+            return HttpResponse(form.errors)
 
 
 def conference(request):
@@ -320,17 +302,15 @@ def conference(request):
 
             new_ride = models.Conference() #change
             new_ride.location = new_point #1
+            new_ride.ridetime = cd['ridetime']
+            new_ride.locationAddress = cd['locationAddress']
+            new_ride.description = cd['description']
             new_ride.save()
 
             username = cd['username']
             password = cd['password']
             newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
-            new_ride.riders.add(newGuy) #2
-
-            new_ride.ridetime = str(cd['ridetime']) #5
-            new_ride.locationAddress = cd['locationAddress']
-            new_ride.description = cd['description']
-
+            new_ride.riders.add(newGuy)
             new_ride.save()
 
             return HttpResponseRedirect('/bike/add_point/success')
@@ -370,6 +350,7 @@ def more_data(request, group, key):
 
 
 def form_updater(request, form_type):
+
     args = {}
     args.update(csrf(request))
     args['kickoff'] = forms.KickOff()
