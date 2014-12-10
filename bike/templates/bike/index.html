@@ -29,7 +29,9 @@
     <style>
         body {
             padding-top: 70px;
-
+        }
+        .leaflet-popup-content {
+            font-size:115%;
         }
     </style>
 
@@ -321,7 +323,23 @@
                             popUpHtml += '<b>' + key + '</b>' + ":  " + value + '<br>';
                         }
                     }
+                    //create popupHTML and bind to marker
+                    popUpHtml += '<p><button id="joinRide" class="btn btn-default btn-primary">Join Ride</button></p>'
                     marker.bindPopup(popUpHtml).openPopup();
+                    $("#joinRide").click(joinRideFunc); //Add click handler for people joining this ride
+                });
+            }
+        });
+    }
+
+    function joinRideFunc() {
+        $('.leaflet-popup-content').empty();
+        $.ajax({
+            dataType: "html",
+            url: "http://127.0.0.1:8000/bike/form/join_ride/",
+            success: function (data) {
+                $(data).each(function (key, data) {
+                    $(data).appendTo('.leaflet-popup-content');
                 });
             }
         });

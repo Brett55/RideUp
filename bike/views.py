@@ -367,6 +367,7 @@ def form_updater(request, form_type):
     args['trail_work_day'] = forms.TrailWorkDay()
     args['bike_swap'] = forms.BikeSwap()
     args['conference'] = forms.Conference()
+    args['join_ride'] = forms.JoinRide()
 
     t = Template('{% load bootstrap3 %}' +
                  '{% bootstrap_form ' + form_type + ' %}' +

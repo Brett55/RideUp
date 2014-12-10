@@ -55,6 +55,12 @@ class KickOff(forms.Form):
     roadOrDirt = forms.ChoiceField(label='Trail or Road', choices=SURFACE_CHOICE, required=True)
 
 
+class JoinRide(forms.Form):
+    # your_name = forms.CharField(label='Your Name', max_length=100, widget=forms.TextInput(), required=True)
+    username = forms.CharField(label='Username', max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+    password = forms.CharField(label='Password', max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+
+
 class AddRideSpotTrail(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(required=True)
