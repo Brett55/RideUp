@@ -350,8 +350,8 @@ def more_data(request, group, key):
 
 
 def get_rider_info(request, rider_id):
-    query_set = User.objects.filter(id=rider_id)
-    data = serializers.serialize("json", query_set)
+    query_set = User.objects.only("username").filter(id=rider_id)
+    data = serializers.serialize("json", query_set, fields=('username'))
     return HttpResponse(data, content_type='application/json')
 
 

@@ -94,18 +94,14 @@
         </div>
         <div class="col-lg-9 text-right">
             <div id="map" style="height:500px"></div>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div id="peopleRiding"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <div id="peopleRiding">People Riding:</div>
-        </div>
-    </div>
-</div>
-
 
 
 <script>
@@ -337,7 +333,8 @@
             url: "http://127.0.0.1:8000/bike/riders/" + rider_id,
             success: function (data) {
                 $(data).each(function (key, data) {
-                    console.log(data);
+                    $("#peopleRiding").empty();
+                    $('<p>Riders: ' + data.fields.username + '<p>').appendTo('#peopleRiding');
                 });
             }
         });
