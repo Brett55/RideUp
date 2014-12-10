@@ -82,9 +82,7 @@
         <div class="col-lg-3 text-left">
             <div>
                 <form class="form-horizontal" role="form" method="POST" id="post-form">
-                    {% csrf_token %}
-                    {{ form.errors }}
-                    {{ form.non_field_errors }}
+                    {% bootstrap_form_errors kickoff %}
                     {% bootstrap_field kickoff.coordinates %}
                     {% bootstrap_field kickoff.name %}
                     {% bootstrap_field kickoff.rideType %}
@@ -97,9 +95,13 @@
         <div class="col-lg-9 text-right">
             <div id="map" style="height:500px"></div>
             <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div id="peopleRiding"></div>
+                <div class="col-lg-4"></div>
+                <div class="col-lg-4 text-left">
+                    <div>Riders:
+                        <ol id="peopleRiding"></ol>
+                    </div>
                 </div>
+                <div class="col-lg-4"></div>
             </div>
         </div>
     </div>
@@ -107,6 +109,39 @@
 
 
 <script>
+    // Set CSRF Cookie
+    function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    //Test non-CSRF methods
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    //Set the universal settings for $ajax calls for use with CSRF protection
+    $.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+    });
+
+
     //Keep track of which form is being used to submit
     var whichForm = "";
 
@@ -222,6 +257,7 @@
         return false;
     });
 
+
     function loadGeoJSON() {
         //call stored geoJSON in DB
         $.ajax({
@@ -270,18 +306,19 @@
 
     //Marker click handler
     function onClick(e) {
-        var marker = this;
+        marker = this; //global var to use in othe AJAX calls
         var ajaxUrl = "";
         var popUpHtml = "";
         var rideType = marker.feature.properties.rideType;
         var rideSurface = marker.feature.properties.roadOrDirt;
+        $("#peopleRiding").empty(); //clear list of riders before loading it
 
         // If/else condition is used to build AJAX url and popup information
         if (rideType === "RACE" || rideType === "GROUP_RIDE") {
 
             ajaxUrl = "http://127.0.0.1:8000/bike/" + rideType.toLowerCase() + "_" +
             rideSurface.toLowerCase() + "/" +
-            marker.feature.id;
+            marker.feature.id + "/";
 
             popUpHtml =  '<b><u>' + convertNames[rideType.toLowerCase() + "_" +
                             rideSurface.toLowerCase()] + '</u></b><br>' +
@@ -289,7 +326,7 @@
         }
         else {
             ajaxUrl = "http://127.0.0.1:8000/bike/" + rideType.toLowerCase() + "/" +
-            marker.feature.id;
+            marker.feature.id + "/";
 
             popUpHtml =  '<b><u>' + convertNames[rideType.toLowerCase()] + '</u></b><br>' +
                             "<b>Name: </b>" + marker.feature.properties.name + '<br>';
@@ -319,30 +356,70 @@
                                 for (var rider_id in value) {
                                     getRiders(value[rider_id]);
                                 }
+                                value = value.length;
                             }
                             popUpHtml += '<b>' + key + '</b>' + ":  " + value + '<br>';
                         }
                     }
                     //create popupHTML and bind to marker
-                    popUpHtml += '<p><button id="joinRide" class="btn btn-default btn-primary">Join Ride</button></p>'
+                    popUpHtml += '<p><button id="joinRideButton" class="btn btn-default btn-primary">Join Ride</button></p>'
                     marker.bindPopup(popUpHtml).openPopup();
-                    $("#joinRide").click(joinRideFunc); //Add click handler for people joining this ride
+                    $("#joinRideButton").click(joinRideFunc); //Add click handler for people joining this ride
                 });
             }
         });
     }
 
     function joinRideFunc() {
-        $('.leaflet-popup-content').empty();
+        $('.leaflet-popup-content').empty().append(
+                            '<form class="form-horizontal" role="form" method="POST" id="join_ride_form">');
         $.ajax({
             dataType: "html",
             url: "http://127.0.0.1:8000/bike/form/join_ride/",
             success: function (data) {
                 $(data).each(function (key, data) {
-                    $(data).appendTo('.leaflet-popup-content');
+                    $(data).appendTo('#join_ride_form');
                 });
             }
         });
+        var frm = $('#join_ride_form');
+        var ajaxUrl = "";
+        var rideType = marker.feature.properties.rideType;
+        var rideSurface = marker.feature.properties.roadOrDirt;
+
+        // If/else condition is used to build AJAX url and popup information
+        if (rideType === "RACE" || rideType === "GROUP_RIDE") {
+
+            ajaxUrl = "http://127.0.0.1:8000/bike/add_rider/" + rideType.toLowerCase() + "_" +
+            rideSurface.toLowerCase() + "/" +
+            marker.feature.id + "/";
+        }
+        else {
+            ajaxUrl = "http://127.0.0.1:8000/bike/add_rider/" + rideType.toLowerCase() + "/" +
+            marker.feature.id + "/";
+        }
+        frm.submit(function () {
+        $.ajax({
+            type: "POST",
+            url: ajaxUrl, //Use whichForm to set the URL for the API
+            data: frm.serialize(),
+            success: function () {
+                //close popup
+                $('.leaflet-popup-content').empty().append(
+                        '<p>Success!</p>');
+{#                map.closePopup();#}
+                //Reload geoJSON
+                loadGeoJSON();
+            },
+            error: function (xhr, errmsg, err) {
+                console.log("ERROR!");
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+        return false;
+    });
     }
 
     function getRiders(rider_id) {
@@ -351,8 +428,7 @@
             url: "http://127.0.0.1:8000/bike/riders/" + rider_id,
             success: function (data) {
                 $(data).each(function (key, data) {
-                    $("#peopleRiding").empty();
-                    $('<p>Riders: ' + data.fields.username + '<p>').appendTo('#peopleRiding');
+                    $('<li>' + data.fields.username + '</li>').appendTo('#peopleRiding');
                 });
             }
         });
@@ -381,7 +457,14 @@
     map.on('click', onMapClick);
     $(document).ready(function () {
         loadGeoJSON();
+
     });
+    map.on('popupopen', function(e) {
+        var px = map.project(e.popup._latlng);
+        px.y -= e.popup._container.clientHeight/2
+        map.panTo(map.unproject(px),{animate: true});
+    });
+
 </script>
 </body>
 </html>
