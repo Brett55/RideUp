@@ -4,8 +4,9 @@ from models import RideLocation
 
 
 urlpatterns = patterns('',
-                       url(r'^(\w+)/(\d+)/$', 'bike.views.more_data', name='moreData'),
-                       url(r'^form/(\w+)/$', 'bike.views.form_updater', name='formUpdate'),
+                       url(r'^riders/(\d+)/$', 'bike.views.get_rider_info'),
+                       url(r'^(\w+)/(\d+)/$', 'bike.views.more_data'),
+                       url(r'^form/(\w+)/$', 'bike.views.form_updater'),
                        url(r'^data.geojson/$', GeoJSONLayerView.as_view(model=RideLocation,
                                                                         properties=('roadOrDirt',
                                                                                     'rideType', 'name', 'id'))),

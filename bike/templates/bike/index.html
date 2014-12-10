@@ -86,7 +86,6 @@
                     {% bootstrap_field kickoff.coordinates %}
                     {% bootstrap_field kickoff.name %}
                     {% bootstrap_field kickoff.rideType %}
-
                     <div id="fill"></div>
                     <div id="fill_last"></div>
                 </form>
@@ -98,6 +97,16 @@
         </div>
     </div>
 </div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="peopleRiding">People Riding:</div>
+        </div>
+    </div>
+</div>
+
+
 
 <script>
     //Keep track of which form is being used to submit
@@ -186,7 +195,7 @@
         id: 'examples.map-i875mjb7'
     }).addTo(map);
 
-    //grab form on submit
+    //grab form and POST data on submission
     var frm = $('#post-form');
     frm.submit(function () {
         $.ajax({
@@ -198,7 +207,7 @@
                 $("#fill").empty();
                 $("#fill_last").empty();
                 $('#id_name').val('');
-                $('id_rideType').val("BLANK");
+                $('#id_rideType').val("BLANK");
 
                 //Reload geoJSON
                 loadGeoJSON();
@@ -308,10 +317,27 @@
                                     year: '2-digit'
                                 });
                             }
+                            if (fld === "riders") {
+                                for (var rider_id in value) {
+                                    getRiders(value[rider_id]);
+                                }
+                            }
                             popUpHtml += '<b>' + key + '</b>' + ":  " + value + '<br>';
                         }
                     }
                     marker.bindPopup(popUpHtml).openPopup();
+                });
+            }
+        });
+    }
+
+    function getRiders(rider_id) {
+        $.ajax({
+            dataType: "json",
+            url: "http://127.0.0.1:8000/bike/riders/" + rider_id,
+            success: function (data) {
+                $(data).each(function (key, data) {
+                    console.log(data);
                 });
             }
         });

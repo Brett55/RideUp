@@ -5,8 +5,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.context_processors import csrf
 from django.core import serializers
 from django.contrib.gis.geos import Point
-from django.contrib.auth.models import User
 from django.template import Context, Template
+from django.contrib.auth.models import User
 
 
 def index(request):
@@ -329,28 +329,33 @@ def form_success(request):
 
 def more_data(request, group, key):
     if group == "race_trail":
-        tasks = models.TrailRace.objects.filter(location_id=key)
+        query_set = models.TrailRace.objects.filter(location_id=key)
     elif group == "group_ride_road":
-        tasks = models.GroupRideRoad.objects.filter(location_id=key)
+        query_set = models.GroupRideRoad.objects.filter(location_id=key)
     elif group == "group_ride_trail":
-        tasks = models.GroupRideDirt.objects.filter(location_id=key)
+        query_set = models.GroupRideDirt.objects.filter(location_id=key)
     elif group == "race_road":
-        tasks = models.RoadRace.objects.filter(location_id=key)
+        query_set = models.RoadRace.objects.filter(location_id=key)
     elif group == "special_event":
-        tasks = models.RideSpecialEvent.objects.filter(location_id=key)
+        query_set = models.RideSpecialEvent.objects.filter(location_id=key)
     elif group == "trail_work_day":
-        tasks = models.TrailWorkDay.objects.filter(location_id=key)
+        query_set = models.TrailWorkDay.objects.filter(location_id=key)
     elif group == "bike_swap":
-        tasks = models.BikeSwap.objects.filter(location_id=key)
+        query_set = models.BikeSwap.objects.filter(location_id=key)
     elif group == "conference":
-        tasks = models.Conference.objects.filter(location_id=key)
+        query_set = models.Conference.objects.filter(location_id=key)
 
-    data = serializers.serialize("json", tasks)
+    data = serializers.serialize("json", query_set)
+    return HttpResponse(data, content_type='application/json')
+
+
+def get_rider_info(request, rider_id):
+    query_set = User.objects.filter(id=rider_id)
+    data = serializers.serialize("json", query_set)
     return HttpResponse(data, content_type='application/json')
 
 
 def form_updater(request, form_type):
-
     args = {}
     args.update(csrf(request))
     args['kickoff'] = forms.KickOff()
