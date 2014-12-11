@@ -18,6 +18,7 @@
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
     <script src={% static "bike/datetimepicker-master/jquery.js" %}></script>
     <script src={% static "bike/datetimepicker-master/jquery.datetimepicker.js" %}></script>
+    <script src={% static "bike/js/bootbox.js" %}></script>
 
     {# Load the tag library #}
     {% load bootstrap3 %}
@@ -29,9 +30,6 @@
     <style>
         body {
             padding-top: 70px;
-        }
-        .leaflet-popup-content {
-            font-size:115%;
         }
     </style>
 
@@ -107,8 +105,8 @@
     </div>
 </div>
 
-
 <script>
+
     // Set CSRF Cookie
     function getCookie(name) {
     var cookieValue = null;
@@ -294,6 +292,7 @@
         "name":"Name",
         "coordinates":"Coordinates",
         "riders":"Riders",
+        "non_member_riders":"Non Member Riders",
         "race_trail":"Mountain Bike Race",
         "group_ride_road":"Group Ride - Road",
         "group_ride_trail":"Group Ride - MTB",
@@ -306,9 +305,11 @@
 
     //Marker click handler
     function onClick(e) {
+
         marker = this; //global var to use in othe AJAX calls
         var ajaxUrl = "";
         var popUpHtml = "";
+        var member_non_member = "";//for AJAX URL, return members vs non members JSON
         var rideType = marker.feature.properties.rideType;
         var rideSurface = marker.feature.properties.roadOrDirt;
         $("#peopleRiding").empty(); //clear list of riders before loading it
@@ -352,27 +353,65 @@
                                     year: '2-digit'
                                 });
                             }
-                            if (fld === "riders") {
+                            if (fld === "non_member_riders") {
+                                member_non_member = "non_member";
                                 for (var rider_id in value) {
-                                    getRiders(value[rider_id]);
+                                    getRiders(member_non_member, value[rider_id]);
                                 }
-                                value = value.length;
+                                var count_of_non_members_riding = value.length;
+                            }
+                            else if (fld === "riders") {
+                                member_non_member = "member";
+                                for (var rider_id in value) {
+                                    getRiders(member_non_member, value[rider_id]);
+                                }
+                                value = value.length + count_of_non_members_riding;
                             }
                             popUpHtml += '<b>' + key + '</b>' + ":  " + value + '<br>';
                         }
                     }
                     //create popupHTML and bind to marker
                     popUpHtml += '<p><button id="joinRideButton" class="btn btn-default btn-primary">Join Ride</button></p>'
-                    marker.bindPopup(popUpHtml).openPopup();
+                    bootbox.dialog({
+                        title: "That html",
+                        message: popUpHtml,
+                        animate: true
+                    });
                     $("#joinRideButton").click(joinRideFunc); //Add click handler for people joining this ride
                 });
             }
         });
     }
 
+    //building form to join ride as guest or member
     function joinRideFunc() {
-        $('.leaflet-popup-content').empty().append(
-                            '<form class="form-horizontal" role="form" method="POST" id="join_ride_form">');
+        $('.bootbox-body').empty().append(
+            '<div class="container">' +
+                '<div class="row">' +
+                    '<div class="col-lg-4 text-left">' +
+                        '<form id="joinRideForm" class="form-horizontal" method="POST" role="form">' +
+                            '<div class="row">' +
+                                '<div class="col-lg-3 text-left innerBox1"></div>' +
+                                '<div class="col-lg-3 text-left innerBox2"></div>' +
+                            '</div>' +
+                        '</form>' +
+                    '</div>' +
+                '</div>' +
+            '</div>');
+
+        //guest form, requires name only
+        $('#joinRideForm').prepend('{% bootstrap_field join_ride.first_name %}');
+        $('.innerBox1').append(
+        '<input id="nextSubmit" class="btn btn-default form-group btn-primary" type="submit" ' +
+        'value="Join Ride" name="submit" style="display: inline-block;">');
+        $('.innerBox2').append('<button id="memberButton" class="btn btn-default form-group btn-primary">Become Member</button>');
+        //if person wants to join as member, add more fields and remove member button
+        $("#memberButton").click(function() {
+            $('#joinRideForm').prepend('{% bootstrap_field join_ride.password %}');
+            $('#joinRideForm').prepend('{% bootstrap_field join_ride.username %}');
+            $('#memberButton').remove();
+        });
+
         $.ajax({
             dataType: "html",
             url: "http://127.0.0.1:8000/bike/form/join_ride/",
@@ -382,7 +421,8 @@
                 });
             }
         });
-        var frm = $('#join_ride_form');
+
+        var frm = $('#joinRideForm');
         var ajaxUrl = "";
         var rideType = marker.feature.properties.rideType;
         var rideSurface = marker.feature.properties.roadOrDirt;
@@ -405,9 +445,9 @@
             data: frm.serialize(),
             success: function () {
                 //close popup
-                $('.leaflet-popup-content').empty().append(
+                $('.bootbox-body').empty().append(
                         '<p>Success!</p>');
-{#                map.closePopup();#}
+
                 //Reload geoJSON
                 loadGeoJSON();
             },
@@ -422,13 +462,18 @@
     });
     }
 
-    function getRiders(rider_id) {
+    function getRiders(member_non_member, rider_id) {
         $.ajax({
             dataType: "json",
-            url: "http://127.0.0.1:8000/bike/riders/" + rider_id,
+            url: "http://127.0.0.1:8000/bike/riders/" + member_non_member + "/" + rider_id + "/",
             success: function (data) {
                 $(data).each(function (key, data) {
-                    $('<li>' + data.fields.username + '</li>').appendTo('#peopleRiding');
+                    if (member_non_member === "member") {
+                        $('<li>' + data.fields.username + '</li>').appendTo('#peopleRiding');
+                    }
+                    else {
+                        $('<li>' + data.fields.name + '</li>').appendTo('#peopleRiding');
+                    }
                 });
             }
         });
@@ -461,7 +506,7 @@
     });
     map.on('popupopen', function(e) {
         var px = map.project(e.popup._latlng);
-        px.y -= e.popup._container.clientHeight/2
+        px.y -= e.popup._container.clientHeight
         map.panTo(map.unproject(px),{animate: true});
     });
 

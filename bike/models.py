@@ -52,14 +52,16 @@ class RideLocation(models.Model):
     objects = models.GeoManager()
 
 
+class NonMembers(models.Model):
+    name = models.CharField(max_length=50, null=False)
+
+
 class GroupRideDirt(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
-
+    non_member_riders = models.ManyToManyField(NonMembers)
     rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=50, choices=MOUNTAIN_CHOICE, null=True)
-
     ridetime = models.DateTimeField()
-
     rideLevelTrail = models.CharField('MTB Ride Difficulty', max_length=20, choices=LEVEL_CHOICE, null=True)
     postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
     objects = models.GeoManager()
@@ -68,11 +70,9 @@ class GroupRideDirt(models.Model):
 class GroupRideRoad(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
-
+    non_member_riders = models.ManyToManyField(NonMembers)
     rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=50, choices=MOUNTAIN_CHOICE, null=True)
-
     ridetime = models.DateTimeField()
-
     rideLevelRoad = models.CharField('Road Ride Difficulty', max_length=20, choices=ROAD_CHOICE, null=True)
     postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
     objects = models.GeoManager()
@@ -81,7 +81,7 @@ class GroupRideRoad(models.Model):
 class RideSpecialEvent(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
-
+    non_member_riders = models.ManyToManyField(NonMembers)
     hostedBy = models.CharField(max_length=50, null=True)
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
@@ -94,9 +94,8 @@ class RideSpecialEvent(models.Model):
 class TrailRace(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
-
+    non_member_riders = models.ManyToManyField(NonMembers)
     rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=50, choices=MOUNTAIN_CHOICE, null=True)
-
     hostedBy = models.CharField(max_length=50, null=True)
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
@@ -110,7 +109,7 @@ class TrailRace(models.Model):
 class RoadRace(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
-
+    non_member_riders = models.ManyToManyField(NonMembers)
     hostedBy = models.CharField(max_length=50, null=True)
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
@@ -124,7 +123,7 @@ class RoadRace(models.Model):
 class TrailWorkDay(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
-
+    non_member_riders = models.ManyToManyField(NonMembers)
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
     ridetime = models.DateTimeField()
@@ -135,7 +134,7 @@ class TrailWorkDay(models.Model):
 class BikeSwap(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
-
+    non_member_riders = models.ManyToManyField(NonMembers)
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
     ridetime = models.DateTimeField()
@@ -145,7 +144,7 @@ class BikeSwap(models.Model):
 class Conference(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
-
+    non_member_riders = models.ManyToManyField(NonMembers)
     hostedBy = models.CharField(max_length=50, null=True)
     locationAddress = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=300, null=False)
@@ -153,3 +152,6 @@ class Conference(models.Model):
     ridetime = models.DateTimeField()
     website = models.CharField(max_length=100, null=True)
     objects = models.GeoManager()
+
+
+

@@ -13,6 +13,7 @@ def index(request):
     args = {}
     args.update(csrf(request))
     args['kickoff'] = forms.KickOff()
+    args['join_ride'] = forms.JoinRide()
     return render_to_response('bike/index.html', args)
 
 
@@ -38,9 +39,14 @@ def more_data(request, group, key):
     return HttpResponse(data, content_type='application/json')
 
 
-def get_rider_info(request, rider_id):
-    query_set = User.objects.only("username").filter(id=rider_id)
-    data = serializers.serialize("json", query_set, fields=('username'))
+def get_rider_info(request, member_non_member, rider_id):
+    if member_non_member == "member":
+        query_set = User.objects.only("username").filter(id=rider_id)
+        data = serializers.serialize("json", query_set, fields=('username'))
+    else:
+        query_set = models.NonMembers.objects.filter(id=rider_id)
+        data = serializers.serialize("json", query_set)
+
     return HttpResponse(data, content_type='application/json')
 
 
@@ -90,11 +96,18 @@ def add_rider(request, group, key):
         form = forms.JoinRide(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            username = cd['username']
-            password = cd['password']
-            new_guy = User.objects.create_user(username, "adwa@gmail.com", password)
-            query_set.riders.add(new_guy)
-            query_set.save()
+            if cd['username'] == "": #login for anonymous users
+                new_guy_non_member = models.NonMembers()
+                new_guy_non_member.name = cd['first_name']
+                new_guy_non_member.save()
+                query_set.non_member_riders.add(new_guy_non_member)
+                query_set.save()
+            else:
+                username = cd['username']
+                password = cd['password']
+                new_guy = User.objects.create_user(username, "adwa@gmail.com", password)
+                query_set.riders.add(new_guy)
+                query_set.save()
 
             return HttpResponseRedirect('/bike/add_point/success')
 
