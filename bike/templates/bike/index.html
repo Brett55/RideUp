@@ -94,11 +94,6 @@
             <div id="map" style="height:500px"></div>
             <div class="row">
                 <div class="col-lg-4"></div>
-                <div class="col-lg-4 text-left">
-                    <div>Riders:
-                        <ol id="peopleRiding"></ol>
-                    </div>
-                </div>
                 <div class="col-lg-4"></div>
             </div>
         </div>
@@ -291,7 +286,7 @@
         "rideType":"Event Type",
         "name":"Name",
         "coordinates":"Coordinates",
-        "riders":"Riders",
+        "riders":"Member Riders",
         "non_member_riders":"Non Member Riders",
         "race_trail":"Mountain Bike Race",
         "group_ride_road":"Group Ride - Road",
@@ -309,10 +304,8 @@
         marker = this; //global var to use in othe AJAX calls
         var ajaxUrl = "";
         var popUpHtml = "";
-        var member_non_member = "";//for AJAX URL, return members vs non members JSON
         var rideType = marker.feature.properties.rideType;
         var rideSurface = marker.feature.properties.roadOrDirt;
-        $("#peopleRiding").empty(); //clear list of riders before loading it
 
         // If/else condition is used to build AJAX url and popup information
         if (rideType === "RACE" || rideType === "GROUP_RIDE") {
@@ -321,16 +314,15 @@
             rideSurface.toLowerCase() + "/" +
             marker.feature.id + "/";
 
-            popUpHtml =  '<b><u>' + convertNames[rideType.toLowerCase() + "_" +
-                            rideSurface.toLowerCase()] + '</u></b><br>' +
-                            "<b>Name: </b>" + marker.feature.properties.name + '<br>';
+            popUpHtml =  '<table id="detailTable" class="table table-striped table-bordered table-condensed"><tbody><tr><th>' + convertNames[rideType.toLowerCase() + "_" + rideSurface.toLowerCase()] + '</th></tr>' +
+                            "<tr><th>Name: </th>" + '<td>' + marker.feature.properties.name + '</td></tr>';
         }
         else {
             ajaxUrl = "http://127.0.0.1:8000/bike/" + rideType.toLowerCase() + "/" +
             marker.feature.id + "/";
 
-            popUpHtml =  '<b><u>' + convertNames[rideType.toLowerCase()] + '</u></b><br>' +
-                            "<b>Name: </b>" + marker.feature.properties.name + '<br>';
+            popUpHtml =  '<table id="detailTable" class="table table-striped table-bordered table-condensed"><tbody><tr><th>' + convertNames[rideType.toLowerCase()] + '</th></tr>' +
+                            "<tr><th>Name: </th><td>" + marker.feature.properties.name + '</td></tr>';
         }
         //Calling ajaxURL to populate marker popup
         $.ajax({
@@ -353,38 +345,42 @@
                                     year: '2-digit'
                                 });
                             }
+                            //sorting between members and non members for AJAX call
                             if (fld === "non_member_riders") {
-                                member_non_member = "non_member";
-                                for (var rider_id in value) {
-                                    getRiders(member_non_member, value[rider_id]);
-                                }
-                                var count_of_non_members_riding = value.length;
+                                var nonMembersArray = value;
+                                var td = '<a id="getRiderInfoLinkNonMember" href="javascript:void(0)">' + value.length + '</a>';
+                                popUpHtml += '<tr><th>' + key + '</th>' + '<td>' + td + '</td></tr>';
+
                             }
+                            //sorting between members and non members for AJAX call
                             else if (fld === "riders") {
-                                member_non_member = "member";
-                                for (var rider_id in value) {
-                                    getRiders(member_non_member, value[rider_id]);
-                                }
-                                value = value.length + count_of_non_members_riding;
+                                var membersArray = value;
+                                var td = '<a id="getRiderInfoLinkMember" href="javascript:void(0)">' + value.length + '</a>';
+                                popUpHtml += '<tr><th>' + key + '</th>' + '<td>' + td + '</td></tr>';
                             }
-                            popUpHtml += '<b>' + key + '</b>' + ":  " + value + '<br>';
+                            else {
+                                popUpHtml += '<tr><th>' + key + '</th>' + '<td>' + value + '</td></tr>';
+                            }
                         }
                     }
                     //create popupHTML and bind to marker
-                    popUpHtml += '<p><button id="joinRideButton" class="btn btn-default btn-primary">Join Ride</button></p>'
+                    popUpHtml += '</tbody></table><p><button id="joinRideButton" class="btn btn-default btn-primary">Join Ride</button></p>'
                     bootbox.dialog({
-                        title: "That html",
+                        title: "Details",
                         message: popUpHtml,
                         animate: true
                     });
+                    $("#getRiderInfoLinkMember").click({param1: "member" , param2: membersArray}, getRiders);
+                    $("#getRiderInfoLinkNonMember").click({param1: "non_member" , param2: nonMembersArray}, getRiders);
                     $("#joinRideButton").click(joinRideFunc); //Add click handler for people joining this ride
                 });
             }
         });
     }
 
-    //building form to join ride as guest or member
+    //Joining person to existing event
     function joinRideFunc() {
+        //building form to join ride as guest or member
         $('.bootbox-body').empty().append(
             '<div class="container">' +
                 '<div class="row">' +
@@ -401,25 +397,18 @@
 
         //guest form, requires name only
         $('#joinRideForm').prepend('{% bootstrap_field join_ride.first_name %}');
+
         $('.innerBox1').append(
         '<input id="nextSubmit" class="btn btn-default form-group btn-primary" type="submit" ' +
         'value="Join Ride" name="submit" style="display: inline-block;">');
+
         $('.innerBox2').append('<button id="memberButton" class="btn btn-default form-group btn-primary">Become Member</button>');
+
         //if person wants to join as member, add more fields and remove member button
         $("#memberButton").click(function() {
             $('#joinRideForm').prepend('{% bootstrap_field join_ride.password %}');
             $('#joinRideForm').prepend('{% bootstrap_field join_ride.username %}');
             $('#memberButton').remove();
-        });
-
-        $.ajax({
-            dataType: "html",
-            url: "http://127.0.0.1:8000/bike/form/join_ride/",
-            success: function (data) {
-                $(data).each(function (key, data) {
-                    $(data).appendTo('#join_ride_form');
-                });
-            }
         });
 
         var frm = $('#joinRideForm');
@@ -438,45 +427,58 @@
             ajaxUrl = "http://127.0.0.1:8000/bike/add_rider/" + rideType.toLowerCase() + "/" +
             marker.feature.id + "/";
         }
+        //function to add rider to existing event
         frm.submit(function () {
-        $.ajax({
-            type: "POST",
-            url: ajaxUrl, //Use whichForm to set the URL for the API
-            data: frm.serialize(),
-            success: function () {
-                //close popup
-                $('.bootbox-body').empty().append(
-                        '<p>Success!</p>');
+            var first_name = $('#id_first_name').val();//get name to append to list of riders
+            $.ajax({
+                type: "POST",
+                url: ajaxUrl, //Use whichForm to set the URL for the API
+                data: frm.serialize(),
+                success: function () {
+                    //close popup and add 'Success'
+                    $('.bootbox-body').empty().append(
+                            '<p>Success!</p>');
 
-                //Reload geoJSON
-                loadGeoJSON();
-            },
-            error: function (xhr, errmsg, err) {
-                console.log("ERROR!");
-                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
-                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-            }
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log("ERROR!");
+                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+            return false;
         });
-        return false;
-    });
     }
 
-    function getRiders(member_non_member, rider_id) {
-        $.ajax({
-            dataType: "json",
-            url: "http://127.0.0.1:8000/bike/riders/" + member_non_member + "/" + rider_id + "/",
-            success: function (data) {
-                $(data).each(function (key, data) {
-                    if (member_non_member === "member") {
-                        $('<li>' + data.fields.username + '</li>').appendTo('#peopleRiding');
-                    }
-                    else {
-                        $('<li>' + data.fields.name + '</li>').appendTo('#peopleRiding');
-                    }
-                });
-            }
-        });
+    //function to get all riders attached to an event and display them as a list
+    function getRiders(event) {
+
+        //pass objects from event dictionary to variables
+        var member_non_member = event.data.param1;
+        var value = event.data.param2;
+
+        $('#riderInfoTable').remove();
+        $('#detailTable').after('<table class="table table-striped table-bordered table-condensed">' +
+                            '<tbody id="riderInfoTable"><tr><th>Riders</th></tr></tbody></table>');
+        for (var rider_id in value) {
+            $.ajax({
+                dataType: "json",
+                url: "http://127.0.0.1:8000/bike/riders/" + member_non_member + "/" + value[rider_id] + "/",
+                success: function (data) {
+                    $(data).each(function (key, data) {
+                        //members ajax call returned data
+                        if (member_non_member === "member") {
+                            $('<tr><td>' + data.fields.username + '</td></tr>').appendTo('#riderInfoTable');
+                        }
+                        //non members ajax call returned data
+                        else {
+                            $('<tr><td>' + data.fields.name + '</td></tr>').appendTo('#riderInfoTable');
+                        }
+                    });
+                }
+            });
+        }
     }
 
     //Drop point and get coordinates handler
@@ -498,16 +500,10 @@
         $('#id_coordinates').val(lng + ',' + lat)
     }
 
-    // call the onMapClick function when user click on map
+    // when user click the map, it drops a marker and gets (x,y) coordinates
     map.on('click', onMapClick);
     $(document).ready(function () {
         loadGeoJSON();
-
-    });
-    map.on('popupopen', function(e) {
-        var px = map.project(e.popup._latlng);
-        px.y -= e.popup._container.clientHeight
-        map.panTo(map.unproject(px),{animate: true});
     });
 
 </script>

@@ -41,7 +41,7 @@ def more_data(request, group, key):
 
 def get_rider_info(request, member_non_member, rider_id):
     if member_non_member == "member":
-        query_set = User.objects.only("username").filter(id=rider_id)
+        query_set = User.objects.filter(id=rider_id)
         data = serializers.serialize("json", query_set, fields=('username'))
     else:
         query_set = models.NonMembers.objects.filter(id=rider_id)
