@@ -80,6 +80,7 @@
         <div class="col-lg-3 text-left">
             <div>
                 <form class="form-horizontal" role="form" method="POST" id="post-form">
+                    {% csrf_token %}
                     {% bootstrap_form_errors kickoff %}
                     {% bootstrap_field kickoff.coordinates %}
                     {% bootstrap_field kickoff.name %}
@@ -125,13 +126,14 @@
         // these HTTP methods do not require CSRF protection
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     }
+
     //Set the universal settings for $ajax calls for use with CSRF protection
     $.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
         }
-    }
     });
 
 
@@ -146,7 +148,7 @@
         $("#fill_last").empty();
         $.ajax({
             dataType: "html",
-            url: "http://cryptic-mountain-5756.herokuapp.com/bike/form/" + typeEvent.toLowerCase() + "_" + typeSurface.toLowerCase(),
+            url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase() + "_" + typeSurface.toLowerCase(),
             success: function (data) {
                 $(data).each(function (key, data) {
                     $(data).appendTo("#fill_last").hide().fadeIn(1250);
@@ -187,7 +189,7 @@
                 '<option value="ROAD">Road</option></select></div>').appendTo("#fill").hide();
                 $.ajax({
                     dataType: "html",
-                    url: "http://cryptic-mountain-5756.herokuapp.com/bike/form/" + typeEvent.toLowerCase(),
+                    url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase(),
                     success: function (data) {
                         $(data).each(function (key, data) {
                             $(data).appendTo("#fill").hide().fadeIn(1250)
@@ -255,7 +257,7 @@
         //call stored geoJSON in DB
         $.ajax({
             dataType: "json",
-            url: "http://cryptic-mountain-5756.herokuapp.com/bike/data.geojson/",
+            url: "http://127.0.0.1:8000/bike/data.geojson/",
             success: function (data) {
                 $(data.features).each(function (key, data) {
                     L.geoJson(data, {onEachFeature: onEachFeature}).addTo(map);
@@ -310,7 +312,7 @@
         // If/else condition is used to build AJAX url and popup information
         if (rideType === "RACE" || rideType === "GROUP_RIDE") {
 
-            ajaxUrl = "http://cryptic-mountain-5756.herokuapp.com/bike/" + rideType.toLowerCase() + "_" +
+            ajaxUrl = "http://127.0.0.1:8000/bike/" + rideType.toLowerCase() + "_" +
             rideSurface.toLowerCase() + "/" +
             marker.feature.id + "/";
 
@@ -318,7 +320,7 @@
                             "<tr><th>Name: </th>" + '<td>' + marker.feature.properties.name + '</td></tr>';
         }
         else {
-            ajaxUrl = "http://cryptic-mountain-5756.herokuapp.com/bike/" + rideType.toLowerCase() + "/" +
+            ajaxUrl = "http://127.0.0.1:8000/bike/" + rideType.toLowerCase() + "/" +
             marker.feature.id + "/";
 
             popUpHtml =  '<table id="detailTable" class="table table-striped table-bordered table-condensed"><tbody><tr><th>' + convertNames[rideType.toLowerCase()] + '</th></tr>' +
@@ -378,6 +380,7 @@
         });
     }
 
+
     //Joining person to existing event
     function joinRideFunc() {
         //building form to join ride as guest or member
@@ -419,17 +422,16 @@
         // If/else condition is used to build AJAX url and popup information
         if (rideType === "RACE" || rideType === "GROUP_RIDE") {
 
-            ajaxUrl = "http://cryptic-mountain-5756.herokuapp.com/bike/add_rider/" + rideType.toLowerCase() + "_" +
+            ajaxUrl = "http://127.0.0.1:8000/bike/add_rider/" + rideType.toLowerCase() + "_" +
             rideSurface.toLowerCase() + "/" +
             marker.feature.id + "/";
         }
         else {
-            ajaxUrl = "http://cryptic-mountain-5756.herokuapp.com/bike/add_rider/" + rideType.toLowerCase() + "/" +
+            ajaxUrl = "http://127.0.0.1:8000/bike/add_rider/" + rideType.toLowerCase() + "/" +
             marker.feature.id + "/";
         }
         //function to add rider to existing event
         frm.submit(function () {
-            var first_name = $('#id_first_name').val();//get name to append to list of riders
             $.ajax({
                 type: "POST",
                 url: ajaxUrl, //Use whichForm to set the URL for the API
@@ -451,6 +453,7 @@
         });
     }
 
+
     //function to get all riders attached to an event and display them as a list
     function getRiders(event) {
 
@@ -464,7 +467,7 @@
         for (var rider_id in value) {
             $.ajax({
                 dataType: "json",
-                url: "http://cryptic-mountain-5756.herokuapp.com/bike/riders/" + member_non_member + "/" + value[rider_id] + "/",
+                url: "http://127.0.0.1:8000/bike/riders/" + member_non_member + "/" + value[rider_id] + "/",
                 success: function (data) {
                     $(data).each(function (key, data) {
                         //members ajax call returned data
@@ -483,6 +486,7 @@
 
     //Drop point and get coordinates handler
     function onMapClick(e) {
+
         var lat = e.latlng.lat;
         var lng = e.latlng.lng;
 
@@ -504,6 +508,13 @@
     map.on('click', onMapClick);
     $(document).ready(function () {
         loadGeoJSON();
+    });
+
+    //close modal window when clicked Off
+    $(document).on('click', '.bootbox', function(event){
+        var classname = event.target.className;
+        if (classname && !$('.' + classname).parents('.modal-dialog').length)
+            bootbox.hideAll();
     });
 
 </script>

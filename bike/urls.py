@@ -2,7 +2,6 @@ from django.conf.urls import patterns, url
 from djgeojson.views import GeoJSONLayerView
 from models import RideLocation
 
-
 urlpatterns = patterns('',
                        url(r'^riders/(\w+)/(\d+)/$', 'bike.views.get_rider_info'),
                        url(r'^add_rider/(\w+)/(\d+)/$', 'bike.views.add_rider'),
@@ -20,7 +19,6 @@ urlpatterns = patterns('',
                        url(r'^trail_work_day/$', 'bike.views.trail_work_day'),
                        url(r'^bike_swap/$', 'bike.views.bike_swap'),
                        url(r'^conference/$', 'bike.views.conference'),
-
                        url(r'^add_point/error/$', 'bike.views.form_error'),
-                       url(r'^add_point/success/$', 'bike.views.form_success'),
+                       url(r'^add_point/success/$', 'bike.views.form_success')
 )
