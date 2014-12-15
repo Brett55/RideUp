@@ -14,6 +14,7 @@ def index(request):
     args.update(csrf(request))
     args['kickoff'] = forms.KickOff()
     args['join_ride'] = forms.JoinRide()
+    args['join_ride_non_member'] = forms.JoinRideNonMember()
     return render_to_response('bike/index.html', args)
 
 
@@ -42,7 +43,7 @@ def more_data(request, group, key):
 def get_rider_info(request, member_non_member, rider_id):
     if member_non_member == "member":
         query_set = User.objects.filter(id=rider_id)
-        data = serializers.serialize("json", query_set, fields=('username'))
+        data = serializers.serialize("json", query_set, fields=('first_name'))
     else:
         query_set = models.NonMembers.objects.filter(id=rider_id)
         data = serializers.serialize("json", query_set)
@@ -94,23 +95,26 @@ def add_rider(request, group, key):
 
     if request.method == 'POST':
         form = forms.JoinRide(request.POST)
+        form_non_member = forms.JoinRideNonMember(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            if cd['username'] == "": #login for anonymous users
-                new_guy_non_member = models.NonMembers()
-                new_guy_non_member.name = cd['first_name']
-                new_guy_non_member.save()
-                query_set.non_member_riders.add(new_guy_non_member)
-                query_set.save()
-            else:
-                username = cd['username']
-                password = cd['password']
-                new_guy = User.objects.create_user(username, "adwa@gmail.com", password)
-                query_set.riders.add(new_guy)
-                query_set.save()
+            username = cd['username']
+            password = cd['password']
+            new_guy = User.objects.create_user(username, "adwa@gmail.com", password, first_name=cd['first_name'])
+            query_set.riders.add(new_guy)
+            query_set.save()
 
             return HttpResponseRedirect('/bike/add_point/success')
 
+        elif form_non_member.is_valid():
+            cd = form_non_member.cleaned_data
+            new_guy_non_member = models.NonMembers()
+            new_guy_non_member.name = cd['first_name']
+            new_guy_non_member.save()
+            query_set.non_member_riders.add(new_guy_non_member)
+            query_set.save()
+
+            return HttpResponseRedirect('/bike/add_point/success')
         else:
             return HttpResponseRedirect('/bike/add_point/error')
 
@@ -190,7 +194,7 @@ def group_ride_road(request):
 
 def race_trail(request):
     if request.method == 'POST':
-        form_kickoff = forms.KickOff(request.POST) # change
+        form_kickoff = forms.KickOff(request.POST)
         form = forms.TrailRace(request.POST)
         if form.is_valid() and form_kickoff.is_valid():
             new_point = models.RideLocation()
@@ -231,7 +235,7 @@ def race_trail(request):
 
 def race_road(request):
     if request.method == 'POST':
-        form_kickoff = forms.KickOff(request.POST) # change
+        form_kickoff = forms.KickOff(request.POST)
         form = forms.RoadRace(request.POST)
         if form.is_valid() and form_kickoff.is_valid():
             new_point = models.RideLocation()
@@ -260,7 +264,7 @@ def race_road(request):
             username = cd['username']
             password = cd['password']
             newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
-            new_ride.riders.add(newGuy) #2
+            new_ride.riders.add(newGuy)
 
             new_ride.save()
 
@@ -272,7 +276,7 @@ def race_road(request):
 
 def special_event(request):
     if request.method == 'POST':
-        form_kickoff = forms.KickOff(request.POST) # change
+        form_kickoff = forms.KickOff(request.POST)
         form = forms.RideSpecialEvent(request.POST)
         if form.is_valid() and form_kickoff.is_valid():
             new_point = models.RideLocation()
@@ -287,7 +291,7 @@ def special_event(request):
             new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
 
-            new_ride = models.RideSpecialEvent() #change
+            new_ride = models.RideSpecialEvent()
             new_ride.location = new_point
             new_ride.ridetime = cd['ridetime']
             new_ride.hostedBy = cd['hostedBy']
@@ -311,7 +315,7 @@ def special_event(request):
 
 def trail_work_day(request):
     if request.method == 'POST':
-        form_kickoff = forms.KickOff(request.POST) # change
+        form_kickoff = forms.KickOff(request.POST)
         form = forms.TrailWorkDay(request.POST)
         if form.is_valid() and form_kickoff.is_valid():
             new_point = models.RideLocation()
@@ -337,7 +341,7 @@ def trail_work_day(request):
             username = cd['username']
             password = cd['password']
             newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
-            new_ride.riders.add(newGuy) #2
+            new_ride.riders.add(newGuy)
             new_ride.save()
 
             return HttpResponseRedirect('/bike/add_point/success')
@@ -348,7 +352,7 @@ def trail_work_day(request):
 
 def bike_swap(request):
     if request.method == 'POST':
-        form_kickoff = forms.KickOff(request.POST) # change
+        form_kickoff = forms.KickOff(request.POST)
         form = forms.BikeSwap(request.POST)
         if form.is_valid() and form_kickoff.is_valid():
             new_point = models.RideLocation()
@@ -373,7 +377,7 @@ def bike_swap(request):
             username = cd['username']
             password = cd['password']
             newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
-            new_ride.riders.add(newGuy) #2
+            new_ride.riders.add(newGuy)
             new_ride.save()
 
             return HttpResponseRedirect('/bike/add_point/success')
@@ -384,7 +388,7 @@ def bike_swap(request):
 
 def conference(request):
     if request.method == 'POST':
-        form_kickoff = forms.KickOff(request.POST) # change
+        form_kickoff = forms.KickOff(request.POST)
         form = forms.Conference(request.POST)
         if form.is_valid() and form_kickoff.is_valid():
             new_point = models.RideLocation()
@@ -399,8 +403,8 @@ def conference(request):
             new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
 
-            new_ride = models.Conference() #change
-            new_ride.location = new_point #1
+            new_ride = models.Conference()
+            new_ride.location = new_point
             new_ride.ridetime = cd['ridetime']
             new_ride.locationAddress = cd['locationAddress']
             new_ride.description = cd['description']

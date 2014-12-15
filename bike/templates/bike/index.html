@@ -440,7 +440,6 @@
                     //close popup and add 'Success'
                     $('.bootbox-body').empty().append(
                             '<p>Success!</p>');
-
                 },
                 error: function (xhr, errmsg, err) {
                     console.log("ERROR!");
@@ -472,7 +471,7 @@
                     $(data).each(function (key, data) {
                         //members ajax call returned data
                         if (member_non_member === "member") {
-                            $('<tr><td>' + data.fields.username + '</td></tr>').appendTo('#riderInfoTable');
+                            $('<tr><td>' + data.fields.first_name + '</td></tr>').appendTo('#riderInfoTable');
                         }
                         //non members ajax call returned data
                         else {

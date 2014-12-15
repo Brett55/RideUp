@@ -57,16 +57,20 @@ class KickOff(forms.Form):
 
 class JoinRide(forms.Form):
     first_name = forms.CharField(label='Your Name', max_length=100, widget=forms.TextInput(), required=True)
-    username = forms.CharField(label='Username', max_length=100, widget=forms.TextInput(), required=False)
-    password = forms.CharField(label='Password', max_length=100, widget=forms.TextInput(), required=False)
+    username = forms.CharField(label='Username', max_length=100, widget=forms.TextInput(), required=True)
+    password = forms.CharField(label='Password', max_length=100, widget=forms.TextInput(), required=True)
+
+
+class JoinRideNonMember(forms.Form):
+    first_name = forms.CharField(label='Your Name', max_length=100, widget=forms.TextInput(), required=True)
 
 
 class AddRideSpotTrail(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(required=True)
 
-    username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+    username = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
+    password = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
     rideTypeMTB = forms.ChoiceField(label='Discipline', choices=MOUNTAIN_CHOICE, required=True)
 
     rideLevelTrail = forms.ChoiceField(label='Skill Level', choices=LEVEL_CHOICE, required=True)
@@ -77,8 +81,8 @@ class AddRideSpotRoad(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(required=True)
 
-    username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+    username = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
+    password = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
 
     rideLevelRoad = forms.ChoiceField(label='Average Pace', choices=ROAD_CHOICE, required=True)
     postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
@@ -88,35 +92,35 @@ class RideSpecialEvent(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(required=True)
 
-    username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+    username = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
+    password = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
 
     hostedBy = forms.CharField(label='Hosted By', max_length=100,
-                               widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+                               widget=forms.TextInput(), required=False)
     locationAddress = forms.CharField(label='Address', max_length=100,
-                                      widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    description = forms.CharField(max_length=300, widget=forms.TextInput(attrs={'style': 'height:30px'}),
+                                      widget=forms.TextInput(), required=False)
+    description = forms.CharField(max_length=300, widget=forms.TextInput(),
                                   required=False)
-    cost = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    website = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+    cost = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
+    website = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
 
 
 class TrailRace(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(required=True)
 
-    username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+    username = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
+    password = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
     rideTypeMTB = forms.ChoiceField(label='Discipline', choices=MOUNTAIN_CHOICE, required=True)
 
     hostedBy = forms.CharField(label='Hosted By', max_length=100,
-                               widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+                               widget=forms.TextInput(), required=False)
     locationAddress = forms.CharField(label='Address', max_length=100,
-                                      widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    description = forms.CharField(max_length=300, widget=forms.TextInput(attrs={'style': 'height:30px'}),
+                                      widget=forms.TextInput(), required=False)
+    description = forms.CharField(max_length=300, widget=forms.TextInput(),
                                   required=False)
-    cost = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    website = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+    cost = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
+    website = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
     postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
 
 
@@ -124,17 +128,17 @@ class RoadRace(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(required=True)
 
-    username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+    username = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
+    password = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
 
     hostedBy = forms.CharField(label='Hosted By', max_length=100,
-                               widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+                               widget=forms.TextInput(), required=False)
     locationAddress = forms.CharField(label='Address', max_length=100,
                                       widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    description = forms.CharField(max_length=300, widget=forms.TextInput(attrs={'style': 'height:30px'}),
+    description = forms.CharField(max_length=300, widget=forms.TextInput(),
                                   required=False)
-    cost = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    website = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+    cost = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
+    website = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
     postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
 
 
@@ -143,12 +147,12 @@ class TrailWorkDay(forms.Form):
     ridetime = forms.DateTimeField(required=True)
 
     locationAddress = forms.CharField(label='Address', max_length=100,
-                                      widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+                                      widget=forms.TextInput(), required=False)
 
-    username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+    username = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
+    password = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
 
-    description = forms.CharField(max_length=300, widget=forms.TextInput(attrs={'style': 'height:30px'}),
+    description = forms.CharField(max_length=300, widget=forms.TextInput(),
                                   required=False)
     postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
 
@@ -157,12 +161,12 @@ class BikeSwap(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(required=True)
 
-    username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+    username = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
+    password = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
 
     locationAddress = forms.CharField(label='Address', max_length=100,
-                                      widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    description = forms.CharField(max_length=300, widget=forms.TextInput(attrs={'style': 'height:30px'}),
+                                      widget=forms.TextInput(), required=False)
+    description = forms.CharField(max_length=300, widget=forms.TextInput(),
                                   required=False)
 
 
@@ -170,11 +174,11 @@ class Conference(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(required=True)
 
-    username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    password = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
+    username = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
+    password = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
 
     locationAddress = forms.CharField(label='Address', max_length=100,
-                                      widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    description = forms.CharField(max_length=300, widget=forms.TextInput(attrs={'style': 'height:30px'}),
+                                      widget=forms.TextInput(), required=False)
+    description = forms.CharField(max_length=300, widget=forms.TextInput(),
                                   required=False)
 
