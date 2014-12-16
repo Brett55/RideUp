@@ -68,11 +68,7 @@ class JoinRideNonMember(forms.Form):
 class AddRideSpotTrail(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(required=True)
-
-    username = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-    password = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
     rideTypeMTB = forms.ChoiceField(label='Discipline', choices=MOUNTAIN_CHOICE, required=True)
-
     rideLevelTrail = forms.ChoiceField(label='Skill Level', choices=LEVEL_CHOICE, required=True)
     postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
 
@@ -80,10 +76,6 @@ class AddRideSpotTrail(forms.Form):
 class AddRideSpotRoad(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(required=True)
-
-    username = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-    password = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-
     rideLevelRoad = forms.ChoiceField(label='Average Pace', choices=ROAD_CHOICE, required=True)
     postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
 
@@ -91,10 +83,6 @@ class AddRideSpotRoad(forms.Form):
 class RideSpecialEvent(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(required=True)
-
-    username = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-    password = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-
     hostedBy = forms.CharField(label='Hosted By', max_length=100,
                                widget=forms.TextInput(), required=False)
     locationAddress = forms.CharField(label='Address', max_length=100,
@@ -108,11 +96,7 @@ class RideSpecialEvent(forms.Form):
 class TrailRace(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(required=True)
-
-    username = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-    password = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
     rideTypeMTB = forms.ChoiceField(label='Discipline', choices=MOUNTAIN_CHOICE, required=True)
-
     hostedBy = forms.CharField(label='Hosted By', max_length=100,
                                widget=forms.TextInput(), required=False)
     locationAddress = forms.CharField(label='Address', max_length=100,
@@ -127,10 +111,6 @@ class TrailRace(forms.Form):
 class RoadRace(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(required=True)
-
-    username = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-    password = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-
     hostedBy = forms.CharField(label='Hosted By', max_length=100,
                                widget=forms.TextInput(), required=False)
     locationAddress = forms.CharField(label='Address', max_length=100,
@@ -149,9 +129,6 @@ class TrailWorkDay(forms.Form):
     locationAddress = forms.CharField(label='Address', max_length=100,
                                       widget=forms.TextInput(), required=False)
 
-    username = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-    password = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-
     description = forms.CharField(max_length=300, widget=forms.TextInput(),
                                   required=False)
     postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
@@ -160,10 +137,6 @@ class TrailWorkDay(forms.Form):
 class BikeSwap(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(required=True)
-
-    username = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-    password = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-
     locationAddress = forms.CharField(label='Address', max_length=100,
                                       widget=forms.TextInput(), required=False)
     description = forms.CharField(max_length=300, widget=forms.TextInput(),
@@ -173,10 +146,6 @@ class BikeSwap(forms.Form):
 class Conference(forms.Form):
     # Ride Class parmams
     ridetime = forms.DateTimeField(required=True)
-
-    username = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-    password = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-
     locationAddress = forms.CharField(label='Address', max_length=100,
                                       widget=forms.TextInput(), required=False)
     description = forms.CharField(max_length=300, widget=forms.TextInput(),

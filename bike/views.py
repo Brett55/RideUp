@@ -1,6 +1,7 @@
 import models
 import forms
 from django.shortcuts import render_to_response
+from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.context_processors import csrf
 from django.core import serializers
@@ -144,12 +145,6 @@ def group_ride_trail(request):
             new_ride.postRideBeer = cd['postRideBeer']
             new_ride.save()
 
-            username = cd['username']
-            password = cd['password']
-            newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
-            new_ride.riders.add(newGuy)
-            new_ride.save()
-
             return HttpResponseRedirect('/bike/add_point/success')
 
         else:
@@ -178,12 +173,6 @@ def group_ride_road(request):
             new_ride.rideLevelRoad = cd['rideLevelRoad']
             new_ride.ridetime = cd['ridetime']
             new_ride.postRideBeer = cd['postRideBeer']
-            new_ride.save()
-
-            username = cd['username']
-            password = cd['password']
-            newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
-            new_ride.riders.add(newGuy)
             new_ride.save()
 
             return HttpResponseRedirect('/bike/add_point/success')
@@ -221,12 +210,6 @@ def race_trail(request):
             new_ride.postRideBeer = cd['postRideBeer']
             new_ride.save()
 
-            username = cd['username']
-            password = cd['password']
-            newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
-            new_ride.riders.add(newGuy)
-            new_ride.save()
-
             return HttpResponseRedirect('/bike/add_point/success')
 
         else:
@@ -260,11 +243,6 @@ def race_road(request):
             new_ride.website = cd['website']
             new_ride.postRideBeer = cd['postRideBeer']
             new_ride.save()
-
-            username = cd['username']
-            password = cd['password']
-            newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
-            new_ride.riders.add(newGuy)
 
             new_ride.save()
 
@@ -301,12 +279,6 @@ def special_event(request):
             new_ride.website = cd['website']
             new_ride.save()
 
-            username = cd['username']
-            password = cd['password']
-            newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
-            new_ride.riders.add(newGuy)
-            new_ride.save()
-
             return HttpResponseRedirect('/bike/add_point/success')
 
         else:
@@ -336,12 +308,6 @@ def trail_work_day(request):
             new_ride.locationAddress = cd['locationAddress']
             new_ride.description = cd['description']
             new_ride.postRideBeer = cd['postRideBeer']
-            new_ride.save()
-
-            username = cd['username']
-            password = cd['password']
-            newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
-            new_ride.riders.add(newGuy)
             new_ride.save()
 
             return HttpResponseRedirect('/bike/add_point/success')
@@ -374,12 +340,6 @@ def bike_swap(request):
             new_ride.description = cd['description']
             new_ride.save()
 
-            username = cd['username']
-            password = cd['password']
-            newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
-            new_ride.riders.add(newGuy)
-            new_ride.save()
-
             return HttpResponseRedirect('/bike/add_point/success')
 
         else:
@@ -408,12 +368,6 @@ def conference(request):
             new_ride.ridetime = cd['ridetime']
             new_ride.locationAddress = cd['locationAddress']
             new_ride.description = cd['description']
-            new_ride.save()
-
-            username = cd['username']
-            password = cd['password']
-            newGuy = User.objects.create_user(username, "adwa@gmail.com", password)
-            new_ride.riders.add(newGuy)
             new_ride.save()
 
             return HttpResponseRedirect('/bike/add_point/success')

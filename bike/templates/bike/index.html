@@ -80,8 +80,8 @@
         <div class="col-lg-3 text-left">
             <div>
                 <form class="form-horizontal" role="form" method="POST" id="post-form">
-                    {% csrf_token %}
                     {% bootstrap_form_errors kickoff %}
+{#                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">#}
                     {% bootstrap_field kickoff.coordinates %}
                     {% bootstrap_field kickoff.name %}
                     {% bootstrap_field kickoff.rideType %}
@@ -103,6 +103,13 @@
 
 <script>
 
+    //close modal window when clicked Off
+    $(document).on('click', '.modal-backdrop', function(event){
+        var classname = event.target.className;
+        if (classname && !$('.' + classname).parents('.modal-dialog').length)
+            bootbox.hideAll();
+    });
+
     // Set CSRF Cookie
     function getCookie(name) {
     var cookieValue = null;
@@ -121,13 +128,10 @@
     }
     var csrftoken = getCookie('csrftoken');
 
-    //Test non-CSRF methods
     function csrfSafeMethod(method) {
         // these HTTP methods do not require CSRF protection
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     }
-
-    //Set the universal settings for $ajax calls for use with CSRF protection
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -136,6 +140,9 @@
         }
     });
 
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
 
     //Keep track of which form is being used to submit
     var whichForm = "";
@@ -484,10 +491,10 @@
     }
 
     //Drop point and get coordinates handler
-    function onMapClick(e) {
+    function onMapClick(event) {
 
-        var lat = e.latlng.lat;
-        var lng = e.latlng.lng;
+        var lat = event.latlng.lat;
+        var lng = event.latlng.lng;
 
         // Every time when user click on map we want to delete previous marker and create new marker on the new position where the user clicked      
         if (typeof newMarker != 'undefined') {
@@ -509,12 +516,6 @@
         loadGeoJSON();
     });
 
-    //close modal window when clicked Off
-    $(document).on('click', '.bootbox', function(event){
-        var classname = event.target.className;
-        if (classname && !$('.' + classname).parents('.modal-dialog').length)
-            bootbox.hideAll();
-    });
 
 </script>
 </body>
