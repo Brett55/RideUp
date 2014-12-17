@@ -392,27 +392,39 @@
     function joinRideFunc() {
         //building form to join ride as guest or member
         $('.bootbox-body').empty().append(
-            '<div class="container">' +
-                '<div class="row">' +
-                    '<div class="col-xs-4 text-left">' +
-                        '<form id="joinRideForm" class="form-horizontal" method="POST" role="form">' +
-                            '<div class="row">' +
-                                '<div class="col-sm-4 col-md-4 text-left innerBox1"></div>' +
-                                '<div class="col-sm-4 col-md-4 text-left innerBox2"></div>' +
-                            '</div>' +
-                        '</form>' +
-                    '</div>' +
-                '</div>' +
-            '</div>');
+            '<form id="joinRideForm" class="form-horizontal" role="form" method="POST">'
+                 +'<div class="row">'
+                    +'<div class="col-md-12">'
+                            +'<div class="form-group">'
+                                +'<label class="col-md-4 control-label" for="name">Name</label>'
+                                +'<div class="col-md-4">'
+                                    +'<input id="name" class="form-control input-md" type="text" placeholder="Your name" name="name">'
+                                +'</div>'
+                            +'</div>'
+                    +'</div>'
+                +'</div>'
+                +'<div class="row">'
+                    +'<div class="col-md-12">'
+                        +'<div class="form-group">'
+                            +'<div class="col-md-2">'
+                                +'<input id="nextSubmit" class="btn btn-default btn-primary" type="submit" value="Join Ride" name="submit">'
+                            +'</div>'
+                            +'<div class="col-md-2">'
+                                +'<button id="memberButton" class="btn btn-default btn-primary">Become Member</button>'
+                            +'</div>'
+                        +'</div>'
+                    +'</div>'
+                +'</div>'
+            +'</form>');
 
         //guest form, requires name only
-        $('#joinRideForm').prepend('{% bootstrap_field join_ride.first_name %}');
-
-        $('.innerBox1').append(
-        '<input id="nextSubmit" class="btn btn-default form-group btn-primary" type="submit" ' +
-        'value="Join Ride" name="submit" style="display: inline-block;">');
-
-        $('.innerBox2').append('<button id="memberButton" class="btn btn-default form-group btn-primary">Become Member</button>');
+{#        $('#joinRideForm').prepend('{% bootstrap_field join_ride.first_name %}');#}
+{##}
+{#        $('.innerBox1').append(#}
+{#        '<input id="nextSubmit" class="btn btn-default form-group btn-primary" type="submit" ' +#}
+{#        'value="Join Ride" name="submit" style="display: inline-block;">');#}
+{##}
+{#        $('.innerBox2').append('<button id="memberButton" class="btn btn-default form-group btn-primary">Become Member</button>');#}
 
         //if person wants to join as member, add more fields and remove member button
         $("#memberButton").click(function() {
