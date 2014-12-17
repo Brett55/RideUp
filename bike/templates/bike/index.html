@@ -394,11 +394,11 @@
         $('.bootbox-body').empty().append(
             '<div class="container">' +
                 '<div class="row">' +
-                    '<div class="col-lg-4 text-left">' +
+                    '<div class="col-xs-4 text-left">' +
                         '<form id="joinRideForm" class="form-horizontal" method="POST" role="form">' +
                             '<div class="row">' +
-                                '<div class="col-lg-3 text-left innerBox1"></div>' +
-                                '<div class="col-lg-3 text-left innerBox2"></div>' +
+                                '<div class="col-sm-4 col-md-4 text-left innerBox1"></div>' +
+                                '<div class="col-sm-4 col-md-4 text-left innerBox2"></div>' +
                             '</div>' +
                         '</form>' +
                     '</div>' +
@@ -500,9 +500,11 @@
         if (typeof newMarker != 'undefined') {
             map.removeLayer(newMarker);  // delete previous marker
             newMarker = L.marker([lat, lng]).addTo(map);  // add new marker
+            bootbox.confirm("Are you sure?", function(){});
         }
         else {
             newMarker = L.marker([lat, lng]).addTo(map);  // add new marker
+            bootbox.confirm("Are you sure?", function(){});
         }
 
         // we want to pass value of longitued and latitude to input field with id 'coordinates'
