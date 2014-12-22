@@ -101,7 +101,7 @@
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
     <script src={% static "bike/datetimepicker-master/jquery.js" %}></script>
     <script src={% static "bike/datetimepicker-master/jquery.datetimepicker.js" %}></script>
-    <script src={% static "bike/js/bootbox.js" %}></script>
+    <script src={% static "bike/js/bootstrap_jquery_bootbox/bootbox.js" %}></script>
 
     {#    bower components for angular#}
     <script src={% static "bike/js/bower_components/angular/angular.js" %}></script>
@@ -114,8 +114,11 @@
     <script src={% static "bike/js/bower_components/angular-sanitize/angular-sanitize.js" %}></script>
     <script src={% static "bike/js/bower_components/angular-touch/angular-touch.js" %}></script>
 
-    <script src={% static "bike/js/app.js" %}></script>
-    <script src={% static "bike/js/controllers.js" %}></script>
+    {#    angular web app source code#}
+    <script src={% static "bike/js/angular/app.js" %}></script>
+    <script src={% static "bike/js/angular/controllers.js" %}></script>
+
+    {#    web source code#}
     <script src={% static "bike/js/map.js" %}></script>
     <script src={% static "bike/js/joinRide.js" %}></script>
     <script src={% static "bike/js/getRiderInfo.js" %}></script>
