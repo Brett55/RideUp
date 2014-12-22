@@ -1,0 +1,61 @@
+//set map
+var map = L.map('map').setView([51.505, -0.09], 10);
+
+L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+    '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+    'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    id: 'examples.map-i875mjb7'
+}).addTo(map);
+
+
+//Drop point and get coordinates handler
+function onMapClick(event) {
+
+    var lat = event.latlng.lat;
+    var lng = event.latlng.lng;
+
+    // Every time when user click on map we want to delete previous marker and create new marker on the new position where the user clicked
+    if (typeof newMarker != 'undefined') {
+        map.removeLayer(newMarker);  // delete previous marker
+        newMarker = L.marker([lat, lng]).addTo(map);  // add new marker
+        bootbox.confirm("Are you sure?", function(){});
+    }
+    else {
+        newMarker = L.marker([lat, lng]).addTo(map);  // add new marker
+        bootbox.confirm("Are you sure?", function(){});
+    }
+
+    // we want to pass value of longitued and latitude to input field with id 'coordinates'
+    // note that we set that field as hidden because we don't want user to type the coordinates there. We want him to set marker on map
+    $('#id_coordinates').val(lng + ',' + lat)
+}
+
+
+function loadGeoJSON() {
+    //call stored geoJSON in DB
+    $.ajax({
+        dataType: "json",
+        url: "http://127.0.0.1:8000/bike/data.geojson/",
+        success: function (data) {
+            $(data.features).each(function (key, data) {
+                L.geoJson(data, {onEachFeature: onEachFeature}).addTo(map);
+            });
+        }
+    }).error(function () {
+    });
+}
+
+//close modal window when clicked Off
+$(document).on('click', '.modal-backdrop', function(event){
+    var classname = event.target.className;
+    if (classname && !$('.' + classname).parents('.modal-dialog').length)
+        bootbox.hideAll();
+});
+
+// when user click the map, it drops a marker and gets (x,y) coordinates
+map.on('click', onMapClick);
+$(document).ready(function () {
+    loadGeoJSON();
+});

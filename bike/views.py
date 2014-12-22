@@ -1,7 +1,6 @@
 import models
 import forms
 from django.shortcuts import render_to_response
-from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.context_processors import csrf
 from django.core import serializers

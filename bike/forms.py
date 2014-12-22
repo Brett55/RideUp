@@ -62,7 +62,7 @@ class JoinRide(forms.Form):
 
 
 class JoinRideNonMember(forms.Form):
-    first_name = forms.CharField(label='Your Name', max_length=100, widget=forms.TextInput(attrs={'class': 'col-md-12'}), required=True)
+    first_name = forms.CharField(label='Your Name', max_length=100, widget=forms.TextInput(), required=True)
 
 
 class AddRideSpotTrail(forms.Form):

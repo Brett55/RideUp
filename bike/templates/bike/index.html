@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="{% static 'bike/datetimepicker-master/jquery.datetimepicker.css' %}"/>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
-    {#    <link href="../../static/css/bootstrap.min.css" rel="stylesheet">#}
 
     <!-- may remove this below -->
 
@@ -15,17 +14,9 @@
         <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css"/>
      <![endif]-->
 
-    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-    <script src={% static "bike/datetimepicker-master/jquery.js" %}></script>
-    <script src={% static "bike/datetimepicker-master/jquery.datetimepicker.js" %}></script>
-    <script src={% static "bike/js/bootbox.js" %}></script>
-
     {# Load the tag library #}
     {% load bootstrap3 %}
 
-    {# Load CSS and JavaScript from Django #}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
 
     <style>
         body {
@@ -81,7 +72,6 @@
             <div>
                 <form class="form-horizontal" role="form" method="POST" id="post-form">
                     {% bootstrap_form_errors kickoff %}
-{#                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">#}
                     {% bootstrap_field kickoff.coordinates %}
                     {% bootstrap_field kickoff.name %}
                     {% bootstrap_field kickoff.rideType %}
@@ -99,438 +89,41 @@
             </div>
         </div>
     </div>
+
+    <div class="row" ng-app="myTest">
+        <div class="col-lg-12" ng-controller="AboutCtrl">
+            <input ng-model="myVar">
+            <p>a var is: {$ myVar $}</p>
+        </div>
+    </div>
+
 </div>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src={% static "bike/datetimepicker-master/jquery.js" %}></script>
+    <script src={% static "bike/datetimepicker-master/jquery.datetimepicker.js" %}></script>
+    <script src={% static "bike/js/bootbox.js" %}></script>
 
-<script>
+    {#    bower components for angular#}
+    <script src={% static "bike/js/bower_components/angular/angular.js" %}></script>
+    <script src={% static "bike/js/bower_components/angular-animate/angular-animate.js" %}></script>
+    <script src={% static "bike/js/bower_components/angular-aria/angular-aria.js" %}></script>
+    <script src={% static "bike/js/bower_components/angular-cookies/angular-cookies.js" %}></script>
+    <script src={% static "bike/js/bower_components/angular-messages/angular-messages.js" %}></script>
+    <script src={% static "bike/js/bower_components/angular-resource/angular-resource.js" %}></script>
+    <script src={% static "bike/js/bower_components/angular-route/angular-route.js" %}></script>
+    <script src={% static "bike/js/bower_components/angular-sanitize/angular-sanitize.js" %}></script>
+    <script src={% static "bike/js/bower_components/angular-touch/angular-touch.js" %}></script>
 
-    //close modal window when clicked Off
-    $(document).on('click', '.modal-backdrop', function(event){
-        var classname = event.target.className;
-        if (classname && !$('.' + classname).parents('.modal-dialog').length)
-            bootbox.hideAll();
-    });
+    <script src={% static "bike/js/app.js" %}></script>
+    <script src={% static "bike/js/controllers.js" %}></script>
+    <script src={% static "bike/js/map.js" %}></script>
+    <script src={% static "bike/js/joinRide.js" %}></script>
+    <script src={% static "bike/js/getRiderInfo.js" %}></script>
+    <script src={% static "bike/js/createRide.js" %}></script>
 
-    // Set CSRF Cookie
-    function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-    }
-    var csrftoken = getCookie('csrftoken');
+    {# Load CSS and JavaScript from Django #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
 
-    function csrfSafeMethod(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-    $.ajaxSetup({
-        beforeSend: function(xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        }
-    });
-
-    $.ajaxSetup({
-        data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
-    });
-
-    //Keep track of which form is being used to submit
-    var whichForm = "";
-
-    //add more fields for dirt or road group rides or races
-    function detailedUpdateForm() {
-        var typeSurface = $("#id_roadOrDirt").val();
-        var typeEvent = $("#id_rideType").val();
-        //Clear fields and call django api for respective fields
-        $("#fill_last").empty();
-        $.ajax({
-            dataType: "html",
-            url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase() + "_" + typeSurface.toLowerCase(),
-            success: function (data) {
-                $(data).each(function (key, data) {
-                    $(data).appendTo("#fill_last").hide().fadeIn(1250);
-                    // get time from jquery time widget
-                      jQuery('#id_ridetime').datetimepicker({
-                        format: 'm-d-Y g:i A',
-                        pick12HourFormat: true
-                    });
-                    whichForm = typeEvent.toLowerCase() + "_" + typeSurface.toLowerCase();
-                });
-            }
-        });
-    }
-
-    //Add more fields for ride events, if it is a group ride or race, call detailedUpdateFORM
-    $("#id_rideType").change(function updateForm() {
-        var typeEvent = $("#id_rideType").val();
-        if (typeEvent.toLowerCase() != "blank") {
-            if (typeEvent === "RACE" || typeEvent === "GROUP_RIDE") {
-                $("#fill").empty();
-                $("#fill_last").empty();
-                //add sub field for race or group rides, dirt or road, then attach handler (detailedUpdateForm)
-                $('<div class="form-group"><label class="control-label" for="id_roadOrDirt">Trail or Road</label>' +
-                '<select class="form-control" id="id_roadOrDirt" name="roadOrDirt" required="required" title="">' +
-                '<option value="SURFACE">Select Surface</option>' +
-                '<option value="TRAIL">Trail</option>' +
-                '<option value="ROAD">Road</option></select></div>').appendTo("#fill").hide().fadeIn(1250);
-                $("#id_roadOrDirt").change(detailedUpdateForm);
-            }
-            else {
-                //Clear and call django API for respective fields
-                $("#fill").empty();
-                $("#fill_last").empty();
-                $('<div class="form-group"><label class="control-label" for="id_roadOrDirt">Trail or Road</label>' +
-                '<select class="form-control" id="id_roadOrDirt" name="roadOrDirt" type="hidden" required="required" title="">' +
-                '<option value="SURFACE">Select Surface</option>' +
-                '<option value="TRAIL" selected>NA</option>' +
-                '<option value="ROAD">Road</option></select></div>').appendTo("#fill").hide();
-                $.ajax({
-                    dataType: "html",
-                    url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase(),
-                    success: function (data) {
-                        $(data).each(function (key, data) {
-                            $(data).appendTo("#fill").hide().fadeIn(1250)
-                            // get time from jquery time widget
-                            jQuery('#id_ridetime').datetimepicker({
-                                format: 'm-d-Y g:i A',
-                                pick12HourFormat: true
-                            });
-                            whichForm = typeEvent.toLowerCase();
-                        });
-                    }
-                });
-            }
-        }
-        else {
-            //Empty form if 'select type' is selected
-            $("#fill").empty();
-            $("#fill_last").empty();
-        }
-    });
-
-
-    //set map
-    var map = L.map('map').setView([51.505, -0.09], 10);
-
-    L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-        '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-        'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-        id: 'examples.map-i875mjb7'
-    }).addTo(map);
-
-    //grab form and POST data on submission
-    var frm = $('#post-form');
-    frm.submit(function () {
-        $.ajax({
-            type: "POST",
-            url: "/bike/" + whichForm + "/", //Use whichForm to set the URL for the API
-            data: frm.serialize(),
-            success: function () {
-                //Remove the values from the input
-                $("#fill").empty();
-                $("#fill_last").empty();
-                $('#id_name').val('');
-                $('#id_rideType').val("BLANK");
-
-                //Reload geoJSON
-                loadGeoJSON();
-                map.removeLayer(newMarker);
-            },
-
-            error: function (xhr, errmsg, err) {
-                console.log("ERROR!");
-                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
-                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-            }
-        });
-        return false;
-    });
-
-
-    function loadGeoJSON() {
-        //call stored geoJSON in DB
-        $.ajax({
-            dataType: "json",
-            url: "http://127.0.0.1:8000/bike/data.geojson/",
-            success: function (data) {
-                $(data.features).each(function (key, data) {
-                    L.geoJson(data, {onEachFeature: onEachFeature}).addTo(map);
-                });
-            }
-        }).error(function () {
-        });
-    }
-
-    //Marker click handler
-    function onEachFeature(feature, layer) {
-        // attach click handler to do AJAX call
-        layer.on('click', onClick);
-    }
-
-    var convertNames = {
-        "description":"Details",
-        "locationAddress":"Address",
-        "ridetime":"Time",
-        "postRideBeer":"Post-Ride Food & Beer Spot",
-        "cost":"Cost",
-        "website":"Website",
-        "hostedBy":"Hosted By",
-        "rideTypeMTB":"MTB Discipline",
-        "rideLevelTrail":"Skill Level",
-        "rideLevelRoad":"Road Pace",
-        "roadOrDirt":"Road Or Trail",
-        "rideType":"Event Type",
-        "name":"Name",
-        "coordinates":"Coordinates",
-        "riders":"Member Riders",
-        "non_member_riders":"Non Member Riders",
-        "race_trail":"Mountain Bike Race",
-        "group_ride_road":"Group Ride - Road",
-        "group_ride_trail":"Group Ride - MTB",
-        "race_road":"Road Race",
-        "special_event":"Special Event",
-        "trail_work_day":"Trail Work Day",
-        "bike_swap":"Swap Meet",
-        "conference":"Conference"
-    }
-
-    //Marker click handler
-    function onClick(e) {
-
-        marker = this; //global var to use in othe AJAX calls
-        var ajaxUrl = "";
-        var popUpHtml = "";
-        var rideType = marker.feature.properties.rideType;
-        var rideSurface = marker.feature.properties.roadOrDirt;
-
-        // If/else condition is used to build AJAX url and popup information
-        if (rideType === "RACE" || rideType === "GROUP_RIDE") {
-
-            ajaxUrl = "http://127.0.0.1:8000/bike/" + rideType.toLowerCase() + "_" +
-            rideSurface.toLowerCase() + "/" +
-            marker.feature.id + "/";
-
-            popUpHtml =  '<table id="detailTable" class="table table-striped table-bordered table-condensed"><tbody><tr><th>' + convertNames[rideType.toLowerCase() + "_" + rideSurface.toLowerCase()] + '</th></tr>' +
-                            "<tr><th>Name: </th>" + '<td>' + marker.feature.properties.name + '</td></tr>';
-        }
-        else {
-            ajaxUrl = "http://127.0.0.1:8000/bike/" + rideType.toLowerCase() + "/" +
-            marker.feature.id + "/";
-
-            popUpHtml =  '<table id="detailTable" class="table table-striped table-bordered table-condensed"><tbody><tr><th>' + convertNames[rideType.toLowerCase()] + '</th></tr>' +
-                            "<tr><th>Name: </th><td>" + marker.feature.properties.name + '</td></tr>';
-        }
-        //Calling ajaxURL to populate marker popup
-        $.ajax({
-            dataType: "json",
-            url: ajaxUrl,
-            success: function (data) {
-                $(data).each(function (key, data) {
-                    for (var fld in data.fields) {
-                        var key = convertNames[fld]; //popup key
-                        var value = data.fields[fld]; //popup value
-                        if ((key) && (value)) {
-                            if (fld === "ridetime" ) {
-                                var time = new Date(data.fields[fld]); //convert time to readable format
-                                value = time.toLocaleString(navigator.language, {
-                                //Options for time display
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                    day: '2-digit',
-                                    month: '2-digit',
-                                    year: '2-digit'
-                                });
-                            }
-                            //sorting between members and non members for AJAX call
-                            if (fld === "non_member_riders") {
-                                var nonMembersArray = value;
-                                var td = '<a id="getRiderInfoLinkNonMember" href="javascript:void(0)">' + value.length + '</a>';
-                                popUpHtml += '<tr><th>' + key + '</th>' + '<td>' + td + '</td></tr>';
-
-                            }
-                            //sorting between members and non members for AJAX call
-                            else if (fld === "riders") {
-                                var membersArray = value;
-                                var td = '<a id="getRiderInfoLinkMember" href="javascript:void(0)">' + value.length + '</a>';
-                                popUpHtml += '<tr><th>' + key + '</th>' + '<td>' + td + '</td></tr>';
-                            }
-                            else {
-                                popUpHtml += '<tr><th>' + key + '</th>' + '<td>' + value + '</td></tr>';
-                            }
-                        }
-                    }
-                    //create popupHTML and bind to marker
-                    popUpHtml += '</tbody></table><p><button id="joinRideButton" class="btn btn-default btn-primary">Join Ride</button></p>'
-                    bootbox.dialog({
-                        title: "Details",
-                        message: popUpHtml,
-                        animate: true
-                    });
-                    $("#getRiderInfoLinkMember").click({param1: "member" , param2: membersArray}, getRiders);
-                    $("#getRiderInfoLinkNonMember").click({param1: "non_member" , param2: nonMembersArray}, getRiders);
-                    $("#joinRideButton").click(joinRideFunc); //Add click handler for people joining this ride
-                });
-            }
-        });
-    }
-
-
-    //Joining person to existing event
-    function joinRideFunc() {
-        //building form to join ride as guest or member
-        $('.bootbox-body').empty().append(
-            '<form id="joinRideForm" class="form-horizontal" role="form" method="POST">'
-                 +'<div class="row">'
-                    +'<div class="col-md-12">'
-                            +'<div class="form-group">'
-                                +'<label class="col-md-4 control-label" for="name">Name</label>'
-                                +'<div class="col-md-4">'
-                                    +'<input id="name" class="form-control input-md" type="text" placeholder="Your name" name="name">'
-                                +'</div>'
-                            +'</div>'
-                    +'</div>'
-                +'</div>'
-                +'<div class="row">'
-                    +'<div class="col-md-12">'
-                        +'<div class="form-group">'
-                            +'<div class="col-md-2">'
-                                +'<input id="nextSubmit" class="btn btn-default btn-primary" type="submit" value="Join Ride" name="submit">'
-                            +'</div>'
-                            +'<div class="col-md-2">'
-                                +'<button id="memberButton" class="btn btn-default btn-primary">Become Member</button>'
-                            +'</div>'
-                        +'</div>'
-                    +'</div>'
-                +'</div>'
-            +'</form>');
-
-        //guest form, requires name only
-{#        $('#joinRideForm').prepend('{% bootstrap_field join_ride.first_name %}');#}
-{##}
-{#        $('.innerBox1').append(#}
-{#        '<input id="nextSubmit" class="btn btn-default form-group btn-primary" type="submit" ' +#}
-{#        'value="Join Ride" name="submit" style="display: inline-block;">');#}
-{##}
-{#        $('.innerBox2').append('<button id="memberButton" class="btn btn-default form-group btn-primary">Become Member</button>');#}
-
-        //if person wants to join as member, add more fields and remove member button
-        $("#memberButton").click(function() {
-            $('#joinRideForm').prepend('{% bootstrap_field join_ride.password %}');
-            $('#joinRideForm').prepend('{% bootstrap_field join_ride.username %}');
-            $('#memberButton').remove();
-        });
-
-        var frm = $('#joinRideForm');
-        var ajaxUrl = "";
-        var rideType = marker.feature.properties.rideType;
-        var rideSurface = marker.feature.properties.roadOrDirt;
-
-        // If/else condition is used to build AJAX url and popup information
-        if (rideType === "RACE" || rideType === "GROUP_RIDE") {
-
-            ajaxUrl = "http://127.0.0.1:8000/bike/add_rider/" + rideType.toLowerCase() + "_" +
-            rideSurface.toLowerCase() + "/" +
-            marker.feature.id + "/";
-        }
-        else {
-            ajaxUrl = "http://127.0.0.1:8000/bike/add_rider/" + rideType.toLowerCase() + "/" +
-            marker.feature.id + "/";
-        }
-        //function to add rider to existing event
-        frm.submit(function () {
-            $.ajax({
-                type: "POST",
-                url: ajaxUrl, //Use whichForm to set the URL for the API
-                data: frm.serialize(),
-                success: function () {
-                    //close popup and add 'Success'
-                    $('.bootbox-body').empty().append(
-                            '<p>Success!</p>');
-                },
-                error: function (xhr, errmsg, err) {
-                    console.log("ERROR!");
-                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
-                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-                }
-            });
-            return false;
-        });
-    }
-
-
-    //function to get all riders attached to an event and display them as a list
-    function getRiders(event) {
-
-        //pass objects from event dictionary to variables
-        var member_non_member = event.data.param1;
-        var value = event.data.param2;
-
-        $('#riderInfoTable').remove();
-        $('#detailTable').after('<table class="table table-striped table-bordered table-condensed">' +
-                            '<tbody id="riderInfoTable"><tr><th>Riders</th></tr></tbody></table>');
-        for (var rider_id in value) {
-            $.ajax({
-                dataType: "json",
-                url: "http://127.0.0.1:8000/bike/riders/" + member_non_member + "/" + value[rider_id] + "/",
-                success: function (data) {
-                    $(data).each(function (key, data) {
-                        //members ajax call returned data
-                        if (member_non_member === "member") {
-                            $('<tr><td>' + data.fields.first_name + '</td></tr>').appendTo('#riderInfoTable');
-                        }
-                        //non members ajax call returned data
-                        else {
-                            $('<tr><td>' + data.fields.name + '</td></tr>').appendTo('#riderInfoTable');
-                        }
-                    });
-                }
-            });
-        }
-    }
-
-    //Drop point and get coordinates handler
-    function onMapClick(event) {
-
-        var lat = event.latlng.lat;
-        var lng = event.latlng.lng;
-
-        // Every time when user click on map we want to delete previous marker and create new marker on the new position where the user clicked      
-        if (typeof newMarker != 'undefined') {
-            map.removeLayer(newMarker);  // delete previous marker
-            newMarker = L.marker([lat, lng]).addTo(map);  // add new marker
-            bootbox.confirm("Are you sure?", function(){});
-        }
-        else {
-            newMarker = L.marker([lat, lng]).addTo(map);  // add new marker
-            bootbox.confirm("Are you sure?", function(){});
-        }
-
-        // we want to pass value of longitued and latitude to input field with id 'coordinates'
-        // note that we set that field as hidden because we don't want user to type the coordinates there. We want him to set marker on map 
-        $('#id_coordinates').val(lng + ',' + lat)
-    }
-
-    // when user click the map, it drops a marker and gets (x,y) coordinates
-    map.on('click', onMapClick);
-    $(document).ready(function () {
-        loadGeoJSON();
-    });
-
-
-</script>
 </body>
 </html>
