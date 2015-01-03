@@ -12,7 +12,7 @@ function detailedUpdateForm() {
         url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase() + "_" + typeSurface.toLowerCase(),
         success: function (data) {
             $(data).each(function (key, data) {
-                $(data).appendTo("#fill_last").hide().fadeIn(1250);
+                $(data).appendTo("#fill_last").hide().fadeIn(1);
                 // get time from jquery time widget
                   jQuery('#id_ridetime').datetimepicker({
                     format: 'm-d-Y g:i A',
@@ -36,7 +36,7 @@ $("#id_rideType").change(function updateForm() {
             '<select class="form-control" id="id_roadOrDirt" name="roadOrDirt" required="required" title="">' +
             '<option value="SURFACE">Select Surface</option>' +
             '<option value="TRAIL">Trail</option>' +
-            '<option value="ROAD">Road</option></select></div>').appendTo("#fill").hide().fadeIn(1250);
+            '<option value="ROAD">Road</option></select></div>').appendTo("#fill").hide().fadeIn(1);
             $("#id_roadOrDirt").change(detailedUpdateForm);
         }
         else {
@@ -53,7 +53,7 @@ $("#id_rideType").change(function updateForm() {
                 url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase(),
                 success: function (data) {
                     $(data).each(function (key, data) {
-                        $(data).appendTo("#fill").hide().fadeIn(1250)
+                        $(data).appendTo("#fill").hide().fadeIn(1);
                         // get time from jquery time widget
                         jQuery('#id_ridetime').datetimepicker({
                             format: 'm-d-Y g:i A',

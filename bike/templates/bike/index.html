@@ -5,8 +5,10 @@
     <title>Ride Spots</title>
     {% load staticfiles %}
     <link rel="stylesheet" href="{% static 'bike/datetimepicker-master/jquery.datetimepicker.css' %}"/>
+    <link rel="stylesheet" href="{% static 'bike/css/Control.OSMGeocoder.css' %}"/>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+
 
     <!-- may remove this below -->
 
@@ -17,12 +19,18 @@
     {# Load the tag library #}
     {% load bootstrap3 %}
 
-
     <style>
         body {
             padding-top: 70px;
         }
+        .nav, .pagination, .carousel, .panel-title a {
+            cursor: pointer;
+        }
+        .btn {
+            margin: 2px;
+        }
     </style>
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -71,8 +79,6 @@
         <div class="col-lg-3 text-left">
             <div>
                 <form class="form-horizontal" role="form" method="POST" id="post-form">
-                    {% csrf_token %}
-                    {% bootstrap_form_errors kickoff %}
                     {% bootstrap_field kickoff.coordinates %}
                     {% bootstrap_field kickoff.name %}
                     {% bootstrap_field kickoff.rideType %}
@@ -91,35 +97,93 @@
         </div>
     </div>
 
-    <div class="row" ng-app="myTest">
-        <div class="col-lg-12" ng-controller="AboutCtrl">
-            <input ng-model="myVar">
-            <p>a var is: {$ myVar $}</p>
-        </div>
-    </div>
 
+{#    <div ng-controller="ModalCtrl">#}
+{#        <script type="text/ng-template" id="myModalContent.html">#}
+{#            <div class="modal-header">#}
+{#                <h3 ng-hide="myForm.success" class="modal-title">Join Ride</h3>#}
+{#                <h3 ng-show="myForm.success">Success!</h3>#}
+{#            </div>#}
+{#            <div class="modal-body">#}
+{#                <form ng-hide="myForm.success">#}
+{#                    <div class="form-group">#}
+{#                        <label>Name</label><br>#}
+{#                        <input type="text" id="name" ng-model="myForm.name" ng-minlength="2"#}
+{#                               ng-maxlength="30" size="50">#}
+{#                    </div>#}
+{#                    <div class="form-group" ng-show="myForm.memberJoin">#}
+{#                        <label>Username</label><br>#}
+{#                        <input type="text" id="name" ng-model="myForm.username" ng-minlength="2"#}
+{#                               ng-maxlength="30" size="50">#}
+{#                    </div>#}
+{#                    <div class="form-group" ng-show="myForm.memberJoin">#}
+{#                        <label>Password</label><br>#}
+{#                        <input type="text" id="name" ng-model="myForm.password" ng-minlength="2"#}
+{#                               ng-maxlength="30" size="50">#}
+{#                    </div>#}
+{#                </form>#}
+{#            </div>#}
+{#            <div class="modal-footer">#}
+{#                <button class="btn btn-primary" ng-hide="myForm.success" ng-click="myForm.doClick()">Join Ride</button>#}
+{#                <button class="btn btn-primary" ng-hide="myForm.success" ng-click="myForm.JoinMember()">Become Member</button>#}
+{#            </div>#}
+{#        </script>#}
+{#        <button class="btn btn-default" ng-click="open()">Open me!</button>#}
+{#    </div>#}
 </div>
+
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src={% static "bike/js/bootstrap_jquery_bootbox/Control.OSMGeocoder.js" %}></script>
     <script src={% static "bike/datetimepicker-master/jquery.js" %}></script>
     <script src={% static "bike/datetimepicker-master/jquery.datetimepicker.js" %}></script>
     <script src={% static "bike/js/bootstrap_jquery_bootbox/bootbox.js" %}></script>
 
     {#    bower components for angular#}
     <script src={% static "bike/js/bower_components/angular/angular.js" %}></script>
-    <script src={% static "bike/js/bower_components/angular-animate/angular-animate.js" %}></script>
-    <script src={% static "bike/js/bower_components/angular-aria/angular-aria.js" %}></script>
     <script src={% static "bike/js/bower_components/angular-cookies/angular-cookies.js" %}></script>
-    <script src={% static "bike/js/bower_components/angular-messages/angular-messages.js" %}></script>
-    <script src={% static "bike/js/bower_components/angular-resource/angular-resource.js" %}></script>
-    <script src={% static "bike/js/bower_components/angular-route/angular-route.js" %}></script>
-    <script src={% static "bike/js/bower_components/angular-sanitize/angular-sanitize.js" %}></script>
-    <script src={% static "bike/js/bower_components/angular-touch/angular-touch.js" %}></script>
+    <script src={% static "bike/js/bower_components/angular-bootstrap/ui-bootstrap-tpls.js" %}></script>
+    <script src={% static "bike/js/bower_components/angular-ui-router/release/angular-ui-router.min.js" %}></script>
 
     {#    angular web app source code#}
     <script src={% static "bike/js/angular/app.js" %}></script>
     <script src={% static "bike/js/angular/controllers.js" %}></script>
 
-    {#    web source code#}
+    <script>
+        // Set CSRF Cookie
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+        });
+    </script>
+
     <script src={% static "bike/js/map.js" %}></script>
     <script src={% static "bike/js/joinRide.js" %}></script>
     <script src={% static "bike/js/getRiderInfo.js" %}></script>
@@ -128,6 +192,7 @@
     {# Load CSS and JavaScript from Django #}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+
 
 </body>
 </html>

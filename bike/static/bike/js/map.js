@@ -1,12 +1,12 @@
 //set map
 var map = L.map('map').setView([51.505, -0.09], 10);
 
-L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
-    maxZoom: 18,
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-    '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-    'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    id: 'examples.map-i875mjb7'
+var osmGeocoder = new L.Control.OSMGeocoder();
+
+map.addControl(osmGeocoder);
+
+L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
+	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
 
@@ -20,11 +20,29 @@ function onMapClick(event) {
     if (typeof newMarker != 'undefined') {
         map.removeLayer(newMarker);  // delete previous marker
         newMarker = L.marker([lat, lng]).addTo(map);  // add new marker
-        bootbox.confirm("Are you sure?", function(){});
+        bootbox.confirm("<h4>Create Ride Event?</h4>", function(result){
+            if (result === true) {
+                $('.modal-content').empty().append(
+                    '<div class="modal-header">'
+                    +'<button class="bootbox-close-button close" aria-hidden="true" data-dismiss="modal" type="button">×</button>'
+                    +'<h4 class="modal-title">Create Ride</h4>'
+                    +'</div>');
+                return false;
+            }
+        });
     }
     else {
         newMarker = L.marker([lat, lng]).addTo(map);  // add new marker
-        bootbox.confirm("Are you sure?", function(){});
+        bootbox.confirm("<h4>Create Ride Event?</h4>", function(result){
+            if (result === true) {
+                $('.modal-content').empty().append(
+                    '<div class="modal-header">'
+                    +'<button class="bootbox-close-button close" aria-hidden="true" data-dismiss="modal" type="button">×</button>'
+                    +'<h4 class="modal-title">Create Ride</h4>'
+                    +'</div>');
+                return false;
+            }
+        });
     }
 
     // we want to pass value of longitued and latitude to input field with id 'coordinates'

@@ -114,9 +114,9 @@ def add_rider(request, group, key):
             query_set.non_member_riders.add(new_guy_non_member)
             query_set.save()
 
-            return HttpResponseRedirect('/bike/add_point/success')
+            return HttpResponse("SUCCESS")
         else:
-            return HttpResponseRedirect('/bike/add_point/error')
+            return HttpResponse(form_non_member.errors)
 
 
 def group_ride_trail(request):
@@ -342,7 +342,7 @@ def bike_swap(request):
             return HttpResponseRedirect('/bike/add_point/success')
 
         else:
-            return HttpResponse(form.errors)
+            return HttpResponseRedirect('/bike/add_point/error')
 
 
 def conference(request):
