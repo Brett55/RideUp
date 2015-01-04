@@ -28,7 +28,11 @@
         "special_event":"Special Event",
         "trail_work_day":"Trail Work Day",
         "bike_swap":"Swap Meet",
-        "conference":"Conference"
+        "conference":"Conference",
+        "DBL_BLACK":"Double Black Diamond",
+        "BLACK":"Single Black Diamond",
+        "BLUE":"Blue",
+        "GREEN":"Green"
     }
 
     //Marker click handler
