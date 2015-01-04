@@ -43,7 +43,7 @@
         // If/else condition is used to build AJAX url and popup information
         if (rideType === "RACE" || rideType === "GROUP_RIDE") {
 
-            ajaxUrl = "http://127.0.0.1:8000/bike/" + rideType.toLowerCase() + "_" +
+            ajaxUrl = "http://cryptic-mountain-5756.herokuapp.com/bike/" + rideType.toLowerCase() + "_" +
             rideSurface.toLowerCase() + "/" +
             marker.feature.id + "/";
 
@@ -51,7 +51,7 @@
                             "<tr><th>Name: </th>" + '<td>' + marker.feature.properties.name + '</td></tr>';
         }
         else {
-            ajaxUrl = "http://127.0.0.1:8000/bike/" + rideType.toLowerCase() + "/" +
+            ajaxUrl = "http://cryptic-mountain-5756.herokuapp.com/bike/" + rideType.toLowerCase() + "/" +
             marker.feature.id + "/";
 
             popUpHtml =  '<table id="detailTable" class="table table-striped table-bordered table-condensed"><tbody><tr><th>' + convertNames[rideType.toLowerCase()] + '</th></tr>' +
@@ -157,12 +157,12 @@
         // If/else condition is used to build AJAX url and popup information
         if (rideType === "RACE" || rideType === "GROUP_RIDE") {
 
-            ajaxUrl = "http://127.0.0.1:8000/bike/add_rider/" + rideType.toLowerCase() + "_" +
+            ajaxUrl = "http://cryptic-mountain-5756.herokuapp.com/bike/add_rider/" + rideType.toLowerCase() + "_" +
             rideSurface.toLowerCase() + "/" +
             marker.feature.id + "/";
         }
         else {
-            ajaxUrl = "http://127.0.0.1:8000/bike/add_rider/" + rideType.toLowerCase() + "/" +
+            ajaxUrl = "http://cryptic-mountain-5756.herokuapp.com/bike/add_rider/" + rideType.toLowerCase() + "/" +
             marker.feature.id + "/";
         }
         //function to add rider to existing event

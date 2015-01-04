@@ -47,7 +47,7 @@ function detailedUpdateForm() {
     $("#fill_last").empty();
     $.ajax({
         dataType: "html",
-        url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase() + "_" + typeSurface.toLowerCase(),
+        url: "http://cryptic-mountain-5756.herokuapp.com/bike/form/" + typeEvent.toLowerCase() + "_" + typeSurface.toLowerCase(),
         success: function (data) {
             $(data).each(function (key, data) {
                 $(data).appendTo("#fill_last").hide().fadeIn(1);
@@ -89,7 +89,7 @@ function makeCreateRideFormLive() {
                 '<option value="ROAD">Road</option></select></div>');
                 $.ajax({
                     dataType: "html",
-                    url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase(),
+                    url: "http://cryptic-mountain-5756.herokuapp.com/bike/form/" + typeEvent.toLowerCase(),
                     success: function (data) {
                         $(data).each(function (key, data) {
                             $(data).appendTo("#fill").hide().fadeIn(1);

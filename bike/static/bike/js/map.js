@@ -47,7 +47,7 @@ function loadGeoJSON() {
     //call stored geoJSON in DB
     $.ajax({
         dataType: "json",
-        url: "http://127.0.0.1:8000/bike/data.geojson/",
+        url: "http://cryptic-mountain-5756.herokuapp.com/bike/data.geojson/",
         success: function (data) {
             $(data.features).each(function (key, data) {
                 L.geoJson(data, {onEachFeature: onEachFeature}).addTo(map);
