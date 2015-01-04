@@ -129,7 +129,7 @@
                 '</div>' +
                 '<div class="form-group" style="display: none" id="passwordGroup">' +
                 '<label>Password</label><br>' +
-                '<input type="text" class="form-control" id="id_password" size="100">' +
+                '<input type="password" class="form-control" id="id_password" size="100">' +
                 '</div>' +
                 '<div class="form-group">' +
                 '<button type="button" id="submitJoinRideForm" class="btn btn-primary">Submit</button>' +
