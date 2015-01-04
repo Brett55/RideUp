@@ -82,11 +82,6 @@ function makeCreateRideFormLive() {
                 //Clear and call django API for respective fields
                 $("#fill").empty();
                 $("#fill_last").empty();
-                $('#fill').append('<div class="form-group"><label class="control-label" for="id_roadOrDirt">Trail or Road</label>' +
-                '<select class="form-control" id="id_roadOrDirt" name="roadOrDirt" type="hidden" required="required" title="">' +
-                '<option value="SURFACE">Select Surface</option>' +
-                '<option value="TRAIL" selected>NA</option>' +
-                '<option value="ROAD">Road</option></select></div>');
                 $.ajax({
                     dataType: "html",
                     url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase(),
