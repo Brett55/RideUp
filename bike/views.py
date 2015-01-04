@@ -284,7 +284,6 @@ def special_event(request):
             new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
             new_point.name = cd_form_kickoff['name']
             new_point.rideType = cd_form_kickoff['rideType']
-            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
 
             new_ride = models.RideSpecialEvent()
@@ -317,7 +316,6 @@ def trail_work_day(request):
             new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
             new_point.name = cd_form_kickoff['name']
             new_point.rideType = cd_form_kickoff['rideType']
-            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
 
             new_ride = models.TrailWorkDay()
@@ -348,7 +346,6 @@ def bike_swap(request):
             new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
             new_point.name = cd_form_kickoff['name']
             new_point.rideType = cd_form_kickoff['rideType']
-            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
 
             new_ride = models.BikeSwap()
@@ -378,7 +375,6 @@ def conference(request):
             new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
             new_point.name = cd_form_kickoff['name']
             new_point.rideType = cd_form_kickoff['rideType']
-            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
 
             new_ride = models.Conference()
