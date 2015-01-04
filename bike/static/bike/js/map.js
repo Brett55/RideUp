@@ -22,11 +22,7 @@ function onMapClick(event) {
         newMarker = L.marker([lat, lng]).addTo(map);  // add new marker
         bootbox.confirm("<h4>Create Ride Event?</h4>", function(result){
             if (result === true) {
-                $('.modal-content').empty().append(
-                    '<div class="modal-header">'
-                    +'<button class="bootbox-close-button close" aria-hidden="true" data-dismiss="modal" type="button">×</button>'
-                    +'<h4 class="modal-title">Create Ride</h4>'
-                    +'</div>');
+                modalCreateRide();
                 return false;
             }
         });
@@ -35,11 +31,7 @@ function onMapClick(event) {
         newMarker = L.marker([lat, lng]).addTo(map);  // add new marker
         bootbox.confirm("<h4>Create Ride Event?</h4>", function(result){
             if (result === true) {
-                $('.modal-content').empty().append(
-                    '<div class="modal-header">'
-                    +'<button class="bootbox-close-button close" aria-hidden="true" data-dismiss="modal" type="button">×</button>'
-                    +'<h4 class="modal-title">Create Ride</h4>'
-                    +'</div>');
+                modalCreateRide();
                 return false;
             }
         });

@@ -116,9 +116,8 @@
     function createJoinRideForm() {
         //building form to join ride as guest or member
         $('.bootbox-body').empty().append(
-                '<div class="container">' +
                 '<div class="row">' +
-                '<div class="col-xs-4 text-left">' +
+                '<div class="col-xs-10 col-xs-offset-1 text-left">' +
                 '<form id="joinRideForm" class="form-horizontal" method="POST" role="form">' +
                 '<div class="form-group">' +
                 '<label>Name</label><br>' +
@@ -126,18 +125,17 @@
                 '</div>' +
                 '<div class="form-group" style="display: none" id="usernameGroup">' +
                 '<label>Username</label><br>' +
-                '<input type="text" class="form-control" id="id_username" size="50">' +
+                '<input type="text" class="form-control" id="id_username" size="100">' +
                 '</div>' +
                 '<div class="form-group" style="display: none" id="passwordGroup">' +
                 '<label>Password</label><br>' +
-                '<input type="text" class="form-control" id="id_password" size="50">' +
+                '<input type="text" class="form-control" id="id_password" size="100">' +
                 '</div>' +
                 '<div class="form-group">' +
                 '<button type="button" id="submitJoinRideForm" class="btn btn-primary">Submit</button>' +
                 '<button type="button" id="memberJoinButton" class="btn btn-success">Become Member</button>' +
                 '</div>' +
                 '</form>' +
-                '</div>' +
                 '</div>' +
                 '</div>');
 

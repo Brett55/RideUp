@@ -66,9 +66,28 @@ def form_updater(request, form_type):
     args['join_ride'] = forms.JoinRide()
 
     t = Template('{% load bootstrap3 %}' +
-                 '{% bootstrap_form ' + form_type + ' %}' +
-                 '<input type="submit" name="submit" id="nextSubmit" class="btn btn-default form-group btn-primary" value="Submit">'
-    )
+                 '{% bootstrap_form ' + form_type + ' %}'
+                    +'<div class="form-group" style="display: block;">'
+                    +'<label class="control-label" for="id_description">How often will this Ride/Event occur?</label>'
+                    +'<div class="radio">'
+                    +'<label>'
+                    +'<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>'
+                    +'Every Week'
+                    +'</label>'
+                    +'</div>'
+                    +'<div class="radio">'
+                    +'<label>'
+                    +'<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">'
+                    +'Every other Week'
+                    +'</label>'
+                    +'</div>'
+                    +'<div class="radio disabled">'
+                    +'<label>'
+                    +'<input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">'
+                    +'One time thing'
+                    +'</label>'
+                    +'</div><br>'
+                 + '<input type="submit" name="submit" id="nextSubmit" class="btn btn-default form-group btn-primary" value="Submit">')
     c = Context({str(form_type): args[str(form_type)]})
     html = t.render(c)
 
