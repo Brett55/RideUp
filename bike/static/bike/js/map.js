@@ -13,8 +13,10 @@ L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
 //Drop point and get coordinates handler
 function onMapClick(event) {
 
-    var lat = event.latlng.lat;
-    var lng = event.latlng.lng;
+    lat = event.latlng.lat;
+    lng = event.latlng.lng;
+
+    var coords = lng + ',' + lat;
 
     // Every time when user click on map we want to delete previous marker and create new marker on the new position where the user clicked
     if (typeof newMarker != 'undefined') {
@@ -22,7 +24,7 @@ function onMapClick(event) {
         newMarker = L.marker([lat, lng]).addTo(map);  // add new marker
         bootbox.confirm("<h4>Create Ride Event?</h4>", function(result){
             if (result === true) {
-                modalCreateRide();
+                modalCreateRide(coords); //function located in createRide.js
                 return false;
             }
         });
@@ -31,15 +33,11 @@ function onMapClick(event) {
         newMarker = L.marker([lat, lng]).addTo(map);  // add new marker
         bootbox.confirm("<h4>Create Ride Event?</h4>", function(result){
             if (result === true) {
-                modalCreateRide();
+                modalCreateRide(coords);//function located in createRide.js
                 return false;
             }
         });
     }
-
-    // we want to pass value of longitued and latitude to input field with id 'coordinates'
-    // note that we set that field as hidden because we don't want user to type the coordinates there. We want him to set marker on map
-    $('#id_coordinates').val(lng + ',' + lat)
 }
 
 
@@ -47,7 +45,7 @@ function loadGeoJSON() {
     //call stored geoJSON in DB
     $.ajax({
         dataType: "json",
-        url: "http://cryptic-mountain-5756.herokuapp.com/bike/data.geojson/",
+        url: "http://127.0.0.1:8000/bike/data.geojson/",
         success: function (data) {
             $(data.features).each(function (key, data) {
                 L.geoJson(data, {onEachFeature: onEachFeature}).addTo(map);

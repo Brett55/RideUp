@@ -2,7 +2,7 @@
 var whichForm = "";
 
 
-function modalCreateRide() {
+function modalCreateRide(coords) {
     $('.modal-content').empty().append(
     '<div class="modal-header">'
         +'<button class="bootbox-close-button close" aria-hidden="true" data-dismiss="modal" type="button">×</button>'
@@ -10,11 +10,11 @@ function modalCreateRide() {
     +'</div>'
     +'<div class="modal-body">'
         +'<div class="row">'
-            +'<div class="col-xs-10 col-xs-offset-1 text-left">'
+            +'<div class="col-xs-10 col-xs-offset-1 text-left successMsg">'
                 +'<form id="post-form" class="form-horizontal" method="POST" role="form">'
-                    +'<input id="id_coordinates" type="hidden" name="coordinates" maxlength="200">'
+                    +'<input id="id_coordinates" type="hidden" name="coordinates" maxlength="200" value="' + coords + '">'
                     +'<div class="form-group">'
-                        +'<label class="control-label" for="id_name">Name of Event</label>'
+                        +'<label class="control-label" for="id_name"></label>'
                         +'<input id="id_name" class="form-control" type="text" title="" style="height:30px" required="required" placeholder="Name" name="name" maxlength="100">'
                     +'</div>'
                     +'<div class="form-group">'
@@ -47,7 +47,7 @@ function detailedUpdateForm() {
     $("#fill_last").empty();
     $.ajax({
         dataType: "html",
-        url: "http://cryptic-mountain-5756.herokuapp.com/bike/form/" + typeEvent.toLowerCase() + "_" + typeSurface.toLowerCase(),
+        url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase() + "_" + typeSurface.toLowerCase(),
         success: function (data) {
             $(data).each(function (key, data) {
                 $(data).appendTo("#fill_last").hide().fadeIn(1);
@@ -89,7 +89,7 @@ function makeCreateRideFormLive() {
                 '<option value="ROAD">Road</option></select></div>');
                 $.ajax({
                     dataType: "html",
-                    url: "http://cryptic-mountain-5756.herokuapp.com/bike/form/" + typeEvent.toLowerCase(),
+                    url: "http://127.0.0.1:8000/bike/form/" + typeEvent.toLowerCase(),
                     success: function (data) {
                         $(data).each(function (key, data) {
                             $(data).appendTo("#fill").hide().fadeIn(1);
@@ -129,6 +129,8 @@ function makeCreateRideFormLive() {
                 //Reload geoJSON
                 loadGeoJSON();
                 map.removeLayer(newMarker);
+                $('.successMsg').empty().append(
+                        '<h3 class="logo">Success!</h3>');
             },
 
             error: function (xhr, errmsg, err) {

@@ -81,7 +81,7 @@ def form_updater(request, form_type):
                     +'Every other Week'
                     +'</label>'
                     +'</div>'
-                    +'<div class="radio disabled">'
+                    +'<div class="radio">'
                     +'<label>'
                     +'<input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">'
                     +'One time thing'
