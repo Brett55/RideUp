@@ -5,22 +5,22 @@ function getRiders(event) {
     var member_non_member = event.data.param1;
     var value = event.data.param2;
 
-    $('#riderInfoTable').remove();
-    $('#detailTable').after('<table class="table table-striped table-bordered table-condensed">' +
-                        '<tbody id="riderInfoTable"><tr><th>Riders</th></tr></tbody></table>');
+    $('.riderInfoTable').remove();
+    $('#detailTable').after('<table class="riderInfoTable table table-striped table-bordered table-condensed">' +
+                        '<tbody id="riderInfofromAjax"><tr><th>Riders</th></tr></tbody></table>');
     for (var rider_id in value) {
         $.ajax({
             dataType: "json",
-            url: "http://cryptic-mountain-5756.herokuapp.com/bike/riders/" + member_non_member + "/" + value[rider_id] + "/",
+            url: "http://127.0.0.1:8000/bike/riders/" + member_non_member + "/" + value[rider_id] + "/",
             success: function (data) {
                 $(data).each(function (key, data) {
                     //members ajax call returned data
                     if (member_non_member === "member") {
-                        $('<tr><td>' + data.fields.first_name + '</td></tr>').appendTo('#riderInfoTable');
+                        $('<tr><td>' + data.fields.first_name + '</td></tr>').appendTo('#riderInfofromAjax');
                     }
                     //non members ajax call returned data
                     else {
-                        $('<tr><td>' + data.fields.name + '</td></tr>').appendTo('#riderInfoTable');
+                        $('<tr><td>' + data.fields.name + '</td></tr>').appendTo('#riderInfofromAjax');
                     }
                 });
             }

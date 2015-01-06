@@ -1,5 +1,5 @@
 //set map
-var map = L.map('map').setView([51.505, -0.09], 10);
+var map = L.map('map').setView([39.0407056,-76.8590506], 9);
 
 var osmGeocoder = new L.Control.OSMGeocoder();
 
@@ -45,7 +45,7 @@ function loadGeoJSON() {
     //call stored geoJSON in DB
     $.ajax({
         dataType: "json",
-        url: "http://cryptic-mountain-5756.herokuapp.com/bike/data.geojson/",
+        url: "http://127.0.0.1:8000/bike/data.geojson/",
         success: function (data) {
             $(data.features).each(function (key, data) {
                 L.geoJson(data, {onEachFeature: onEachFeature}).addTo(map);
