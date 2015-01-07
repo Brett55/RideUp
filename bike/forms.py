@@ -8,13 +8,6 @@ LEVEL_CHOICE = (
     ('DBL_BLACK', "Double Black")
 )
 
-LEVEL_CHOICE = (
-    ('GREEN', "Green"),
-    ('BLUE', "Blue"),
-    ('BLACK', "Black"),
-    ('DBL_BLACK', "Double Black")
-)
-
 MOUNTAIN_CHOICE = (
     ('Cross Country', "Cross Country"),
     ('Down Hill', "Down Hill"),
@@ -33,15 +26,21 @@ EVENT_TYPE = (
 )
 
 ROAD_CHOICE = (
-    ('10MPH', "10Mph"),
-    ('15MPH', "15Mph"),
-    ('20MPH', "20Mph"),
-    ('25MPH', "25Mph")
+    ("Group A",  "Group A"),
+    ("Group B", "Group B"),
+    ("Group C", "Group C"),
+    ("Group D", "Group D")
 )
 
 SURFACE_CHOICE = (
     ('TRAIL', 'Trail'),
     ('ROAD', 'Road')
+)
+
+FREQUENCY = (
+    ('Weekly', 'Weekly'),
+    ('Bi-Weekly', 'Bi-Weekly'),
+    ('One Time for Now', 'One Time for Now')
 )
 
 
@@ -51,6 +50,8 @@ class KickOff(forms.Form):
     name = forms.CharField(max_length=100, widget=forms.TextInput(
         attrs={'style': 'height:30px'}), required=True)
 
+    editable = forms.BooleanField(initial=True)
+    event_Frequency = forms.CharField(label='Event Frequency', max_length=100, required=True)
     rideType = forms.ChoiceField(label='Type of Event', choices=EVENT_TYPE, required=True, initial='BLANK')
     roadOrDirt = forms.ChoiceField(label='Trail or Road', choices=SURFACE_CHOICE, required=True)
 
@@ -150,4 +151,5 @@ class Conference(forms.Form):
                                       widget=forms.TextInput(), required=False)
     description = forms.CharField(max_length=300, widget=forms.TextInput(),
                                   required=False)
+
 

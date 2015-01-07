@@ -33,7 +33,7 @@
         "BLACK":"Single Black Diamond",
         "BLUE":"Blue",
         "GREEN":"Green"
-    }
+    };
 
     //Marker click handler
     function onClick(e) {
@@ -52,14 +52,16 @@
             marker.feature.id + "/";
 
             popUpHtml =  '<table id="detailTable" class="table table-striped table-bordered table-condensed"><tbody><tr><th><h4>' + convertNames[rideType.toLowerCase() + "_" + rideSurface.toLowerCase()] + '</h4></th></tr>' +
-                            "<tr><th>Name: </th>" + '<td>' + marker.feature.properties.name + '</td></tr>';
+                            "<tr><th>Name: </th>" + '<td>' + marker.feature.properties.name + '</td></tr>' +
+                            "<tr><th>Frequency: </th>" + '<td>' + marker.feature.properties.event_Frequency + '</td></tr>';
         }
         else {
             ajaxUrl = "http://127.0.0.1:8000/bike/" + rideType.toLowerCase() + "/" +
             marker.feature.id + "/";
 
-            popUpHtml =  '<table id="detailTable" class="table table-striped table-bordered table-condensed"><tbody><tr><th>' + convertNames[rideType.toLowerCase()] + '</th></tr>' +
-                            "<tr><th>Name: </th><td>" + marker.feature.properties.name + '</td></tr>';
+            popUpHtml =  '<table id="detailTable" class="table table-striped table-bordered table-condensed"><tbody><tr><th><h4>' + convertNames[rideType.toLowerCase()] + '</h4></th></tr>' +
+                            "<tr><th>Name: </th><td>" + marker.feature.properties.name + '</td></tr>' +
+                            "<tr><th>Frequency: </th>" + '<td>' + marker.feature.properties.event_Frequency + '</td></tr>';
         }
         //Calling ajaxURL to populate marker popup
         $.ajax({

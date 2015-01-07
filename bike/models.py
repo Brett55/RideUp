@@ -9,10 +9,10 @@ LEVEL_CHOICE = (
 )
 
 ROAD_CHOICE = (
-    ('10MPH', "10Mph"),
-    ('15MPH', "15Mph"),
-    ('20MPH', "20Mph"),
-    ('25MPH', "25Mph")
+    ("Group A", "Group A"),
+    ("Group B", "Group B"),
+    ("Group C", "Group C"),
+    ("Group D", "Group D")
 )
 
 MOUNTAIN_CHOICE = (
@@ -25,6 +25,12 @@ MOUNTAIN_CHOICE = (
 
 class RideLocation(models.Model):
     name = models.CharField('Ride Spot/Event', max_length=50)
+
+    FREQUENCY = (
+        ('Weekly', 'Weekly'),
+        ('Bi-Weekly', 'Bi-Weekly'),
+        ('One Time for Now', 'One Time for Now')
+    )
 
     EVENT_TYPE = (
         ('BLANK', "Select Type"),
@@ -41,6 +47,8 @@ class RideLocation(models.Model):
         ('ROAD', 'Road'),
     )
 
+    event_Frequency = models.CharField('Type of Ride/Event', max_length=50, choices=FREQUENCY)
+    editable = models.BooleanField(default=False)
     rideType = models.CharField('Type of Ride/Event', max_length=50, choices=EVENT_TYPE)
     roadOrDirt = models.CharField('Surface Type', max_length=50, choices=SURFACE_CHOICE)
 
@@ -71,7 +79,6 @@ class GroupRideRoad(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
     non_member_riders = models.ManyToManyField(NonMembers)
-    rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=50, choices=MOUNTAIN_CHOICE, null=True)
     ridetime = models.DateTimeField()
     rideLevelRoad = models.CharField('Road Ride Difficulty', max_length=20, choices=ROAD_CHOICE, null=True)
     postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)

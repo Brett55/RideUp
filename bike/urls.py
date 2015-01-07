@@ -7,9 +7,12 @@ urlpatterns = patterns('',
                        url(r'^add_rider/(\w+)/(\d+)/$', 'bike.views.add_rider'),
                        url(r'^(\w+)/(\d+)/$', 'bike.views.more_data'),
                        url(r'^form/(\w+)/$', 'bike.views.form_updater'),
-                       url(r'^data.geojson/$', GeoJSONLayerView.as_view(model=RideLocation,
-                                                                        properties=('roadOrDirt',
-                                                                                    'rideType', 'name', 'id'))),
+
+                       url(r'^data.geojson/$', GeoJSONLayerView.as_view(
+                           model=RideLocation, properties=(
+                           'roadOrDirt', 'event_Frequency', 'rideType', 'name', 'id')
+                            )
+                       ),
                        url(r'^index/$', 'bike.views.index'),
                        url(r'^group_ride_trail/$', 'bike.views.group_ride_trail'),
                        url(r'^group_ride_road/$', 'bike.views.group_ride_road'),
