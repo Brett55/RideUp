@@ -66,6 +66,6 @@ $(document).on('click', '.modal-backdrop', function(event){
 map.on('click', onMapClick);
 $(document).ready(function () {
     loadGeoJSON();
-    bootbox.alert('<p class="navText text-center">Welcome to <b> Ride[up] !</b><br><br> Left Click the Map Below to Create a Ride Event <br><br>' +
-    'or <br><br> Simply Click Existing Events to view Details</p>');
+    bootbox.alert('<p class="navText text-center">Welcome to <b> Ride[up] !</b><br><br> Left Click the Map Below to Create a Group Ride<br><br>' +
+    'or <br><br> Simply Click Existing Events to View Details</p>');
 });

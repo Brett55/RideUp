@@ -7,7 +7,7 @@
     var convertNames = {
         "description":"Details",
         "locationAddress":"Address",
-        "ridetime":"Time",
+        "Ridetime":"Time",
         "postRideBeer":"Post-Ride Food & Beer Spot",
         "cost":"Cost",
         "website":"Website",
