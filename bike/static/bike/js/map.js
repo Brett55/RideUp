@@ -45,7 +45,7 @@ function loadGeoJSON() {
     //call stored geoJSON in DB
     $.ajax({
         dataType: "json",
-        url: "http://127.0.0.1:8000/bike/data.geojson/",
+        url: "data.geojson/",
         success: function (data) {
             $(data.features).each(function (key, data) {
                 L.geoJson(data, {onEachFeature: onEachFeature}).addTo(map);
@@ -66,4 +66,6 @@ $(document).on('click', '.modal-backdrop', function(event){
 map.on('click', onMapClick);
 $(document).ready(function () {
     loadGeoJSON();
+    bootbox.alert('<p class="navText text-center">Welcome to <b> Ride[up] !</b><br><br> Left Click the Map Below to Create a Ride Event <br><br>' +
+    'or <br><br> Simply Click Existing Events to view Details</p>');
 });

@@ -13,7 +13,7 @@ urlpatterns = patterns('',
                            'roadOrDirt', 'editable', 'event_Frequency', 'rideType', 'name', 'id')
                             )
                        ),
-                       url(r'^index/$', 'bike.views.index'),
+                       url(r'^$', 'bike.views.index'),
                        url(r'^group_ride_trail/$', 'bike.views.group_ride_trail'),
                        url(r'^group_ride_road/$', 'bike.views.group_ride_road'),
                        url(r'^race_trail/$', 'bike.views.race_trail'),

@@ -47,7 +47,7 @@
         // If/else condition is used to build AJAX url and popup information
         if (rideType === "RACE" || rideType === "GROUP_RIDE") {
 
-            ajaxUrl = "http://127.0.0.1:8000/bike/" + rideType.toLowerCase() + "_" +
+            ajaxUrl = "" + rideType.toLowerCase() + "_" +
             rideSurface.toLowerCase() + "/" +
             marker.feature.id + "/";
 
@@ -56,7 +56,7 @@
                             "<tr><th>Frequency: </th>" + '<td>' + marker.feature.properties.event_Frequency + '</td></tr>';
         }
         else {
-            ajaxUrl = "http://127.0.0.1:8000/bike/" + rideType.toLowerCase() + "/" +
+            ajaxUrl = "" + rideType.toLowerCase() + "/" +
             marker.feature.id + "/";
 
             popUpHtml =  '<table id="detailTable" class="table table-striped table-bordered table-condensed"><tbody><tr><th><h4>' + convertNames[rideType.toLowerCase()] + '</h4></th></tr>' +
@@ -163,12 +163,12 @@
         // If/else condition is used to build AJAX url and popup information
         if (rideType === "RACE" || rideType === "GROUP_RIDE") {
 
-            ajaxUrl = "http://127.0.0.1:8000/bike/add_rider/" + rideType.toLowerCase() + "_" +
+            ajaxUrl = "add_rider/" + rideType.toLowerCase() + "_" +
             rideSurface.toLowerCase() + "/" +
             marker.feature.id + "/";
         }
         else {
-            ajaxUrl = "http://127.0.0.1:8000/bike/add_rider/" + rideType.toLowerCase() + "/" +
+            ajaxUrl = "/add_rider/" + rideType.toLowerCase() + "/" +
             marker.feature.id + "/";
         }
         //function to add rider to existing event

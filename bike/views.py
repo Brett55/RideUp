@@ -139,7 +139,7 @@ def add_rider(request, group, key):
             query_set.riders.add(new_guy)
             query_set.save()
 
-            return HttpResponseRedirect('/bike/add_point/success')
+            return HttpResponseRedirect('/add_point/success')
 
         elif form_non_member.is_valid():
             cd = form_non_member.cleaned_data
@@ -181,10 +181,10 @@ def group_ride_trail(request):
             new_ride.postRideBeer = cd['postRideBeer']
             new_ride.save()
 
-            return HttpResponseRedirect('/bike/add_point/success')
+            return HttpResponseRedirect('/add_point/success')
 
         else:
-            return HttpResponseRedirect('/bike/add_point/error')
+            return HttpResponseRedirect('/add_point/error')
 
 
 def group_ride_road(request):
@@ -213,10 +213,10 @@ def group_ride_road(request):
             new_ride.postRideBeer = cd['postRideBeer']
             new_ride.save()
 
-            return HttpResponseRedirect('/bike/add_point/success')
+            return HttpResponseRedirect('/add_point/success')
 
         else:
-            return HttpResponseRedirect('/bike/add_point/error')
+            return HttpResponseRedirect('/add_point/error')
 
 
 def race_trail(request):
@@ -250,10 +250,10 @@ def race_trail(request):
             new_ride.postRideBeer = cd['postRideBeer']
             new_ride.save()
 
-            return HttpResponseRedirect('/bike/add_point/success')
+            return HttpResponseRedirect('/add_point/success')
 
         else:
-            return HttpResponseRedirect('/bike/add_point/error')
+            return HttpResponseRedirect('/add_point/error')
 
 
 def race_road(request):
@@ -288,10 +288,10 @@ def race_road(request):
 
             new_ride.save()
 
-            return HttpResponseRedirect('/bike/add_point/success')
+            return HttpResponseRedirect('/add_point/success')
 
         else:
-            return HttpResponseRedirect('/bike/add_point/error')
+            return HttpResponseRedirect('/add_point/error')
 
 
 def special_event(request):
@@ -323,10 +323,10 @@ def special_event(request):
             new_ride.website = cd['website']
             new_ride.save()
 
-            return HttpResponseRedirect('/bike/add_point/success')
+            return HttpResponseRedirect('/add_point/success')
 
         else:
-            return HttpResponseRedirect('/bike/add_point/error')
+            return HttpResponseRedirect('/add_point/error')
 
 
 def trail_work_day(request):
@@ -356,10 +356,10 @@ def trail_work_day(request):
             new_ride.postRideBeer = cd['postRideBeer']
             new_ride.save()
 
-            return HttpResponseRedirect('/bike/add_point/success')
+            return HttpResponseRedirect('/add_point/success')
 
         else:
-            return HttpResponseRedirect('/bike/add_point/error')
+            return HttpResponseRedirect('/add_point/error')
 
 
 def bike_swap(request):
@@ -388,10 +388,10 @@ def bike_swap(request):
             new_ride.description = cd['description']
             new_ride.save()
 
-            return HttpResponseRedirect('/bike/add_point/success')
+            return HttpResponseRedirect('/add_point/success')
 
         else:
-            return HttpResponseRedirect('/bike/add_point/error')
+            return HttpResponseRedirect('/add_point/error')
 
 
 def conference(request):
@@ -420,7 +420,7 @@ def conference(request):
             new_ride.description = cd['description']
             new_ride.save()
 
-            return HttpResponseRedirect('/bike/add_point/success')
+            return HttpResponseRedirect('/add_point/success')
 
         else:
             return HttpResponse(form_kickoff.errors)
