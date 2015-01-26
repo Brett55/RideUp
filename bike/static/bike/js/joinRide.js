@@ -87,14 +87,14 @@
                             //sorting between members and non members for AJAX call
                             if (fld === "non_member_riders") {
                                 var nonMembersArray = value;
-                                var td = '<a id="getRiderInfoLinkNonMember" href="javascript:void(0)">' + value.length + '</a>';
+                                var td = '<a id="getRiderInfoLinkNonMember" href="javascript:void(0)">' + value.length + ' - Show Riders' + '</a>';
                                 popUpHtml += '<tr><th>' + key + '</th>' + '<td>' + td + '</td></tr>';
 
                             }
                             //sorting between members and non members for AJAX call
                             else if (fld === "riders") {
                                 var membersArray = value;
-                                var td = '<a id="getRiderInfoLinkMember" href="javascript:void(0)">' + value.length + '</a>';
+                                var td = '<a id="getRiderInfoLinkMember" href="javascript:void(0)">' + value.length + ' - Show Riders' + '</a>';
                                 popUpHtml += '<tr><th>' + key + '</th>' + '<td>' + td + '</td></tr>';
                             }
                             else {

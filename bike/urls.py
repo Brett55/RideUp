@@ -10,7 +10,7 @@ urlpatterns = patterns('',
 
                        url(r'^data.geojson/$', GeoJSONLayerView.as_view(
                            model=RideLocation, properties=(
-                           'roadOrDirt', 'event_Frequency', 'rideType', 'name', 'id')
+                           'roadOrDirt', 'editable', 'event_Frequency', 'rideType', 'name', 'id')
                             )
                        ),
                        url(r'^index/$', 'bike.views.index'),
