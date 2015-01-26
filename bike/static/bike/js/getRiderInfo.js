@@ -5,10 +5,6 @@ function getRiders(event) {
     var member_non_member = event.data.param1;
     var value = event.data.param2;
 
-    $('.riderInfoTable').remove();
-    $('#detailTable').after('<table class="riderInfoTable table table-striped table-bordered table-condensed">' +
-                        '<tbody id="riderInfofromAjax"><tr><th>Riders</th></tr></tbody></table>');
-
     //if no riders have joined yet, display this message
     if (value.length === 0) {
         $('<tr><td>No Riders Yet...</td></tr>').appendTo('#riderInfofromAjax');
@@ -20,6 +16,11 @@ function getRiders(event) {
             dataType: "json",
             url: "riders/" + member_non_member + "/" + value[rider_id] + "/",
             success: function (data) {
+
+                $('.riderInfoTable').remove();
+                $('#detailTable').after('<table class="riderInfoTable table table-striped table-bordered table-condensed">' +
+                        '<tbody id="riderInfofromAjax"><tr><th>Riders</th></tr></tbody></table>');
+
                 $(data).each(function (key, data) {
                     //members ajax call returned data
                     if (member_non_member === "member") {
