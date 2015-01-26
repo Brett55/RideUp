@@ -48,7 +48,7 @@ class RideLocation(models.Model):
     )
 
     event_Frequency = models.CharField('Type of Ride/Event', max_length=50, choices=FREQUENCY)
-    editable = models.BooleanField(default=False)
+    editable = models.CharField(max_length=3)
     rideType = models.CharField('Type of Ride/Event', max_length=50, choices=EVENT_TYPE)
     roadOrDirt = models.CharField('Surface Type', max_length=50, choices=SURFACE_CHOICE)
 

@@ -68,30 +68,42 @@ def form_updater(request, form_type):
     t = Template('{% load bootstrap3 %}' +
                  '{% bootstrap_form ' + form_type + ' %}'
                     +'<div class="form-group" style="display: block;">'
-                    +'<label class="control-label" for="id_description">How often will this Ride/Event occur?</label>'
-                    +'<div class="radio">'
-                    +'<label>'
-                    +'<input type="radio" name="event_Frequency" id="id_event_Frequency1" value="Every Week" checked>'
-                    +'Every Week'
-                    +'</label>'
+                        +'<label class="control-label" for="id_description">How often will this Ride/Event occur?</label>'
+                        +'<div class="radio">'
+                            +'<label>'
+                                +'<input type="radio" name="event_Frequency" id="id_event_Frequency1" value="Every Week" checked>'
+                                +'Every Week'
+                            +'</label>'
+                        +'</div>'
+                        +'<div class="radio">'
+                            +'<label>'
+                                +'<input type="radio" name="event_Frequency" id="id_event_Frequency2" value="Every Other Week">'
+                                +'Every Other Week'
+                            +'</label>'
+                        +'</div>'
+                        +'<div class="radio">'
+                            +'<label>'
+                                +'<input type="radio" name="event_Frequency" id="id_event_Frequency3" value="Just Once for Now">'
+                                +'Just Once for Now'
+                            +'</label>'
+                        +'</div>'
                     +'</div>'
-                    +'<div class="radio">'
-                    +'<label>'
-                    +'<input type="radio" name="event_Frequency" id="id_event_Frequency2" value="Every Other Week">'
-                    +'Every Other Week'
-                    +'</label>'
+                    +'<div class="form-group" style="display: block;">'
+                        +'<label class="control-label" for="id_description">Allow Others to Edit this Event?</label>'
+                        +'<div class="radio">'
+                            +'<label>'
+                                +'<input type="radio" name="editable" id="id_editable_yes" value="Yes" checked>'
+                                +'Yes'
+                            +'</label>'
+                        +'</div>'
+                        +'<div class="radio">'
+                            +'<label>'
+                                +'<input type="radio" name="editable" id="id_editable_no" value="No">'
+                                +'No'
+                            +'</label>'
+                        +'</div>'
                     +'</div>'
-                    +'<div class="radio">'
-                    +'<label>'
-                    +'<input type="radio" name="event_Frequency" id="id_event_Frequency3" value="Just Once for Now">'
-                    +'Just Once for Now'
-                    +'</label>'
-                    +'</div>'
-                    +'<div class="checkbox">'
-                    +'<label><input type="checkbox" value="">Option 1</label>'
-                    +'</div>'
-                    +'<br>'
-                 + '<input type="submit" name="submit" id="nextSubmit" class="btn btn-default form-group btn-primary" value="Submit">')
+                    +'<input type="submit" name="submit" id="nextSubmit" class="btn btn-default form-group btn-primary" value="Submit">')
     c = Context({str(form_type): args[str(form_type)]})
     html = t.render(c)
 
@@ -156,6 +168,7 @@ def group_ride_trail(request):
             new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
             new_point.name = cd_form_kickoff['name']
             new_point.event_Frequency = cd_form_kickoff['event_Frequency']
+            new_point.editable = cd_form_kickoff['editable']
             new_point.rideType = cd_form_kickoff['rideType']
             new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
@@ -188,6 +201,7 @@ def group_ride_road(request):
             new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
             new_point.name = cd_form_kickoff['name']
             new_point.event_Frequency = cd_form_kickoff['event_Frequency']
+            new_point.editable = cd_form_kickoff['editable']
             new_point.rideType = cd_form_kickoff['rideType']
             new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
@@ -219,6 +233,7 @@ def race_trail(request):
             new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
             new_point.name = cd_form_kickoff['name']
             new_point.event_Frequency = cd_form_kickoff['event_Frequency']
+            new_point.editable = cd_form_kickoff['editable']
             new_point.rideType = cd_form_kickoff['rideType']
             new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
@@ -255,6 +270,7 @@ def race_road(request):
             new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
             new_point.name = cd_form_kickoff['name']
             new_point.event_Frequency = cd_form_kickoff['event_Frequency']
+            new_point.editable = cd_form_kickoff['editable']
             new_point.rideType = cd_form_kickoff['rideType']
             new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
@@ -292,6 +308,7 @@ def special_event(request):
             new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
             new_point.name = cd_form_kickoff['name']
             new_point.event_Frequency = cd_form_kickoff['event_Frequency']
+            new_point.editable = cd_form_kickoff['editable']
             new_point.rideType = cd_form_kickoff['rideType']
             new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
@@ -326,6 +343,7 @@ def trail_work_day(request):
             new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
             new_point.name = cd_form_kickoff['name']
             new_point.event_Frequency = cd_form_kickoff['event_Frequency']
+            new_point.editable = cd_form_kickoff['editable']
             new_point.rideType = cd_form_kickoff['rideType']
             new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
@@ -358,6 +376,7 @@ def bike_swap(request):
             new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
             new_point.name = cd_form_kickoff['name']
             new_point.event_Frequency = cd_form_kickoff['event_Frequency']
+            new_point.editable = cd_form_kickoff['editable']
             new_point.rideType = cd_form_kickoff['rideType']
             new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
@@ -389,6 +408,7 @@ def conference(request):
             new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
             new_point.name = cd_form_kickoff['name']
             new_point.event_Frequency = cd_form_kickoff['event_Frequency']
+            new_point.editable = cd_form_kickoff['editable']
             new_point.rideType = cd_form_kickoff['rideType']
             new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
             new_point.save()
@@ -403,7 +423,7 @@ def conference(request):
             return HttpResponseRedirect('/bike/add_point/success')
 
         else:
-            return HttpResponseRedirect('/bike/add_point/error')
+            return HttpResponse(form_kickoff.errors)
 
 
 def form_error(request):

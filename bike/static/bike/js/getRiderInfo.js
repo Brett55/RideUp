@@ -8,6 +8,13 @@ function getRiders(event) {
     $('.riderInfoTable').remove();
     $('#detailTable').after('<table class="riderInfoTable table table-striped table-bordered table-condensed">' +
                         '<tbody id="riderInfofromAjax"><tr><th>Riders</th></tr></tbody></table>');
+
+    //if no riders have joined yet, display this message
+    if (value.length === 0) {
+        $('<tr><td>No Riders Yet...</td></tr>').appendTo('#riderInfofromAjax');
+    }
+
+    //this will not execute if no riders have joined yet
     for (var rider_id in value) {
         $.ajax({
             dataType: "json",
@@ -23,6 +30,9 @@ function getRiders(event) {
                         $('<tr><td>' + data.fields.name + '</td></tr>').appendTo('#riderInfofromAjax');
                     }
                 });
+            },
+            error: function (xhr, errmsg, err) {
+                $('<tr><td>No Riders Yet...</td></tr>').appendTo('#riderInfofromAjax');
             }
         });
     }

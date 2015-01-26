@@ -50,7 +50,7 @@ class KickOff(forms.Form):
     name = forms.CharField(max_length=100, widget=forms.TextInput(
         attrs={'style': 'height:30px'}), required=True)
 
-    editable = forms.BooleanField(initial=True)
+    editable = forms.CharField(max_length=3)
     event_Frequency = forms.CharField(label='Event Frequency', max_length=100, required=True)
     rideType = forms.ChoiceField(label='Type of Event', choices=EVENT_TYPE, required=True, initial='BLANK')
     roadOrDirt = forms.ChoiceField(label='Trail or Road', choices=SURFACE_CHOICE, required=True)
