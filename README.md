@@ -1,1 +1,1 @@
-A bicycle web application
+‘RideUP’, is a personal project I developed that utilizes PostGIS, Django, HTML, Leaflet, and jQuery. ‘RideUP’ is a web application for bicycle enthusiasts that serves as the single focal point for all bicycle related events to include; weekly group rides, races, bike swaps, trail work days, and conferences.
