@@ -150,10 +150,9 @@ def group_ride_trail(request):
         new_point = process_create_ride_form(request)
         form_main = forms.AddRideSpotTrail(request.POST)
         if form_main.is_valid():
-            new_ride = models.GroupRideDirt()
-            new_ride.location = new_point
             cd = form_main.cleaned_data
-            new_ride.__dict__.update(cd)
+            new_ride = models.GroupRideDirt(**cd)
+            new_ride.location = new_point
             new_ride.save()
 
             return HttpResponse('Success')
@@ -179,7 +178,7 @@ def group_ride_road(request):
 
         return HttpResponse('Success')
 
-        else:
+    else:
             return HttpResponseRedirect('/add_point/error')
 
 

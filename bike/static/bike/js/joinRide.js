@@ -35,6 +35,18 @@
         "GREEN":"Green"
     };
 
+    var ajax_convert_names = {
+
+        "race_trail": "TrailRace",
+        "group_ride_road": "GroupRideRoad",
+        "group_ride_trail": "GroupRideDirt",
+        "race_road": "RoadRace",
+        "special_event": "RideSpecialEvent",
+        "trail_work_day": "TrailWorkDay",
+        "bike_swap": "SwapMeet",
+        "conference": "Conference"
+    };
+
     //Marker click handler
     function onClick(e) {
 
@@ -47,8 +59,8 @@
         // If/else condition is used to build AJAX url and popup information
         if (rideType === "RACE" || rideType === "GROUP_RIDE") {
 
-            ajaxUrl = "" + rideType.toLowerCase() + "_" +
-            rideSurface.toLowerCase() + "/" +
+            ajaxUrl = ajax_convert_names[rideType.toLowerCase() + "_" +
+            rideSurface.toLowerCase()] + "/" +
             marker.feature.id + "/";
 
             popUpHtml =  '<table id="detailTable" class="table table-striped table-bordered table-condensed"><tbody><tr><th><h4>' + convertNames[rideType.toLowerCase() + "_" + rideSurface.toLowerCase()] + '</h4></th></tr>' +
@@ -56,7 +68,7 @@
                             "<tr><th>Frequency: </th>" + '<td>' + marker.feature.properties.event_Frequency + '</td></tr>';
         }
         else {
-            ajaxUrl = "" + rideType.toLowerCase() + "/" +
+            ajaxUrl = ajax_convert_names[rideType.toLowerCase()] + "/" +
             marker.feature.id + "/";
 
             popUpHtml =  '<table id="detailTable" class="table table-striped table-bordered table-condensed"><tbody><tr><th><h4>' + convertNames[rideType.toLowerCase()] + '</h4></th></tr>' +
@@ -163,12 +175,12 @@
         // If/else condition is used to build AJAX url and popup information
         if (rideType === "RACE" || rideType === "GROUP_RIDE") {
 
-            ajaxUrl = "add_rider/" + rideType.toLowerCase() + "_" +
-            rideSurface.toLowerCase() + "/" +
+            ajaxUrl = "add_rider/" + ajax_convert_names[rideType.toLowerCase() + "_" +
+            rideSurface.toLowerCase()] + "/" +
             marker.feature.id + "/";
         }
         else {
-            ajaxUrl = "/add_rider/" + rideType.toLowerCase() + "/" +
+            ajaxUrl = "/add_rider/" + ajax_convert_names[rideType.toLowerCase()] + "/" +
             marker.feature.id + "/";
         }
         //function to add rider to existing event
