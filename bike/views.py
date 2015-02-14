@@ -97,22 +97,8 @@ def form_updater(request, form_type):
 
 
 def add_rider(request, group, key):
-    if group == "race_trail":
-        query_set = models.TrailRace.objects.get(location_id=key)
-    elif group == "group_ride_road":
-        query_set = models.GroupRideRoad.objects.get(location_id=key)
-    elif group == "group_ride_trail":
-        query_set = models.GroupRideDirt.objects.get(location_id=key)
-    elif group == "race_road":
-        query_set = models.RoadRace.objects.get(location_id=key)
-    elif group == "special_event":
-        query_set = models.RideSpecialEvent.objects.get(location_id=key)
-    elif group == "trail_work_day":
-        query_set = models.TrailWorkDay.objects.get(location_id=key)
-    elif group == "bike_swap":
-        query_set = models.BikeSwap.objects.get(location_id=key)
-    elif group == "conference":
-        query_set = models.Conference.objects.get(location_id=key)
+    model = get_model("bike", group)
+    query_set = model.objects.get(location_id=key)
 
     if request.method == 'POST':
         form = forms.JoinRide(request.POST)
