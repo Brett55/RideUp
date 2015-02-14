@@ -7,6 +7,7 @@ from django.core import serializers
 from django.contrib.gis.geos import Point
 from django.template import Context, Template
 from django.contrib.auth.models import User
+from django.db.models.loading import get_model
 
 
 def index(request):
@@ -19,22 +20,9 @@ def index(request):
 
 
 def more_data(request, group, key):
-    if group == "race_trail":
-        query_set = models.TrailRace.objects.filter(location_id=key)
-    elif group == "group_ride_road":
-        query_set = models.GroupRideRoad.objects.filter(location_id=key)
-    elif group == "group_ride_trail":
-        query_set = models.GroupRideDirt.objects.filter(location_id=key)
-    elif group == "race_road":
-        query_set = models.RoadRace.objects.filter(location_id=key)
-    elif group == "special_event":
-        query_set = models.RideSpecialEvent.objects.filter(location_id=key)
-    elif group == "trail_work_day":
-        query_set = models.TrailWorkDay.objects.filter(location_id=key)
-    elif group == "bike_swap":
-        query_set = models.BikeSwap.objects.filter(location_id=key)
-    elif group == "conference":
-        query_set = models.Conference.objects.filter(location_id=key)
+    model = get_model("bike", group)
+    query_set = model.objects.filter(location_id=key)
+
 
     data = serializers.serialize("json", query_set)
     return HttpResponse(data, content_type='application/json')
