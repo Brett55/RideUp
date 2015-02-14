@@ -22,8 +22,6 @@ def index(request):
 def more_data(request, group, key):
     model = get_model("bike", group)
     query_set = model.objects.filter(location_id=key)
-
-
     data = serializers.serialize("json", query_set)
     return HttpResponse(data, content_type='application/json')
 
