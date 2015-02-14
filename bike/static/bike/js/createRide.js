@@ -115,7 +115,7 @@ function makeCreateRideFormLive() {
     frm.submit(function () {
         $.ajax({
             type: "POST",
-            url: "" + whichForm + "/", //Use whichForm to set the URL for the API
+            url: ajax_convert_names[whichForm] + "/", //Use whichForm to set the URL for the API
             data: frm.serialize(),
             success: function () {
                 //Remove the values from the input

@@ -145,13 +145,31 @@ def process_create_ride_form(request):
         HttpResponse(form_kickoff.errors)
 
 
-def group_ride_trail(request):
+def create_ride(request, model_name):
     if request.method == 'POST':
         new_point = process_create_ride_form(request)
-        form_main = forms.AddRideSpotTrail(request.POST)
+
+        if model_name == "GroupRideDirt":
+            form_main = forms.AddRideSpotTrail(request.POST)
+        elif model_name == "GroupRideRoad":
+            form_main = forms.AddRideSpotRoad(request.POST)
+        elif model_name == "RideSpecialEvent":
+            form_main = forms.RideSpecialEvent(request.POST)
+        elif model_name == "TrailRace":
+            form_main = forms.TrailRace(request.POST)
+        elif model_name == "RoadRace":
+            form_main = forms.RoadRace(request.POST)
+        elif model_name == "TrailWorkDay":
+            form_main = forms.TrailWorkDay(request.POST)
+        elif model_name == "BikeSwap":
+            form_main = forms.BikeSwap(request.POST)
+        elif model_name == "Conference":
+            form_main = forms.Conference(request.POST)
+
         if form_main.is_valid():
+            model = get_model("bike", model_name)
             cd = form_main.cleaned_data
-            new_ride = models.GroupRideDirt(**cd)
+            new_ride = model(**cd)
             new_ride.location = new_point
             new_ride.save()
 
@@ -159,234 +177,6 @@ def group_ride_trail(request):
 
         else:
             HttpResponse(form_main.errors)
-
-
-def group_ride_road(request):
-    if request.method == 'POST':
-        new_point = process_create_ride_form(request)
-        form_main = forms.AddRideSpotTrail(request.POST)
-        if form_main.is_valid():
-            new_ride = models.GroupRideDirt()
-            new_ride.location = new_point
-            cd = form_main.cleaned_data
-            new_ride = models.GroupRideRoad()
-            new_ride.location = new_point
-            new_ride.rideLevelRoad = cd['rideLevelRoad']
-            new_ride.ridetime = cd['ridetime']
-            new_ride.postRideBeer = cd['postRideBeer']
-            new_ride.save()
-
-        return HttpResponse('Success')
-
-    else:
-            return HttpResponseRedirect('/add_point/error')
-
-
-def race_trail(request):
-    if request.method == 'POST':
-        form_kickoff = forms.KickOff(request.POST)
-        form = forms.TrailRace(request.POST)
-        if form.is_valid() and form_kickoff.is_valid():
-            new_point = models.RideLocation()
-
-            cd = form.cleaned_data
-            cd_form_kickoff = form_kickoff.cleaned_data
-
-            coordinates = cd_form_kickoff['coordinates'].split(',')
-            new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
-            new_point.name = cd_form_kickoff['name']
-            new_point.event_Frequency = cd_form_kickoff['event_Frequency']
-            new_point.editable = cd_form_kickoff['editable']
-            new_point.rideType = cd_form_kickoff['rideType']
-            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
-            new_point.save()
-
-            new_ride = models.TrailRace()
-            new_ride.location = new_point
-            new_ride.rideTypeMTB = cd['rideTypeMTB']
-            new_ride.ridetime = cd['ridetime']
-            new_ride.hostedBy = cd['hostedBy']
-            new_ride.locationAddress = cd['locationAddress']
-            new_ride.description = cd['description']
-            new_ride.cost = cd['cost']
-            new_ride.website = cd['website']
-            new_ride.postRideBeer = cd['postRideBeer']
-            new_ride.save()
-
-            return HttpResponseRedirect('/add_point/success')
-
-        else:
-            return HttpResponseRedirect('/add_point/error')
-
-
-def race_road(request):
-    if request.method == 'POST':
-        form_kickoff = forms.KickOff(request.POST)
-        form = forms.RoadRace(request.POST)
-        if form.is_valid() and form_kickoff.is_valid():
-            new_point = models.RideLocation()
-
-            cd = form.cleaned_data
-            cd_form_kickoff = form_kickoff.cleaned_data
-
-            coordinates = cd_form_kickoff['coordinates'].split(',')
-            new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
-            new_point.name = cd_form_kickoff['name']
-            new_point.event_Frequency = cd_form_kickoff['event_Frequency']
-            new_point.editable = cd_form_kickoff['editable']
-            new_point.rideType = cd_form_kickoff['rideType']
-            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
-            new_point.save()
-
-            new_ride = models.RoadRace()
-            new_ride.location = new_point
-            new_ride.ridetime = cd['ridetime']
-            new_ride.hostedBy = cd['hostedBy']
-            new_ride.locationAddress = cd['locationAddress']
-            new_ride.description = cd['description']
-            new_ride.cost = cd['cost']
-            new_ride.website = cd['website']
-            new_ride.postRideBeer = cd['postRideBeer']
-            new_ride.save()
-
-            new_ride.save()
-
-            return HttpResponseRedirect('/add_point/success')
-
-        else:
-            return HttpResponseRedirect('/add_point/error')
-
-
-def special_event(request):
-    if request.method == 'POST':
-        form_kickoff = forms.KickOff(request.POST)
-        form = forms.RideSpecialEvent(request.POST)
-        if form.is_valid() and form_kickoff.is_valid():
-            new_point = models.RideLocation()
-
-            cd = form.cleaned_data
-            cd_form_kickoff = form_kickoff.cleaned_data
-
-            coordinates = cd_form_kickoff['coordinates'].split(',')
-            new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
-            new_point.name = cd_form_kickoff['name']
-            new_point.event_Frequency = cd_form_kickoff['event_Frequency']
-            new_point.editable = cd_form_kickoff['editable']
-            new_point.rideType = cd_form_kickoff['rideType']
-            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
-            new_point.save()
-
-            new_ride = models.RideSpecialEvent()
-            new_ride.location = new_point
-            new_ride.ridetime = cd['ridetime']
-            new_ride.hostedBy = cd['hostedBy']
-            new_ride.locationAddress = cd['locationAddress']
-            new_ride.description = cd['description']
-            new_ride.cost = cd['cost']
-            new_ride.website = cd['website']
-            new_ride.save()
-
-            return HttpResponseRedirect('/add_point/success')
-
-        else:
-            return HttpResponseRedirect('/add_point/error')
-
-
-def trail_work_day(request):
-    if request.method == 'POST':
-        form_kickoff = forms.KickOff(request.POST)
-        form = forms.TrailWorkDay(request.POST)
-        if form.is_valid() and form_kickoff.is_valid():
-            new_point = models.RideLocation()
-
-            cd = form.cleaned_data
-            cd_form_kickoff = form_kickoff.cleaned_data
-
-            coordinates = cd_form_kickoff['coordinates'].split(',')
-            new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
-            new_point.name = cd_form_kickoff['name']
-            new_point.event_Frequency = cd_form_kickoff['event_Frequency']
-            new_point.editable = cd_form_kickoff['editable']
-            new_point.rideType = cd_form_kickoff['rideType']
-            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
-            new_point.save()
-
-            new_ride = models.TrailWorkDay()
-            new_ride.location = new_point
-            new_ride.ridetime = cd['ridetime']
-            new_ride.locationAddress = cd['locationAddress']
-            new_ride.description = cd['description']
-            new_ride.postRideBeer = cd['postRideBeer']
-            new_ride.save()
-
-            return HttpResponseRedirect('/add_point/success')
-
-        else:
-            return HttpResponseRedirect('/add_point/error')
-
-
-def bike_swap(request):
-    if request.method == 'POST':
-        form_kickoff = forms.KickOff(request.POST)
-        form = forms.BikeSwap(request.POST)
-        if form.is_valid() and form_kickoff.is_valid():
-            new_point = models.RideLocation()
-
-            cd = form.cleaned_data
-            cd_form_kickoff = form_kickoff.cleaned_data
-
-            coordinates = cd_form_kickoff['coordinates'].split(',')
-            new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
-            new_point.name = cd_form_kickoff['name']
-            new_point.event_Frequency = cd_form_kickoff['event_Frequency']
-            new_point.editable = cd_form_kickoff['editable']
-            new_point.rideType = cd_form_kickoff['rideType']
-            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
-            new_point.save()
-
-            new_ride = models.BikeSwap()
-            new_ride.ridetime = cd['ridetime']
-            new_ride.location = new_point
-            new_ride.locationAddress = cd['locationAddress']
-            new_ride.description = cd['description']
-            new_ride.save()
-
-            return HttpResponseRedirect('/add_point/success')
-
-        else:
-            return HttpResponseRedirect('/add_point/error')
-
-
-def conference(request):
-    if request.method == 'POST':
-        form_kickoff = forms.KickOff(request.POST)
-        form = forms.Conference(request.POST)
-        if form.is_valid() and form_kickoff.is_valid():
-            new_point = models.RideLocation()
-
-            cd = form.cleaned_data
-            cd_form_kickoff = form_kickoff.cleaned_data
-
-            coordinates = cd_form_kickoff['coordinates'].split(',')
-            new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
-            new_point.name = cd_form_kickoff['name']
-            new_point.event_Frequency = cd_form_kickoff['event_Frequency']
-            new_point.editable = cd_form_kickoff['editable']
-            new_point.rideType = cd_form_kickoff['rideType']
-            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
-            new_point.save()
-
-            new_ride = models.Conference()
-            new_ride.location = new_point
-            new_ride.ridetime = cd['ridetime']
-            new_ride.locationAddress = cd['locationAddress']
-            new_ride.description = cd['description']
-            new_ride.save()
-
-            return HttpResponseRedirect('/add_point/success')
-
-        else:
-            return HttpResponse(form_kickoff.errors)
 
 
 def form_error(request):

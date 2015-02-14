@@ -43,7 +43,7 @@
         "race_road": "RoadRace",
         "special_event": "RideSpecialEvent",
         "trail_work_day": "TrailWorkDay",
-        "bike_swap": "SwapMeet",
+        "bike_swap": "BikeSwap",
         "conference": "Conference"
     };
 
