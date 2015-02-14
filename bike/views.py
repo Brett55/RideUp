@@ -126,58 +126,50 @@ def add_rider(request, group, key):
             return HttpResponse(form_non_member.errors)
 
 
+def process_create_ride_form(request):
+    form_kickoff = forms.KickOff(request.POST)
+    if form_kickoff.is_valid():
+        new_point = models.RideLocation()
+        cd_form_kickoff = form_kickoff.cleaned_data
+        coordinates = cd_form_kickoff['coordinates'].split(',')
+        new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
+        new_point.name = cd_form_kickoff['name']
+        new_point.event_Frequency = cd_form_kickoff['event_Frequency']
+        new_point.editable = cd_form_kickoff['editable']
+        new_point.rideType = cd_form_kickoff['rideType']
+        new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
+        new_point.save()
+
+        return new_point
+    else:
+        HttpResponse(form_kickoff.errors)
+
+
 def group_ride_trail(request):
     if request.method == 'POST':
-        form_kickoff = forms.KickOff(request.POST)
-        form = forms.AddRideSpotTrail(request.POST)
-        if form.is_valid() and form_kickoff.is_valid():
-            new_point = models.RideLocation()
-
-            cd = form.cleaned_data
-            cd_form_kickoff = form_kickoff.cleaned_data
-
-            coordinates = cd_form_kickoff['coordinates'].split(',')
-            new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
-            new_point.name = cd_form_kickoff['name']
-            new_point.event_Frequency = cd_form_kickoff['event_Frequency']
-            new_point.editable = cd_form_kickoff['editable']
-            new_point.rideType = cd_form_kickoff['rideType']
-            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
-            new_point.save()
-
+        new_point = process_create_ride_form(request)
+        form_main = forms.AddRideSpotTrail(request.POST)
+        if form_main.is_valid():
             new_ride = models.GroupRideDirt()
             new_ride.location = new_point
-            new_ride.rideTypeMTB = cd['rideTypeMTB']
-            new_ride.rideLevelTrail = cd['rideLevelTrail']
-            new_ride.ridetime = cd['ridetime']
-            new_ride.postRideBeer = cd['postRideBeer']
+            cd = form_main.cleaned_data
+            new_ride.__dict__.update(cd)
             new_ride.save()
 
-            return HttpResponseRedirect('/add_point/success')
+            return HttpResponse('Success')
 
         else:
-            return HttpResponseRedirect('/add_point/error')
+            HttpResponse(form_main.errors)
 
 
 def group_ride_road(request):
     if request.method == 'POST':
-        form_kickoff = forms.KickOff(request.POST)
-        form = forms.AddRideSpotRoad(request.POST)
-        if form.is_valid() and form_kickoff.is_valid():
-            new_point = models.RideLocation()
-
-            cd = form.cleaned_data
-            cd_form_kickoff = form_kickoff.cleaned_data
-
-            coordinates = cd_form_kickoff['coordinates'].split(',')
-            new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
-            new_point.name = cd_form_kickoff['name']
-            new_point.event_Frequency = cd_form_kickoff['event_Frequency']
-            new_point.editable = cd_form_kickoff['editable']
-            new_point.rideType = cd_form_kickoff['rideType']
-            new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
-            new_point.save()
-
+        new_point = process_create_ride_form(request)
+        form_main = forms.AddRideSpotTrail(request.POST)
+        if form_main.is_valid():
+            new_ride = models.GroupRideDirt()
+            new_ride.location = new_point
+            cd = form_main.cleaned_data
             new_ride = models.GroupRideRoad()
             new_ride.location = new_point
             new_ride.rideLevelRoad = cd['rideLevelRoad']
@@ -185,7 +177,7 @@ def group_ride_road(request):
             new_ride.postRideBeer = cd['postRideBeer']
             new_ride.save()
 
-            return HttpResponseRedirect('/add_point/success')
+        return HttpResponse('Success')
 
         else:
             return HttpResponseRedirect('/add_point/error')
