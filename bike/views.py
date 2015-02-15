@@ -125,6 +125,9 @@ def add_rider(request, group, key):
         else:
             return HttpResponse(form_non_member.errors)
 
+    else:
+        return HttpResponse("ERROR")
+
 
 def process_create_ride_form(request):
     form_kickoff = forms.KickOff(request.POST)
@@ -178,11 +181,5 @@ def create_ride(request, model_name):
             return HttpResponse('Success')
         else:
             HttpResponse(form_main.errors)
-
-
-def form_error(request):
-    return render_to_response('bike/form_error.html')
-
-
-def form_success(request):
-    return render_to_response('bike/form_success.html')
+    else:
+        return HttpResponse("ERROR")
