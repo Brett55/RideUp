@@ -40,10 +40,57 @@ function onMapClick(event) {
     }
 }
 
-var redMarker = L.AwesomeMarkers.icon({
-    prefix: "fa",
+var trailWorkDay = L.AwesomeMarkers.icon({
+    prefix: 'fa',
+    icon: 'bicycle',
+    markerColor: 'darkred'
+});
+
+var trailRace = L.AwesomeMarkers.icon({
+    prefix: 'fa',
+    icon: 'bicycle',
+    markerColor: 'green'
+});
+
+var roadRace = L.AwesomeMarkers.icon({
+    prefix: 'fa',
     icon: 'bicycle',
     markerColor: 'red'
+});
+
+var specialEvent = L.AwesomeMarkers.icon({
+    prefix: 'fa',
+    icon: 'bicycle',
+    markerColor: 'orange'
+});
+
+var bikeSwap = L.AwesomeMarkers.icon({
+    prefix: 'fa',
+    icon: 'bicycle',
+    markerColor: 'darkgreen'
+});
+
+var groupRideRoad = L.AwesomeMarkers.icon({
+    prefix: 'fa',
+    icon: 'bicycle',
+    markerColor: 'purple'
+});
+
+var groupRideTrail = L.AwesomeMarkers.icon({
+    prefix: 'fa',
+    icon: 'bicycle',
+    markerColor: 'blue'
+});
+
+var conference = L.AwesomeMarkers.icon({
+    prefix: 'fa',
+    icon: 'bicycle',
+    markerColor: 'darkpurple'
+});
+
+var default_icon = L.AwesomeMarkers.icon({
+    icon: 'home',
+    markerColor: 'cadetblue'
 });
 
 function loadGeoJSON() {
@@ -55,7 +102,33 @@ function loadGeoJSON() {
             $(data.features).each(function (key, data) {
                 L.geoJson(data, {
                     pointToLayer: function (feature, latlng) {
-                        return L.marker(latlng, {"icon": redMarker});
+                        if (feature.properties.rideType === "CONFERENCE") {
+                            return L.marker(latlng, {"icon": conference});
+                        }
+                        else if ((feature.properties.rideType === "GROUP_RIDE" ) && (feature.properties.roadOrDirt === "TRAIL" )) {
+                            return L.marker(latlng, {"icon": groupRideTrail});
+                        }
+                        else if ((feature.properties.rideType === "GROUP_RIDE") && (feature.properties.roadOrDirt === "ROAD" )) {
+                            return L.marker(latlng, {"icon": groupRideRoad});
+                        }
+                        else if ((feature.properties.rideType === "RACE") && (feature.properties.roadOrDirt === "TRAIL" )) {
+                            return L.marker(latlng, {"icon": trailRace});
+                        }
+                        else if ((feature.properties.rideType === "RACE") && (feature.properties.roadOrDirt === "ROAD" )) {
+                            return L.marker(latlng, {"icon": roadRace});
+                        }
+                        else if (feature.properties.rideType === "BIKE_SWAP") {
+                            return L.marker(latlng, {"icon": bikeSwap});
+                        }
+                        else if (feature.properties.rideType === "TRAIL_WORK_DAY") {
+                            return L.marker(latlng, {"icon": trailWorkDay});
+                        }
+                        else if (feature.properties.rideType === "SPECIAL_EVENT") {
+                            return L.marker(latlng, {"icon": specialEvent});
+                        }
+                        else {
+                            return L.marker(latlng, {"icon": default_icon});
+                        }
                     },
                     onEachFeature: onEachFeature
                 }).addTo(map);
