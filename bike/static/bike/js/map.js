@@ -40,6 +40,11 @@ function onMapClick(event) {
     }
 }
 
+var redMarker = L.AwesomeMarkers.icon({
+    prefix: "fa",
+    icon: 'bicycle',
+    markerColor: 'red'
+});
 
 function loadGeoJSON() {
     //call stored geoJSON in DB
@@ -48,11 +53,22 @@ function loadGeoJSON() {
         url: "data.geojson/",
         success: function (data) {
             $(data.features).each(function (key, data) {
-                L.geoJson(data, {onEachFeature: onEachFeature}).addTo(map);
+                L.geoJson(data, {
+                    pointToLayer: function (feature, latlng) {
+                        return L.marker(latlng, {"icon": redMarker});
+                    },
+                    onEachFeature: onEachFeature
+                }).addTo(map);
             });
         }
     }).error(function () {
     });
+}
+
+//Marker click handler
+function onEachFeature(feature, layer) {
+    // attach click handler to do AJAX call
+    layer.on('click', onClick);
 }
 
 //close modal window when clicked Off

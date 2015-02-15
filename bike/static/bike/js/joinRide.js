@@ -1,9 +1,3 @@
-    //Marker click handler
-    function onEachFeature(feature, layer) {
-        // attach click handler to do AJAX call
-        layer.on('click', onClick);
-    }
-
     var convertNames = {
         "description":"Details",
         "locationAddress":"Address",
