@@ -1,7 +1,7 @@
 import models
 import forms
 from django.shortcuts import render_to_response
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.core.context_processors import csrf
 from django.core import serializers
 from django.contrib.gis.geos import Point
@@ -29,7 +29,7 @@ def more_data(request, group, key):
 def get_rider_info(request, member_non_member, rider_id):
     if member_non_member == "member":
         query_set = User.objects.filter(id=rider_id)
-        data = serializers.serialize("json", query_set, fields=('first_name'))
+        data = serializers.serialize("json", query_set, fields='first_name')
     else:
         query_set = models.NonMembers.objects.filter(id=rider_id)
         data = serializers.serialize("json", query_set)
@@ -111,7 +111,7 @@ def add_rider(request, group, key):
             query_set.riders.add(new_guy)
             query_set.save()
 
-            return HttpResponseRedirect('/add_point/success')
+            return HttpResponse(username + ' Added')
 
         elif form_non_member.is_valid():
             cd = form_non_member.cleaned_data
@@ -121,15 +121,15 @@ def add_rider(request, group, key):
             query_set.non_member_riders.add(new_guy_non_member)
             query_set.save()
 
-            return HttpResponse("SUCCESS")
+            return HttpResponse(new_guy_non_member.name + ' Added')
         else:
             return HttpResponse(form_non_member.errors)
 
 
 def process_create_ride_form(request):
     form_kickoff = forms.KickOff(request.POST)
+    new_point = models.RideLocation()
     if form_kickoff.is_valid():
-        new_point = models.RideLocation()
         cd_form_kickoff = form_kickoff.cleaned_data
         coordinates = cd_form_kickoff['coordinates'].split(',')
         new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
@@ -140,14 +140,14 @@ def process_create_ride_form(request):
         new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
         new_point.save()
 
-        return new_point
+        return new_point, form_kickoff.errors
     else:
-        HttpResponse(form_kickoff.errors)
+        return new_point, form_kickoff.errors
 
 
 def create_ride(request, model_name):
     if request.method == 'POST':
-        new_point = process_create_ride_form(request)
+        new_point, errors = process_create_ride_form(request)
 
         if model_name == "GroupRideDirt":
             form_main = forms.AddRideSpotTrail(request.POST)
@@ -165,6 +165,8 @@ def create_ride(request, model_name):
             form_main = forms.BikeSwap(request.POST)
         elif model_name == "Conference":
             form_main = forms.Conference(request.POST)
+        else:
+            return HttpResponse(errors)
 
         if form_main.is_valid():
             model = get_model("bike", model_name)
@@ -174,7 +176,6 @@ def create_ride(request, model_name):
             new_ride.save()
 
             return HttpResponse('Success')
-
         else:
             HttpResponse(form_main.errors)
 
