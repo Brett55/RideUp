@@ -2,4 +2,3 @@
 staticfiles
 .idea
 local_settings.py
-settings.py
