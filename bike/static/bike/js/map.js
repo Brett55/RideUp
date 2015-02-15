@@ -61,8 +61,7 @@ function loadGeoJSON() {
                 }).addTo(map);
             });
         }
-    }).error(function () {
-    });
+    }).error(function () {});
 }
 
 //Marker click handler
