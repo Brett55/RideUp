@@ -2,21 +2,6 @@ from django import forms
 from django.forms import ModelForm
 import models
 
-
-LEVEL_CHOICE = (
-    ('GREEN', "Green"),
-    ('BLUE', "Blue"),
-    ('BLACK', "Black"),
-    ('DBL_BLACK', "Double Black")
-)
-
-MOUNTAIN_CHOICE = (
-    ('Cross Country', "Cross Country"),
-    ('Down Hill', "Down Hill"),
-    ('Free Ride', "Free Ride"),
-    ('Dirt Jump', "Dirt Jump")
-)
-
 EVENT_TYPE = (
     ('BLANK', "Select Type"),
     ('RACE', "Race"),
@@ -27,24 +12,10 @@ EVENT_TYPE = (
     ('BIKE_SWAP', "Bike Swap")
 )
 
-ROAD_CHOICE = (
-    ("Group A",  "Group A"),
-    ("Group B", "Group B"),
-    ("Group C", "Group C"),
-    ("Group D", "Group D")
-)
-
 SURFACE_CHOICE = (
     ('TRAIL', 'Trail'),
     ('ROAD', 'Road')
 )
-
-FREQUENCY = (
-    ('Weekly', 'Weekly'),
-    ('Bi-Weekly', 'Bi-Weekly'),
-    ('One Time for Now', 'One Time for Now')
-)
-
 
 class KickOff(forms.Form):
     # RideLocation Class params

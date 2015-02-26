@@ -68,14 +68,14 @@ class RideUpEvent(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
     non_member_riders = models.ManyToManyField(NonMembers)
-    ridetime = models.DateTimeField()
+    ridetime = models.DateTimeField('Ride Time')
     postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
     website = models.CharField(max_length=100, null=True)
     cost = models.CharField(max_length=50, null=True)
     rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=50, choices=MOUNTAIN_CHOICE, null=True)
     description = models.CharField(max_length=300, null=False)
-    hostedBy = models.CharField(max_length=50, null=True)
-    locationAddress = models.CharField(max_length=50, null=True)
+    hostedBy = models.CharField('Hosted By', max_length=50, null=True)
+    locationAddress = models.CharField('Location Address', max_length=50, null=True)
 
     class Meta:
         abstract = True
