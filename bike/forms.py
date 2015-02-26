@@ -18,7 +18,6 @@ SURFACE_CHOICE = (
 )
 
 class KickOff(forms.Form):
-    # RideLocation Class params
     coordinates = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'type': "hidden"}), required=True)
     name = forms.CharField(max_length=100, widget=forms.TextInput(
         attrs={'style': 'height:30px'}), required=True)
