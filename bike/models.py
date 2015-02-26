@@ -74,6 +74,7 @@ class RideUpEvent(models.Model):
     cost = models.CharField(max_length=50, null=True)
     rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=50, choices=MOUNTAIN_CHOICE, null=True)
     description = models.CharField(max_length=300, null=False)
+    hostedBy = models.CharField(max_length=50, null=True)
     locationAddress = models.CharField(max_length=50, null=True)
 
     class Meta:
@@ -91,17 +92,14 @@ class GroupRideRoad(RideUpEvent):
 
 
 class RideSpecialEvent(RideUpEvent):
-    hostedBy = models.CharField(max_length=50, null=True)
     objects = models.GeoManager()
 
 
 class TrailRace(RideUpEvent):
-    hostedBy = models.CharField(max_length=50, null=True)
     objects = models.GeoManager()
 
 
 class RoadRace(RideUpEvent):
-    hostedBy = models.CharField(max_length=50, null=True)
     objects = models.GeoManager()
 
 
@@ -114,7 +112,6 @@ class BikeSwap(RideUpEvent):
 
 
 class Conference(RideUpEvent):
-    hostedBy = models.CharField(max_length=50, null=True)
     objects = models.GeoManager()
 
 
