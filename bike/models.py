@@ -64,100 +64,57 @@ class NonMembers(models.Model):
     name = models.CharField(max_length=50, null=False)
 
 
-class GroupRideDirt(models.Model):
+class RideUpEvent(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
     non_member_riders = models.ManyToManyField(NonMembers)
-    rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=50, choices=MOUNTAIN_CHOICE, null=True)
     ridetime = models.DateTimeField()
+    postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
+    website = models.CharField(max_length=100, null=True)
+    cost = models.CharField(max_length=50, null=True)
+    rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=50, choices=MOUNTAIN_CHOICE, null=True)
+    description = models.CharField(max_length=300, null=False)
+    locationAddress = models.CharField(max_length=50, null=True)
+
+    class Meta:
+        abstract = True
+
+
+class GroupRideDirt(RideUpEvent):
     rideLevelTrail = models.CharField('MTB Ride Difficulty', max_length=20, choices=LEVEL_CHOICE, null=True)
-    postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
     objects = models.GeoManager()
 
 
-class GroupRideRoad(models.Model):
-    location = models.ForeignKey(RideLocation)
-    riders = models.ManyToManyField(User)
-    non_member_riders = models.ManyToManyField(NonMembers)
-    ridetime = models.DateTimeField()
+class GroupRideRoad(RideUpEvent):
     rideLevelRoad = models.CharField('Road Ride Difficulty', max_length=20, choices=ROAD_CHOICE, null=True)
-    postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
     objects = models.GeoManager()
 
 
-class RideSpecialEvent(models.Model):
-    location = models.ForeignKey(RideLocation)
-    riders = models.ManyToManyField(User)
-    non_member_riders = models.ManyToManyField(NonMembers)
+class RideSpecialEvent(RideUpEvent):
     hostedBy = models.CharField(max_length=50, null=True)
-    locationAddress = models.CharField(max_length=50, null=True)
-    description = models.CharField(max_length=300, null=False)
-    cost = models.CharField(max_length=50, null=True)
-    ridetime = models.DateTimeField()
-    website = models.CharField(max_length=100, null=True)
     objects = models.GeoManager()
 
 
-class TrailRace(models.Model):
-    location = models.ForeignKey(RideLocation)
-    riders = models.ManyToManyField(User)
-    non_member_riders = models.ManyToManyField(NonMembers)
-    rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=50, choices=MOUNTAIN_CHOICE, null=True)
+class TrailRace(RideUpEvent):
     hostedBy = models.CharField(max_length=50, null=True)
-    locationAddress = models.CharField(max_length=50, null=True)
-    description = models.CharField(max_length=300, null=False)
-    cost = models.CharField(max_length=50, null=True)
-    ridetime = models.DateTimeField()
-    website = models.CharField(max_length=100, null=True)
-    postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
     objects = models.GeoManager()
 
 
-class RoadRace(models.Model):
-    location = models.ForeignKey(RideLocation)
-    riders = models.ManyToManyField(User)
-    non_member_riders = models.ManyToManyField(NonMembers)
+class RoadRace(RideUpEvent):
     hostedBy = models.CharField(max_length=50, null=True)
-    locationAddress = models.CharField(max_length=50, null=True)
-    description = models.CharField(max_length=300, null=False)
-    cost = models.CharField(max_length=50, null=True)
-    ridetime = models.DateTimeField()
-    website = models.CharField(max_length=100, null=True)
-    postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
     objects = models.GeoManager()
 
 
-class TrailWorkDay(models.Model):
-    location = models.ForeignKey(RideLocation)
-    riders = models.ManyToManyField(User)
-    non_member_riders = models.ManyToManyField(NonMembers)
-    locationAddress = models.CharField(max_length=50, null=True)
-    description = models.CharField(max_length=300, null=False)
-    ridetime = models.DateTimeField()
-    postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
+class TrailWorkDay(RideUpEvent):
     objects = models.GeoManager()
 
 
-class BikeSwap(models.Model):
-    location = models.ForeignKey(RideLocation)
-    riders = models.ManyToManyField(User)
-    non_member_riders = models.ManyToManyField(NonMembers)
-    locationAddress = models.CharField(max_length=50, null=True)
-    description = models.CharField(max_length=300, null=False)
-    ridetime = models.DateTimeField()
+class BikeSwap(RideUpEvent):
     objects = models.GeoManager()
 
 
-class Conference(models.Model):
-    location = models.ForeignKey(RideLocation)
-    riders = models.ManyToManyField(User)
-    non_member_riders = models.ManyToManyField(NonMembers)
+class Conference(RideUpEvent):
     hostedBy = models.CharField(max_length=50, null=True)
-    locationAddress = models.CharField(max_length=50, null=True)
-    description = models.CharField(max_length=300, null=False)
-    cost = models.CharField(max_length=50, null=True)
-    ridetime = models.DateTimeField()
-    website = models.CharField(max_length=100, null=True)
     objects = models.GeoManager()
 
 

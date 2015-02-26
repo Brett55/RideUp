@@ -1,4 +1,6 @@
 from django import forms
+from django.forms import ModelForm
+import models
 
 
 LEVEL_CHOICE = (
@@ -66,90 +68,52 @@ class JoinRideNonMember(forms.Form):
     first_name = forms.CharField(label='Your Name', max_length=100, widget=forms.TextInput(), required=True)
 
 
-class AddRideSpotTrail(forms.Form):
-    # Ride Class parmams
-    ridetime = forms.DateTimeField(label='Time', required=True)
-    rideTypeMTB = forms.ChoiceField(label='Discipline', choices=MOUNTAIN_CHOICE, required=True)
-    rideLevelTrail = forms.ChoiceField(label='Skill Level', choices=LEVEL_CHOICE, required=True)
-    postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
+class AddRideSpotTrail(ModelForm):
+    class Meta:
+        model = models.GroupRideDirt
+        fields = ('ridetime', 'rideTypeMTB', 'rideLevelTrail', 'postRideBeer')
 
 
-class AddRideSpotRoad(forms.Form):
-    # Ride Class parmams
-    ridetime = forms.DateTimeField(label='Time', required=True)
-    rideLevelRoad = forms.ChoiceField(label='Average Pace', choices=ROAD_CHOICE, required=True)
-    postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
+class AddRideSpotRoad(ModelForm):
+    class Meta:
+        model = models.GroupRideRoad
+        fields = ('ridetime', 'postRideBeer', 'rideLevelRoad')
 
 
-class RideSpecialEvent(forms.Form):
-    # Ride Class parmams
-    ridetime = forms.DateTimeField(label='Time', required=True)
-    hostedBy = forms.CharField(label='Hosted By', max_length=100,
-                               widget=forms.TextInput(), required=False)
-    locationAddress = forms.CharField(label='Address', max_length=100,
-                                      widget=forms.TextInput(), required=False)
-    description = forms.CharField(max_length=300, widget=forms.TextInput(),
-                                  required=False)
-    cost = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-    website = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
+class RideSpecialEvent(ModelForm):
+    class Meta:
+        model = models.RideSpecialEvent
+        fields = ('ridetime', 'locationAddress', 'description', 'postRideBeer', 'hostedBy', 'cost', 'website')
 
 
-class TrailRace(forms.Form):
-    # Ride Class parmams
-    ridetime = forms.DateTimeField(label='Time', required=True)
-    rideTypeMTB = forms.ChoiceField(label='Discipline', choices=MOUNTAIN_CHOICE, required=True)
-    hostedBy = forms.CharField(label='Hosted By', max_length=100,
-                               widget=forms.TextInput(), required=False)
-    locationAddress = forms.CharField(label='Address', max_length=100,
-                                      widget=forms.TextInput(), required=False)
-    description = forms.CharField(max_length=300, widget=forms.TextInput(),
-                                  required=False)
-    cost = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-    website = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-    postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
+class TrailRace(ModelForm):
+    class Meta:
+        model = models.TrailRace
+        fields = ('ridetime', 'locationAddress', 'description', 'postRideBeer',
+                  'hostedBy', 'cost', 'website', 'rideTypeMTB')
 
 
-class RoadRace(forms.Form):
-    # Ride Class parmams
-    ridetime = forms.DateTimeField(label='Time', required=True)
-    hostedBy = forms.CharField(label='Hosted By', max_length=100,
-                               widget=forms.TextInput(), required=False)
-    locationAddress = forms.CharField(label='Address', max_length=100,
-                                      widget=forms.TextInput(attrs={'style': 'height:30px'}), required=False)
-    description = forms.CharField(max_length=300, widget=forms.TextInput(),
-                                  required=False)
-    cost = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-    website = forms.CharField(max_length=100, widget=forms.TextInput(), required=False)
-    postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
+class RoadRace(ModelForm):
+    class Meta:
+        model = models.RoadRace
+        fields = ('ridetime', 'locationAddress', 'description', 'postRideBeer', 'hostedBy', 'cost', 'website')
 
 
-class TrailWorkDay(forms.Form):
-    # Ride Class parmams
-    ridetime = forms.DateTimeField(label='Time', required=True)
-
-    locationAddress = forms.CharField(label='Address', max_length=100,
-                                      widget=forms.TextInput(), required=False)
-
-    description = forms.CharField(max_length=300, widget=forms.TextInput(),
-                                  required=False)
-    postRideBeer = forms.CharField(label='Post Ride Beer & Food Spot', required=False)
+class TrailWorkDay(ModelForm):
+    class Meta:
+        model = models.TrailWorkDay
+        fields = ('ridetime', 'locationAddress', 'description', 'postRideBeer')
 
 
-class BikeSwap(forms.Form):
-    # Ride Class parmams
-    ridetime = forms.DateTimeField(label='Time', required=True)
-    locationAddress = forms.CharField(label='Address', max_length=100,
-                                      widget=forms.TextInput(), required=False)
-    description = forms.CharField(max_length=300, widget=forms.TextInput(),
-                                  required=False)
+class BikeSwap(ModelForm):
+    class Meta:
+        model = models.BikeSwap
+        fields = ('ridetime', 'locationAddress', 'description')
 
 
-class Conference(forms.Form):
-    # Ride Class parmams
-    ridetime = forms.DateTimeField(label='Time', required=True)
-    locationAddress = forms.CharField(label='Address', max_length=100,
-                                      widget=forms.TextInput(), required=False)
-    description = forms.CharField(max_length=300, widget=forms.TextInput(),
-                                  required=False)
+class Conference(ModelForm):
+    class Meta:
+        model = models.Conference
+        fields = ('ridetime', 'locationAddress', 'description')
 
 
