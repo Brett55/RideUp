@@ -175,6 +175,9 @@ def create_ride(request, model_name):
         if form_main.is_valid():
             model = get_model("bike", model_name)
             cd = form_main.cleaned_data
+            #clean form data
+            for key in cd.keys():
+                cd[key] = escape(cd.get(key))
             new_ride = model(**cd)
             new_ride.location = new_point
             new_ride.save()
