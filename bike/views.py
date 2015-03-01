@@ -7,6 +7,7 @@ from django.core import serializers
 from django.contrib.gis.geos import Point
 from django.template import Context, Template
 from django.contrib.auth.models import User
+from django.utils.html import escape
 from django.db.models.loading import get_model
 
 
@@ -105,8 +106,8 @@ def add_rider(request, group, key):
         form_non_member = forms.JoinRideNonMember(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            username = cd['username']
-            password = cd['password']
+            username = escape(cd['username'])
+            password = escape(cd['password'])
             new_guy = User.objects.create_user(username, "adwa@gmail.com", password, first_name=cd['first_name'])
             query_set.riders.add(new_guy)
             query_set.save()
@@ -116,7 +117,7 @@ def add_rider(request, group, key):
         elif form_non_member.is_valid():
             cd = form_non_member.cleaned_data
             new_guy_non_member = models.NonMembers()
-            new_guy_non_member.name = cd['first_name']
+            new_guy_non_member.name = escape(cd['first_name'])
             new_guy_non_member.save()
             query_set.non_member_riders.add(new_guy_non_member)
             query_set.save()
@@ -136,11 +137,11 @@ def process_create_ride_form(request):
         cd_form_kickoff = form_kickoff.cleaned_data
         coordinates = cd_form_kickoff['coordinates'].split(',')
         new_point.geom = Point(float(coordinates[0]), float(coordinates[1]))
-        new_point.name = cd_form_kickoff['name']
-        new_point.event_Frequency = cd_form_kickoff['event_Frequency']
-        new_point.editable = cd_form_kickoff['editable']
-        new_point.rideType = cd_form_kickoff['rideType']
-        new_point.roadOrDirt = cd_form_kickoff['roadOrDirt']
+        new_point.name = escape(cd_form_kickoff['name'])
+        new_point.event_Frequency = escape(cd_form_kickoff['event_Frequency'])
+        new_point.editable = escape(cd_form_kickoff['editable'])
+        new_point.rideType = escape(cd_form_kickoff['rideType'])
+        new_point.roadOrDirt = escape(cd_form_kickoff['roadOrDirt'])
         new_point.save()
 
         return new_point, form_kickoff.errors
