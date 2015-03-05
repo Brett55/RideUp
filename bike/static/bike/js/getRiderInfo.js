@@ -15,6 +15,7 @@ function getRiders(event) {
     //if no riders have joined yet, display this message
     if (value.length === 0) {
         $('<tr><td>No Riders Yet...</td></tr>').appendTo('#riderInfofromAjax');
+        return 0;
     }
 
     //this will not execute if no riders have joined yet
@@ -22,6 +23,7 @@ function getRiders(event) {
         dataType: "json",
         url: "riders/" + member_non_member + "/",
         type: "GET",
+        // pass the ID's of the riders that joined this event already to AJAX GET request
         data: {riders: value},
         success: function (data) {
             $(data).each(function (key, data) {
@@ -36,7 +38,10 @@ function getRiders(event) {
             });
         },
         error: function (xhr, errmsg, err) {
-            $('<tr><td>No Riders Yet...</td></tr>').appendTo('#riderInfofromAjax');
+            console.log("ERROR!");
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+            " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
         }
     });
 }
