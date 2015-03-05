@@ -1,5 +1,6 @@
 import models
 import forms
+from itertools import chain
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.core.context_processors import csrf
@@ -27,14 +28,13 @@ def more_data(request, group, key):
     return HttpResponse(data, content_type='application/json')
 
 
-def get_rider_info(request, member_non_member, rider_id):
+def get_rider_info(request, member_non_member):
     if member_non_member == "member":
-        query_set = User.objects.filter(id=rider_id)
+        query_set = User.objects.filter(id__in=request.GET.getlist('riders[]'))
         data = serializers.serialize("json", query_set, fields='first_name')
     else:
-        query_set = models.NonMembers.objects.filter(id=rider_id)
+        query_set = models.NonMembers.objects.filter(id__in=request.GET.getlist('riders[]'))
         data = serializers.serialize("json", query_set)
-
     return HttpResponse(data, content_type='application/json')
 
 

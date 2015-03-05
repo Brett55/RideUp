@@ -1,3 +1,6 @@
+//cache previous API calls here
+var cachedGetRiders = {};
+
 //function to get all riders attached to an event and display them as a list
 function getRiders(event) {
 
@@ -15,25 +18,25 @@ function getRiders(event) {
     }
 
     //this will not execute if no riders have joined yet
-    for (var rider_id in value) {
-        $.ajax({
-            dataType: "json",
-            url: "riders/" + member_non_member + "/" + value[rider_id] + "/",
-            success: function (data) {
-                $(data).each(function (key, data) {
-                    //members ajax call returned data
-                    if (member_non_member === "member") {
-                        $('<tr><td>' + data.fields.first_name + '</td></tr>').appendTo('#riderInfofromAjax');
-                    }
-                    //non members ajax call returned data
-                    else {
-                        $('<tr><td>' + data.fields.name + '</td></tr>').appendTo('#riderInfofromAjax');
-                    }
-                });
-            },
-            error: function (xhr, errmsg, err) {
-                $('<tr><td>No Riders Yet...</td></tr>').appendTo('#riderInfofromAjax');
-            }
-        });
-    }
+    $.ajax({
+        dataType: "json",
+        url: "riders/" + member_non_member + "/",
+        type: "GET",
+        data: {riders: value},
+        success: function (data) {
+            $(data).each(function (key, data) {
+                //members ajax call returned data
+                if (member_non_member === "member") {
+                    $('<tr><td>' + data.fields.first_name + '</td></tr>').appendTo('#riderInfofromAjax');
+                }
+                //non members ajax call returned data
+                else {
+                    $('<tr><td>' + data.fields.name + '</td></tr>').appendTo('#riderInfofromAjax');
+                }
+            });
+        },
+        error: function (xhr, errmsg, err) {
+            $('<tr><td>No Riders Yet...</td></tr>').appendTo('#riderInfofromAjax');
+        }
+    });
 }
