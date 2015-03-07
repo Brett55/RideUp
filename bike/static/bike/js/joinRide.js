@@ -4,6 +4,7 @@
         "Ridetime":"Time",
         "postRideBeer":"Post-Ride Food & Beer Spot",
         "cost":"Cost",
+        "ridetime": "Ride Time",
         "website":"Website",
         "hostedBy":"Hosted By",
         "rideTypeMTB":"MTB Discipline",
@@ -104,12 +105,16 @@
                                 popUpHtml += '<tr><th>' + key + '</th>' + '<td>' + td + '</td></tr>';
                             }
                             else {
-                                popUpHtml += '<tr><th>' + key + '</th>' + '<td>' + value + '</td></tr>';
+                                popUpHtml += '<tr><th>' + key + '</th>' + '<td id="' + fld + '"' + 'class="shake shake-slow shake-constant hover-stop">' + value + '</td></tr>';
                             }
                         }
                     }
                     //create popupHTML and bind to marker
-                    popUpHtml += '</tbody></table><p><button id="joinRideButton" class="btn btn-default btn-primary">Join Ride</button></p>'
+                    popUpHtml += '</tbody></table>' +
+                    '<p><button id="joinRideButton" class="btn btn-default btn-primary">Join Ride</button>' +
+                    '<button id="editRideButton" class="btn btn-default btn-warning">Edit Ride</button>' +
+                    '</p>';
+
                     bootbox.dialog({
                         title: "Details",
                         message: popUpHtml,
@@ -117,7 +122,8 @@
                     });
                     $("#getRiderInfoLinkMember").click({param1: "member" , param2: membersArray}, getRiders);
                     $("#getRiderInfoLinkNonMember").click({param1: "non_member" , param2: nonMembersArray}, getRiders);
-                    $("#joinRideButton").click(createJoinRideForm); //Add click handler for people joining this ride
+                    $("#joinRideButton").click(createJoinRideForm);
+                    $("#editRideButton").click(editJoinRideForm);//Add click handler for people joining this ride
                 });
             }
         });

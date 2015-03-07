@@ -84,6 +84,6 @@ class BikeSwap(ModelForm):
 class Conference(ModelForm):
     class Meta:
         model = models.Conference
-        fields = ('ridetime', 'locationAddress', 'description')
+        fields = ('ridetime', 'locationAddress', 'description', 'cost')
 
 
