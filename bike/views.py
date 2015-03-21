@@ -37,6 +37,10 @@ def get_rider_info(request, member_non_member):
     return HttpResponse(data, content_type='application/json')
 
 
+def update_event(request, id):
+    return HttpResponse(id)
+
+
 def form_updater(request, form_type):
     args = {}
     args.update(csrf(request))
