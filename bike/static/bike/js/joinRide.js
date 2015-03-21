@@ -31,7 +31,6 @@
     };
 
     var ajax_convert_names = {
-
         "race_trail": "TrailRace",
         "group_ride_road": "GroupRideRoad",
         "group_ride_trail": "GroupRideDirt",
@@ -59,16 +58,16 @@
             marker.feature.id + "/";
 
             popUpHtml =  '<table id="detailTable" class="table table-striped table-bordered table-condensed"><tbody><tr><th><h4>' + convertNames[rideType.toLowerCase() + "_" + rideSurface.toLowerCase()] + '</h4></th></tr>' +
-                            "<tr><th>Name: </th>" + '<td>' + marker.feature.properties.name + '</td></tr>' +
-                            "<tr><th>Frequency: </th>" + '<td>' + marker.feature.properties.event_Frequency + '</td></tr>';
+            "<tr><th>Name: </th>" + '<td class="editable">' + marker.feature.properties.name + '</td></tr>' +
+            "<tr><th>Frequency: </th>" + '<td class="editable">' + marker.feature.properties.event_Frequency + '</td></tr>';
         }
         else {
             ajaxUrl = ajax_convert_names[rideType.toLowerCase()] + "/" +
             marker.feature.id + "/";
 
             popUpHtml =  '<table id="detailTable" class="table table-striped table-bordered table-condensed"><tbody><tr><th><h4>' + convertNames[rideType.toLowerCase()] + '</h4></th></tr>' +
-                            "<tr><th>Name: </th><td>" + marker.feature.properties.name + '</td></tr>' +
-                            "<tr><th>Frequency: </th>" + '<td>' + marker.feature.properties.event_Frequency + '</td></tr>';
+            "<tr><th>Name: </th><td class='editable'>" + marker.feature.properties.name + '</td></tr>' +
+            "<tr><th>Frequency: </th>" + '<td class="editable">' + marker.feature.properties.event_Frequency + '</td></tr>';
         }
         //Calling ajaxURL to populate marker popup
         $.ajax({
@@ -105,7 +104,7 @@
                                 popUpHtml += '<tr><th>' + key + '</th>' + '<td>' + td + '</td></tr>';
                             }
                             else {
-                                popUpHtml += '<tr><th>' + key + '</th>' + '<td id="' + fld + '"' + 'class="shake shake-slow shake-constant hover-stop">' + value + '</td></tr>';
+                                popUpHtml += '<tr><th>' + key + '</th>' + '<td id="' + fld + '"' + 'class="editable">' + value + '</td></tr>';
                             }
                         }
                     }
@@ -123,7 +122,7 @@
                     $("#getRiderInfoLinkMember").click({param1: "member" , param2: membersArray}, getRiders);
                     $("#getRiderInfoLinkNonMember").click({param1: "non_member" , param2: nonMembersArray}, getRiders);
                     $("#joinRideButton").click(createJoinRideForm);
-                    $("#editRideButton").click(editJoinRideForm);//Add click handler for people joining this ride
+                    $("#editRideButton").click(editJoinRideForm.change);//Add click handler for people joining this ride
                 });
             }
         });
