@@ -120,9 +120,9 @@
                         animate: true
                     });
                     $("#getRiderInfoLinkMember").click({param1: "member" , param2: membersArray}, getRiders);
-                    $("#getRiderInfoLinkNonMember").click({param1: "non_member" , param2: nonMembersArray}, getRiders);
+                    $("#getRiderInfoLinkNonMember").click({param1: "non_member", param2: nonMembersArray}, getRiders);
                     $("#joinRideButton").click(createJoinRideForm);
-                    $("#editRideButton").click(editJoinRideForm.change);//Add click handler for people joining this ride
+                    $("#editRideButton").click({param1: ajaxUrl}, editJoinRideForm.change);//Add click handler for people joining this ride
                 });
             }
         });

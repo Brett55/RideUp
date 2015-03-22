@@ -5,7 +5,7 @@ from models import RideLocation
 urlpatterns = patterns('',
                        url(r'^riders/(\w+)/$', 'bike.views.get_rider_info'),
                        url(r'^add_rider/(\w+)/(\d+)/$', 'bike.views.add_rider'),
-                       url(r'^update_event/(\d+)/$', 'bike.views.update_event'),
+                       url(r'^(\w+)/(\d+)/update_event/$', 'bike.views.update_event'),
                        url(r'^(\w+)/(\d+)/$', 'bike.views.more_data'),
                        url(r'^form/(\w+)/$', 'bike.views.form_updater'),
 

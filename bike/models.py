@@ -61,33 +61,33 @@ class RideLocation(models.Model):
 
 
 class NonMembers(models.Model):
-    name = models.CharField(max_length=50, null=False)
-
+    name = models.CharField(max_length=50, blank=False, null=False)
 
 class RideUpEvent(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
     non_member_riders = models.ManyToManyField(NonMembers)
     ridetime = models.DateTimeField('Ride Time')
-    postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100)
-    website = models.CharField(max_length=100, null=True)
-    cost = models.CharField(max_length=50, null=True)
-    rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=50, choices=MOUNTAIN_CHOICE, null=True)
-    description = models.CharField(max_length=300, null=False)
-    hostedBy = models.CharField('Hosted By', max_length=50, null=True)
-    locationAddress = models.CharField('Location Address', max_length=50, null=True)
+    postRideBeer = models.CharField('Post Ride Beer-Food', max_length=100, null=True, blank=True)
+    website = models.CharField(max_length=100, null=True, blank=True)
+    cost = models.CharField(max_length=50, null=True, blank=True)
+    rideTypeMTB = models.CharField('Downhill/XC/Freeride', max_length=50, choices=MOUNTAIN_CHOICE, null=True,
+                                   blank=True)
+    description = models.CharField(max_length=300, null=True, blank=True)
+    hostedBy = models.CharField('Hosted By', max_length=50, null=True, blank=True)
+    locationAddress = models.CharField('Location Address', max_length=50, null=True, blank=True)
 
     class Meta:
         abstract = True
 
 
 class GroupRideDirt(RideUpEvent):
-    rideLevelTrail = models.CharField('MTB Ride Difficulty', max_length=20, choices=LEVEL_CHOICE, null=True)
+    rideLevelTrail = models.CharField('MTB Ride Difficulty', max_length=20, choices=LEVEL_CHOICE, null=True, blank=True)
     objects = models.GeoManager()
 
 
 class GroupRideRoad(RideUpEvent):
-    rideLevelRoad = models.CharField('Road Ride Difficulty', max_length=20, choices=ROAD_CHOICE, null=True)
+    rideLevelRoad = models.CharField('Road Ride Difficulty', max_length=20, choices=ROAD_CHOICE, null=True, blank=True)
     objects = models.GeoManager()
 
 

@@ -4,7 +4,8 @@ var editJoinRideForm = (function () {
     var onOrOff = true;
 
     return {
-        change: function () {
+        change: function (event) {
+            var ajax_URL = event.data.param1;
             var editRideButton = $("#editRideButton");
             if (onOrOff) {
                 $("<a class='edit-tag' href='#'><span class='glyphicon glyphicon-edit'>&nbsp</span></a").prependTo(".editable");
@@ -20,7 +21,7 @@ var editJoinRideForm = (function () {
                 editRideButton.removeClass("btn-success");
                 editRideButton.toggleClass("btn-warning");
                 editRideButton.text("Edit Ride");
-                editJoinRideForm.save();
+                editJoinRideForm.save(ajax_URL);
                 onOrOff = !onOrOff;
             }
         },
@@ -34,17 +35,16 @@ var editJoinRideForm = (function () {
                 });
             }
         },
-        save: function () {
-            console.log(marker);
+        save: function (ajax_URL) {
             var dateInfo = $("#id_ridetime").val();
             $.ajax({
-                type: "PUT",
-                url: "update_event/" + marker.feature.id, //Use whichForm to set the URL for the API
-                data: dateInfo,
+                type: "POST",
+                url: ajax_URL + "update_event/", //Use whichForm to set the URL for the API
+                data: {"ridetime": dateInfo},
                 success: function () {
                     //close popup and add 'Success'
-                    //$('.bootbox-body').empty().append(
-                    //        '<p>Success!</p>');
+                    $('.bootbox-body').empty().append(
+                        '<p>Success!</p>');
                 },
                 error: function (xhr, errmsg, err) {
                     console.log("ERROR!");
