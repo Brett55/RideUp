@@ -86,4 +86,12 @@ class Conference(ModelForm):
         model = models.Conference
         fields = ('ridetime', 'locationAddress', 'description', 'cost')
 
+    def clean(self):
+        data = self.cleaned_data
+        pass
+
+
+
+
+
 

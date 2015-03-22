@@ -2,6 +2,8 @@
 
 var editJoinRideForm = (function () {
     var onOrOff = true;
+    var formDataArray = [];
+    var formDataForAJAX = {};
 
     return {
         change: function (event) {
@@ -34,20 +36,33 @@ var editJoinRideForm = (function () {
         edit: function () {
             var editId = $(this).parent().attr('id');
             if (editId === "ridetime") {
-                $(this).parent().replaceWith('<div><input id="id_ridetime" type="text"/></div>');
-                jQuery('#id_ridetime').datetimepicker({
+                $(this).parent().replaceWith('<div><input id="' + editId + '"' + 'type="text"/></div>');
+                jQuery('#ridetime').datetimepicker({
                     format: 'm-d-Y g:i A',
                     pick12HourFormat: true
                 });
             }
+            else {
+                $(this).parent().replaceWith('<div><input id="' + editId + '"' + 'type="text"/></div>');
+            }
+            formDataArray.push(editId);
         },
 
         save: function (ajax_URL) {
-            var dateInfo = $("#id_ridetime").val();
+            for (var item in formDataArray) {
+                if (formDataArray.hasOwnProperty(item)) {
+                    var key = formDataArray[item];
+                    formDataForAJAX[key] = $("#" + key).val();
+                }
+                else {
+                    console.log('test');
+                }
+            }
+
             $.ajax({
                 type: "POST",
-                url: ajax_URL + "update_event/", //Use whichForm to set the URL for the API
-                data: {"ridetime": dateInfo},
+                url: "/update_event/" + ajax_URL, //Use whichForm to set the URL for the API
+                data: formDataForAJAX,
                 success: function () {
                     //close popup and add 'Success'
                     $('.bootbox-body').empty().append(
