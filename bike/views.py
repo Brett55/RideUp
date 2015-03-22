@@ -8,7 +8,6 @@ from django.contrib.gis.geos import Point
 from django.template import Context, Template
 from django.contrib.auth.models import User
 from django.utils.html import escape
-from django.utils.dateparse import parse_datetime
 from django.db.models.loading import get_model
 
 
@@ -38,8 +37,10 @@ def get_rider_info(request, member_non_member):
     return HttpResponse(data, content_type='application/json')
 
 
-def update_event(request, model_name, key):
+def get_form_and_model(request, model_name):
     form_main = None
+    model = None
+    cd = None
     if model_name == "GroupRideDirt":
         form_main = forms.AddRideSpotTrail(request.POST)
     elif model_name == "GroupRideRoad":
@@ -59,14 +60,21 @@ def update_event(request, model_name, key):
 
     if form_main.is_valid():
         model = get_model("bike", model_name)
-        query_set = model.objects.filter(location_id=key)
         cd = form_main.cleaned_data
+        # clean form data
         for key in cd.keys():
             cd[key] = escape(cd.get(key))
+    else:
+        HttpResponse(form_main.errors)
+
+    return cd, model
+
+def update_event(request, model_name, key):
+    if request.method == "POST":
+        cd, model = get_form_and_model(request, model_name)
+        query_set = model.objects.filter(location_id=key)
         query_set.update(**cd)
-
-    return HttpResponse(form_main.errors)
-
+        return HttpResponse("Success!")
 
 def form_updater(request, form_type):
     args = {}
@@ -174,46 +182,20 @@ def process_create_ride_form(request):
         new_point.roadOrDirt = escape(cd_form_kickoff['roadOrDirt'])
         new_point.save()
 
-        return new_point, form_kickoff.errors
+        return new_point
     else:
-        return new_point, form_kickoff.errors
+        return HttpResponse(form_kickoff.errors)
 
 
 def create_ride(request, model_name):
     if request.method == 'POST':
-        new_point, errors = process_create_ride_form(request)
+        new_point = process_create_ride_form(request)
+        cd, model = get_form_and_model(request, model_name)
+        new_ride = model(**cd)
+        new_ride.location = new_point
+        new_ride.save()
 
-        if model_name == "GroupRideDirt":
-            form_main = forms.AddRideSpotTrail(request.POST)
-        elif model_name == "GroupRideRoad":
-            form_main = forms.AddRideSpotRoad(request.POST)
-        elif model_name == "RideSpecialEvent":
-            form_main = forms.RideSpecialEvent(request.POST)
-        elif model_name == "TrailRace":
-            form_main = forms.TrailRace(request.POST)
-        elif model_name == "RoadRace":
-            form_main = forms.RoadRace(request.POST)
-        elif model_name == "TrailWorkDay":
-            form_main = forms.TrailWorkDay(request.POST)
-        elif model_name == "BikeSwap":
-            form_main = forms.BikeSwap(request.POST)
-        elif model_name == "Conference":
-            form_main = forms.Conference(request.POST)
-        else:
-            return HttpResponse(errors)
+        return HttpResponse('Success')
 
-        if form_main.is_valid():
-            model = get_model("bike", model_name)
-            cd = form_main.cleaned_data
-            #clean form data
-            for key in cd.keys():
-                cd[key] = escape(cd.get(key))
-            new_ride = model(**cd)
-            new_ride.location = new_point
-            new_ride.save()
-
-            return HttpResponse('Success')
-        else:
-            HttpResponse(form_main.errors)
     else:
         return HttpResponse("ERROR")
