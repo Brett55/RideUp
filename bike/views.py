@@ -74,7 +74,7 @@ def update_event(request, model_name, key):
         cd, model = get_form_and_model(request, model_name)
         query_set = model.objects.filter(location_id=key)
         query_set.update(**cd)
-        return HttpResponse("Success!")
+        return HttpResponse("Updated Event!")
 
 def form_updater(request, form_type):
     args = {}
@@ -195,7 +195,7 @@ def create_ride(request, model_name):
         new_ride.location = new_point
         new_ride.save()
 
-        return HttpResponse('Success')
+        return HttpResponse('Ride Created!')
 
     else:
         return HttpResponse("ERROR")

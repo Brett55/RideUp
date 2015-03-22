@@ -16,15 +16,21 @@ var editJoinRideForm = (function () {
                 onOrOff = !onOrOff;
             }
             else {
-                editRideButton = $("#editRideButton");
+                editJoinRideForm.reset();
                 $(".edit-tag").remove();
-                editRideButton.removeClass("btn-success");
-                editRideButton.toggleClass("btn-warning");
-                editRideButton.text("Edit Ride");
                 editJoinRideForm.save(ajax_URL);
                 onOrOff = !onOrOff;
             }
         },
+
+        reset: function() {
+            var editRideButton = $("#editRideButton");
+            editRideButton.removeClass("btn-success");
+            editRideButton.toggleClass("btn-warning");
+            editRideButton.text("Edit Ride");
+            onOrOff = !onOrOff;
+        },
+
         edit: function () {
             var editId = $(this).parent().attr('id');
             if (editId === "ridetime") {
@@ -35,6 +41,7 @@ var editJoinRideForm = (function () {
                 });
             }
         },
+
         save: function (ajax_URL) {
             var dateInfo = $("#id_ridetime").val();
             $.ajax({

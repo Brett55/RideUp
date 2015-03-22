@@ -148,6 +148,7 @@ $(document).on('click', '.modal-backdrop', function(event){
     var classname = event.target.className;
     if (classname && !$('.' + classname).parents('.modal-dialog').length)
         bootbox.hideAll();
+        editJoinRideForm.reset();
 });
 
 // when user click the map, it drops a marker and gets (x,y) coordinates
