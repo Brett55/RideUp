@@ -9,6 +9,7 @@ from django.template import Context, Template
 from django.contrib.auth.models import User
 from django.utils.html import escape
 from django.db.models.loading import get_model
+from django.http import QueryDict
 
 
 def index(request):
@@ -37,31 +38,30 @@ def get_rider_info(request, member_non_member):
     return HttpResponse(data, content_type='application/json')
 
 
-def get_form_and_model(request, model_name):
+def get_form_and_model(req, model_name):
     form_main = None
     model = None
     cd = None
     if model_name == "GroupRideDirt":
-        form_main = forms.AddRideSpotTrail(request.POST)
+        form_main = forms.AddRideSpotTrail(req)
     elif model_name == "GroupRideRoad":
-        form_main = forms.AddRideSpotRoad(request.POST)
+        form_main = forms.AddRideSpotRoad(req)
     elif model_name == "RideSpecialEvent":
-        form_main = forms.RideSpecialEvent(request.POST)
+        form_main = forms.RideSpecialEvent(req)
     elif model_name == "TrailRace":
-        form_main = forms.TrailRace(request.POST)
+        form_main = forms.TrailRace(req)
     elif model_name == "RoadRace":
-        form_main = forms.RoadRace(request.POST)
+        form_main = forms.RoadRace(req)
     elif model_name == "TrailWorkDay":
-        form_main = forms.TrailWorkDay(request.POST)
+        form_main = forms.TrailWorkDay(req)
     elif model_name == "BikeSwap":
-        form_main = forms.BikeSwap(request.POST)
+        form_main = forms.BikeSwap(req)
     elif model_name == "Conference":
-        form_main = forms.Conference(request.POST)
+        form_main = forms.Conference(req)
 
     if form_main.is_valid():
         model = get_model("bike", model_name)
         cd = form_main.cleaned_data
-        # clean form data
         for key in cd.keys():
             cd[key] = escape(cd.get(key))
     else:
@@ -70,11 +70,17 @@ def get_form_and_model(request, model_name):
     return cd, model
 
 def update_event(request, model_name, key):
-    if request.method == "POST":
-        cd, model = get_form_and_model(request, model_name)
-        query_set = model.objects.filter(location_id=key)
-        query_set.update(**cd)
-        return HttpResponse("Updated Event!")
+    req = QueryDict(request.body)
+    # if request.method == "POST":
+    # req = request.POST
+    # elif request.method == "PUT":
+    # else:
+    #     pass
+
+    cd, model = get_form_and_model(req, model_name)
+    query_set = model.objects.filter(location_id=key)
+    query_set.update(**cd)
+    return HttpResponse("Updated Event!")
 
 def form_updater(request, form_type):
     args = {}

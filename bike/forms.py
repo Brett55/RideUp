@@ -86,9 +86,19 @@ class Conference(ModelForm):
         model = models.Conference
         fields = ('ridetime', 'locationAddress', 'description', 'cost')
 
+    def __init__(self, *args, **kwargs):
+        super(Conference, self).__init__(*args, **kwargs)
+        self.fields['ridetime'].required = False
+
     def clean(self):
-        data = self.cleaned_data
-        pass
+        for elem in self.cleaned_data.keys():
+            if elem not in self.changed_data:
+                del self.cleaned_data[elem]
+        return self.cleaned_data
+
+
+
+
 
 
 

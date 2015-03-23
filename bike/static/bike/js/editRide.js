@@ -1,36 +1,34 @@
 'use strict';
-
 var editJoinRideForm = (function () {
-    var onOrOff = true;
     var formDataArray = [];
     var formDataForAJAX = {};
+    var ajax_URL = "";
 
     return {
         change: function (event) {
-            var ajax_URL = event.data.param1;
+            ajax_URL = event.data.param1;
             var editRideButton = $("#editRideButton");
-            if (onOrOff) {
-                $("<a class='edit-tag' href='#'><span class='glyphicon glyphicon-edit'>&nbsp</span></a").prependTo(".editable");
-                editRideButton.removeClass("btn-warning");
-                editRideButton.toggleClass("btn-success");
-                editRideButton.text("Save Edits");
-                $(".edit-tag").click(editJoinRideForm.edit);
-                onOrOff = !onOrOff;
-            }
-            else {
-                editJoinRideForm.reset();
-                $(".edit-tag").remove();
-                editJoinRideForm.save(ajax_URL);
-                onOrOff = !onOrOff;
-            }
+            $("<a class='edit-tag' href='#'><span class='glyphicon glyphicon-edit'>&nbsp</span></a").prependTo(".editable");
+            editRideButton.removeClass("btn-warning");
+            editRideButton.toggleClass("btn-success");
+            editRideButton.toggleClass("editSubmit");
+            editRideButton.text("Save Edits");
+            $(".edit-tag").click(editJoinRideForm.edit);
+            $(".editSubmit").click(editJoinRideForm.submit);
+        },
+
+        submit: function () {
+            editJoinRideForm.reset();
+            $(".edit-tag").remove();
+            editJoinRideForm.save(ajax_URL);
         },
 
         reset: function() {
             var editRideButton = $("#editRideButton");
             editRideButton.removeClass("btn-success");
+            editRideButton.removeClass("editSubmit");
             editRideButton.toggleClass("btn-warning");
             editRideButton.text("Edit Ride");
-            onOrOff = !onOrOff;
         },
 
         edit: function () {
@@ -54,13 +52,10 @@ var editJoinRideForm = (function () {
                     var key = formDataArray[item];
                     formDataForAJAX[key] = $("#" + key).val();
                 }
-                else {
-                    console.log('test');
-                }
             }
 
             $.ajax({
-                type: "POST",
+                type: "PUT",
                 url: "/update_event/" + ajax_URL, //Use whichForm to set the URL for the API
                 data: formDataForAJAX,
                 success: function () {
@@ -73,6 +68,7 @@ var editJoinRideForm = (function () {
                     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
                     " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
                     console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+
                 }
             });
         }
