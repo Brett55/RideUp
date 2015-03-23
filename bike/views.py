@@ -43,19 +43,19 @@ def get_form_and_model(req, model_name, update=False):
     model = None
     cd = None
     if model_name == "GroupRideDirt":
-        form_main = forms.AddRideSpotTrail(req, update)
+        form_main = forms.AddRideSpotTrail(req, update=update)
     elif model_name == "GroupRideRoad":
-        form_main = forms.AddRideSpotRoad(req, update)
+        form_main = forms.AddRideSpotRoad(req, update=update)
     elif model_name == "RideSpecialEvent":
-        form_main = forms.RideSpecialEvent(req, update)
+        form_main = forms.RideSpecialEvent(req, update=update)
     elif model_name == "TrailRace":
-        form_main = forms.TrailRace(req, update)
+        form_main = forms.TrailRace(req, update=update)
     elif model_name == "RoadRace":
-        form_main = forms.RoadRace(req, update)
+        form_main = forms.RoadRace(req, update=update)
     elif model_name == "TrailWorkDay":
-        form_main = forms.TrailWorkDay(req, update)
+        form_main = forms.TrailWorkDay(req, update=update)
     elif model_name == "BikeSwap":
-        form_main = forms.BikeSwap(req, update)
+        form_main = forms.BikeSwap(req, update=update)
     elif model_name == "Conference":
         form_main = forms.Conference(req, update=update)
 
