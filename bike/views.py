@@ -38,26 +38,26 @@ def get_rider_info(request, member_non_member):
     return HttpResponse(data, content_type='application/json')
 
 
-def get_form_and_model(req, model_name):
+def get_form_and_model(req, model_name, update=False):
     form_main = None
     model = None
     cd = None
     if model_name == "GroupRideDirt":
-        form_main = forms.AddRideSpotTrail(req)
+        form_main = forms.AddRideSpotTrail(req, update)
     elif model_name == "GroupRideRoad":
-        form_main = forms.AddRideSpotRoad(req)
+        form_main = forms.AddRideSpotRoad(req, update)
     elif model_name == "RideSpecialEvent":
-        form_main = forms.RideSpecialEvent(req)
+        form_main = forms.RideSpecialEvent(req, update)
     elif model_name == "TrailRace":
-        form_main = forms.TrailRace(req)
+        form_main = forms.TrailRace(req, update)
     elif model_name == "RoadRace":
-        form_main = forms.RoadRace(req)
+        form_main = forms.RoadRace(req, update)
     elif model_name == "TrailWorkDay":
-        form_main = forms.TrailWorkDay(req)
+        form_main = forms.TrailWorkDay(req, update)
     elif model_name == "BikeSwap":
-        form_main = forms.BikeSwap(req)
+        form_main = forms.BikeSwap(req, update)
     elif model_name == "Conference":
-        form_main = forms.Conference(req)
+        form_main = forms.Conference(req, update=update)
 
     if form_main.is_valid():
         model = get_model("bike", model_name)
@@ -70,14 +70,10 @@ def get_form_and_model(req, model_name):
     return cd, model
 
 def update_event(request, model_name, key):
-    req = QueryDict(request.body)
-    # if request.method == "POST":
-    # req = request.POST
-    # elif request.method == "PUT":
-    # else:
-    #     pass
-
-    cd, model = get_form_and_model(req, model_name)
+    if request.method == "PUT":
+        req = QueryDict(request.body)
+    update = True
+    cd, model = get_form_and_model(req, model_name, update)
     query_set = model.objects.filter(location_id=key)
     query_set.update(**cd)
     return HttpResponse("Updated Event!")
@@ -194,9 +190,10 @@ def process_create_ride_form(request):
 
 
 def create_ride(request, model_name):
-    if request.method == 'POST':
+    if request.method == "POST":
+        req = request.POST
         new_point = process_create_ride_form(request)
-        cd, model = get_form_and_model(request, model_name)
+        cd, model = get_form_and_model(req, model_name)
         new_ride = model(**cd)
         new_ride.location = new_point
         new_ride.save()
