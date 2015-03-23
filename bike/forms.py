@@ -43,17 +43,56 @@ class AddRideSpotTrail(ModelForm):
         model = models.GroupRideDirt
         fields = ('ridetime', 'rideTypeMTB', 'rideLevelTrail', 'postRideBeer')
 
+    def __init__(self, *args, **kwargs):
+        self.update = kwargs.pop('update', None)
+        super(AddRideSpotTrail, self).__init__(*args, **kwargs)
+        if self.update:
+            self.fields['ridetime'].required = False
+
+    def clean(self):
+        if self.update:
+            for elem in self.cleaned_data.keys():
+                if elem not in self.changed_data:
+                    del self.cleaned_data[elem]
+        return self.cleaned_data
+
 
 class AddRideSpotRoad(ModelForm):
     class Meta:
         model = models.GroupRideRoad
         fields = ('ridetime', 'postRideBeer', 'rideLevelRoad')
 
+    def __init__(self, *args, **kwargs):
+        self.update = kwargs.pop('update', None)
+        super(AddRideSpotRoad, self).__init__(*args, **kwargs)
+        if self.update:
+            self.fields['ridetime'].required = False
+
+    def clean(self):
+        if self.update:
+            for elem in self.cleaned_data.keys():
+                if elem not in self.changed_data:
+                    del self.cleaned_data[elem]
+        return self.cleaned_data
+
 
 class RideSpecialEvent(ModelForm):
     class Meta:
         model = models.RideSpecialEvent
         fields = ('ridetime', 'locationAddress', 'description', 'postRideBeer', 'hostedBy', 'cost', 'website')
+
+    def __init__(self, *args, **kwargs):
+        self.update = kwargs.pop('update', None)
+        super(RideSpecialEvent, self).__init__(*args, **kwargs)
+        if self.update:
+            self.fields['ridetime'].required = False
+
+    def clean(self):
+        if self.update:
+            for elem in self.cleaned_data.keys():
+                if elem not in self.changed_data:
+                    del self.cleaned_data[elem]
+        return self.cleaned_data
 
 
 class TrailRace(ModelForm):
@@ -62,11 +101,37 @@ class TrailRace(ModelForm):
         fields = ('ridetime', 'locationAddress', 'description', 'postRideBeer',
                   'hostedBy', 'cost', 'website', 'rideTypeMTB')
 
+    def __init__(self, *args, **kwargs):
+        self.update = kwargs.pop('update', None)
+        super(TrailRace, self).__init__(*args, **kwargs)
+        if self.update:
+            self.fields['ridetime'].required = False
+
+    def clean(self):
+        if self.update:
+            for elem in self.cleaned_data.keys():
+                if elem not in self.changed_data:
+                    del self.cleaned_data[elem]
+        return self.cleaned_data
+
 
 class RoadRace(ModelForm):
     class Meta:
         model = models.RoadRace
         fields = ('ridetime', 'locationAddress', 'description', 'postRideBeer', 'hostedBy', 'cost', 'website')
+
+    def __init__(self, *args, **kwargs):
+        self.update = kwargs.pop('update', None)
+        super(RoadRace, self).__init__(*args, **kwargs)
+        if self.update:
+            self.fields['ridetime'].required = False
+
+    def clean(self):
+        if self.update:
+            for elem in self.cleaned_data.keys():
+                if elem not in self.changed_data:
+                    del self.cleaned_data[elem]
+        return self.cleaned_data
 
 
 class TrailWorkDay(ModelForm):
@@ -74,11 +139,37 @@ class TrailWorkDay(ModelForm):
         model = models.TrailWorkDay
         fields = ('ridetime', 'locationAddress', 'description', 'postRideBeer')
 
+    def __init__(self, *args, **kwargs):
+        self.update = kwargs.pop('update', None)
+        super(TrailWorkDay, self).__init__(*args, **kwargs)
+        if self.update:
+            self.fields['ridetime'].required = False
+
+    def clean(self):
+        if self.update:
+            for elem in self.cleaned_data.keys():
+                if elem not in self.changed_data:
+                    del self.cleaned_data[elem]
+        return self.cleaned_data
+
 
 class BikeSwap(ModelForm):
     class Meta:
         model = models.BikeSwap
         fields = ('ridetime', 'locationAddress', 'description')
+
+    def __init__(self, *args, **kwargs):
+        self.update = kwargs.pop('update', None)
+        super(BikeSwap, self).__init__(*args, **kwargs)
+        if self.update:
+            self.fields['ridetime'].required = False
+
+    def clean(self):
+        if self.update:
+            for elem in self.cleaned_data.keys():
+                if elem not in self.changed_data:
+                    del self.cleaned_data[elem]
+        return self.cleaned_data
 
 
 class Conference(ModelForm):

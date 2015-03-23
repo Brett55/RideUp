@@ -1,4 +1,5 @@
 'use strict';
+
 var editJoinRideForm = (function () {
     var formDataArray = [];
     var formDataForAJAX = {};
@@ -33,15 +34,19 @@ var editJoinRideForm = (function () {
 
         edit: function () {
             var editId = $(this).parent().attr('id');
+            var currentVal = $("#" + editId).text();
             if (editId === "ridetime") {
-                $(this).parent().replaceWith('<div><input id="' + editId + '"' + 'type="text"/></div>');
+                $(this).parent().replaceWith('<input class="form-control" id="' + editId + '"' + 'type="text" + placeholder="'
+                + currentVal + '"/>');
+
                 jQuery('#ridetime').datetimepicker({
                     format: 'm-d-Y g:i A',
                     pick12HourFormat: true
                 });
             }
             else {
-                $(this).parent().replaceWith('<div><input id="' + editId + '"' + 'type="text"/></div>');
+                $(this).parent().replaceWith('<input class="form-control" id="' + editId + '"' + 'type="text" placeholder="'
+                + currentVal + '"/>');
             }
             formDataArray.push(editId);
         },
@@ -63,7 +68,7 @@ var editJoinRideForm = (function () {
                     $('.bootbox-body').empty().append(
                         '<p>Success!</p>');
                 },
-                error: function (xhr, errmsg, err) {
+                error: function (xhr, errmsg) {
                     console.log("ERROR!");
                     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
                     " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
