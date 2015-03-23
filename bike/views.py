@@ -72,6 +72,8 @@ def get_form_and_model(req, model_name, update=False):
 def update_event(request, model_name, key):
     if request.method == "PUT":
         req = QueryDict(request.body)
+    else:
+        HttpResponse("Error: Wrong REST Endpoint")
     update = True
     cd, model = get_form_and_model(req, model_name, update)
     query_set = model.objects.filter(location_id=key)
@@ -167,7 +169,7 @@ def add_rider(request, group, key):
             return HttpResponse(form_non_member.errors)
 
     else:
-        return HttpResponse("ERROR")
+        HttpResponse("Error: Wrong REST Endpoint")
 
 
 def process_create_ride_form(request):
@@ -201,4 +203,4 @@ def create_ride(request, model_name):
         return HttpResponse('Ride Created!')
 
     else:
-        return HttpResponse("ERROR")
+        HttpResponse("Error: Wrong REST Endpoint")
