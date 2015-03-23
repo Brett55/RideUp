@@ -58,16 +58,16 @@
             marker.feature.id + "/";
 
             popUpHtml =  '<table id="detailTable" class="table table-striped table-bordered table-condensed"><tbody><tr><th><h4>' + convertNames[rideType.toLowerCase() + "_" + rideSurface.toLowerCase()] + '</h4></th></tr>' +
-            "<tr><th>Name: </th>" + '<td class="editable">' + marker.feature.properties.name + '</td></tr>' +
-            "<tr><th>Frequency: </th>" + '<td class="editable">' + marker.feature.properties.event_Frequency + '</td></tr>';
+            "<tr><th>Name: </th>" + '<td>' + marker.feature.properties.name + '</td></tr>' +
+            "<tr><th>Frequency: </th>" + '<td>' + marker.feature.properties.event_Frequency + '</td></tr>';
         }
         else {
             ajaxUrl = ajax_convert_names[rideType.toLowerCase()] + "/" +
             marker.feature.id + "/";
 
             popUpHtml =  '<table id="detailTable" class="table table-striped table-bordered table-condensed"><tbody><tr><th><h4>' + convertNames[rideType.toLowerCase()] + '</h4></th></tr>' +
-            "<tr><th>Name: </th><td class='editable'>" + marker.feature.properties.name + '</td></tr>' +
-            "<tr><th>Frequency: </th>" + '<td class="editable">' + marker.feature.properties.event_Frequency + '</td></tr>';
+            "<tr><th>Name: </th><td>" + marker.feature.properties.name + '</td></tr>' +
+            "<tr><th>Frequency: </th>" + '<td>' + marker.feature.properties.event_Frequency + '</td></tr>';
         }
         //Calling ajaxURL to populate marker popup
         $.ajax({
@@ -102,6 +102,9 @@
                                 var membersArray = value;
                                 var td = '<a id="getRiderInfoLinkMember" href="javascript:void(0)">' + value.length + ' - Show Riders' + '</a>';
                                 popUpHtml += '<tr><th>' + key + '</th>' + '<td>' + td + '</td></tr>';
+                            }
+                            else if ((fld === "rideLevelTrail") || (fld === "rideLevelRoad") || (fld === "rideTypeMTB")) {
+                                popUpHtml += '<tr><th>' + key + '</th>' + '<td id="' + fld + '"' + '>' + value + '</td></tr>';
                             }
                             else {
                                 popUpHtml += '<tr><th>' + key + '</th>' + '<td id="' + fld + '"' + 'class="editable">' + value + '</td></tr>';
