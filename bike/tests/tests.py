@@ -7,6 +7,7 @@ django.setup()
 
 
 class MainTest(TestCase):
+    """test basic parts of the main page to ensure elements are present"""
     def setUp(self):
         self.browser = webdriver.Firefox()
 
@@ -28,8 +29,33 @@ class MainTest(TestCase):
         result.click()
 
         # assert proper HTML is displayed
+        self.browser.implicitly_wait(1)
         popup = self.browser.find_element_by_css_selector(".navText")
         self.assertIn('concept', popup.text)
+        # close popup
+        self.browser.find_element_by_css_selector('.btn-primary').click()
+
+        # assert memberes section is modal window
+        result = self.browser.find_element_by_css_selector("#members")
+        result.click()
+
+        # assert proper HTML is displayed
+        self.browser.implicitly_wait(1)
+        popup = self.browser.find_elements_by_css_selector(".navText")
+        self.assertIn('Becoming', popup[0].text)
+        # close popup
+        self.browser.find_element_by_css_selector('.btn-primary').click()
+
+        # assert HowTo section is modal window
+        result = self.browser.find_element_by_css_selector("#howTo")
+        result.click()
+
+        # assert proper HTML is displayed
+        self.browser.implicitly_wait(1)
+        popup = self.browser.find_elements_by_css_selector(".navText")
+        self.assertIn('Simply', popup[0].text)
+        # close popup
+        self.browser.find_element_by_css_selector('.btn-primary').click()
 
 
 class GroupRideDirtTestCase(TestCase):
