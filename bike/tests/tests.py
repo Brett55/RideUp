@@ -1,28 +1,35 @@
-from django.test import TestCase, LiveServerTestCase
+from django.test import TestCase
 from bike.models import RideLocation
 from django.contrib.gis.geos import Point
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 import django
-
 django.setup()
 
 
-class AdminTest(LiveServerTestCase):
-    # load fixtures
-    fixtures = ['admin.json']
-
+class MainTest(TestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
 
     def tearDown(self):
         self.browser.quit()
 
-    def test_admin_site(self):
-        # user opens web browser, navigates to admin page
-        self.browser.get(self.live_server_url)
+    def test_main_site(self):
+        # user opens web browser, navigates to home page
+        self.browser.get("localhost:8000/")
+        # close initial popup
+        self.browser.find_element_by_css_selector('.btn-primary').click()
+
+        # assert proper HTML is displayed
         body = self.browser.find_element_by_tag_name('body')
         self.assertIn('Ride[up]:', body.text)
+
+        # assert about section is modal window
+        result = self.browser.find_element_by_css_selector("#about")
+        result.click()
+
+        # assert proper HTML is displayed
+        popup = self.browser.find_element_by_css_selector(".navText")
+        self.assertIn('concept', popup.text)
 
 
 class GroupRideDirtTestCase(TestCase):
