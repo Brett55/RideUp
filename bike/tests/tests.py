@@ -84,22 +84,25 @@ class MainTest(TestCase):
         finally:
             self.assertIn('Details', result_modal.get_attribute("textContent"))
 
+
+        # view non members
         self.browser.find_element_by_css_selector('#getRiderInfoLinkNonMember').click()
         self.assertTrue(self.check_exists_by_xpath('/html/body/div[2]/div[2]/div/div[2]/div/table[2]/tbody'))
 
         self.browser.implicitly_wait(1)
 
-
-        # send form data
+        # view members
         self.browser.find_element_by_css_selector('#getRiderInfoLinkMember').click()
         self.assertTrue(self.check_exists_by_xpath('/html/body/div[2]/div[2]/div/div[2]/div/table[2]/tbody'))
 
         self.browser.implicitly_wait(1)
 
+        # send form data
         self.browser.find_element_by_css_selector('#joinRideButton').click()
         self.browser.find_element_by_css_selector('#id_first_name').send_keys("NewMemberBobbyHill")
         self.browser.find_element_by_css_selector('#submitJoinRideForm').click()
 
+        # on success of POST, check to make sure it worked
         success = WebDriverWait(self.browser, 1).until(
             EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div[2]/div/div[2]/div/p"))
         )
