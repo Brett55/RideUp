@@ -1,6 +1,7 @@
 from django.test import TestCase
 from bike.models import RideLocation
 from django.contrib.gis.geos import Point
+from random import randint
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -9,7 +10,6 @@ from selenium.common.exceptions import NoSuchElementException
 import django
 
 django.setup()
-
 
 
 class MainTest(TestCase):
@@ -108,6 +108,28 @@ class MainTest(TestCase):
         )
         self.assertIn('Success!', success.get_attribute("textContent"))
 
+        self.browser.find_element_by_xpath('/html/body/div[2]/div[1]').click()
+
+        # check member form submission now
+
+        result = self.browser.find_element_by_xpath("/html/body/div/div[2]/div/div[1]/div[1]/div[2]/div[3]/div[4]/i")
+        result.click()
+        self.browser.find_element_by_css_selector('#joinRideButton').click()
+        self.browser.implicitly_wait(1)
+        self.browser.find_element_by_css_selector('#memberJoinButton').click()
+
+        self.browser.find_element_by_css_selector('#id_first_name').send_keys("NewMemberDaleGribble")
+        self.browser.implicitly_wait(1)
+        # generate fake username
+        self.browser.find_element_by_css_selector('#id_username').send_keys("myCoolUserName" +
+                                                                            str(randint(0, 9) * randint(0, 9)
+                                                                                * randint(0, 9)))
+
+        self.browser.implicitly_wait(1)
+
+        self.browser.find_element_by_css_selector('#id_password').send_keys("blah1234")
+        self.browser.implicitly_wait(1)
+        self.browser.find_element_by_css_selector('#submitJoinRideForm').click()
 
 
 class GroupRideDirtTestCase(TestCase):
@@ -131,8 +153,8 @@ class GroupRideDirtTestCase(TestCase):
 #
 # """test to make sure a person can view ride details by clicking a feature"""
 #
-#     def setUp(self):
-#         self.browser = webdriver.Firefox()
+# def setUp(self):
+# self.browser = webdriver.Firefox()
 #
 #     def test_view_point(self):
 #         result = self.browser.find_element_by_css_selector(".awesome-marker-icon-blue")
