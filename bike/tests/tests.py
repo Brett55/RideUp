@@ -18,6 +18,15 @@ class MainTest(TestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
 
+        # user opens web browser, navigates to home page
+        self.browser.get("localhost:8000/")
+        # close initial popup
+        self.browser.find_element_by_css_selector('.btn-primary').click()
+
+        # assert proper HTML is displayed
+        body = self.browser.find_element_by_tag_name('body')
+        self.assertIn('Ride[up]:', body.text)
+
     def tearDown(self):
         self.browser.quit()
 
@@ -29,14 +38,8 @@ class MainTest(TestCase):
         return True
 
     def test_main_site(self):
-        # user opens web browser, navigates to home page
-        self.browser.get("localhost:8000/")
-        # close initial popup
-        self.browser.find_element_by_css_selector('.btn-primary').click()
 
-        # assert proper HTML is displayed
-        body = self.browser.find_element_by_tag_name('body')
-        self.assertIn('Ride[up]:', body.text)
+        self.setUp()
 
         # assert about section is modal window
         result = self.browser.find_element_by_css_selector("#about")
@@ -78,6 +81,15 @@ class CheckRideDetailsandJoin(TestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
 
+        # user opens web browser, navigates to home page
+        self.browser.get("localhost:8000/")
+        # close initial popup
+        self.browser.find_element_by_css_selector('.btn-primary').click()
+
+        # assert proper HTML is displayed
+        body = self.browser.find_element_by_tag_name('body')
+        self.assertIn('Ride[up]:', body.text)
+
     def tearDown(self):
         self.browser.quit()
 
@@ -89,6 +101,8 @@ class CheckRideDetailsandJoin(TestCase):
         return True
 
     def test_view_riders(self):
+
+        self.setUp()
 
         # ride details
         result = self.browser.find_element_by_xpath("/html/body/div/div[2]/div/div[1]/div[1]/div[2]/div[3]/div[4]/i")
@@ -117,6 +131,13 @@ class CheckRideDetailsandJoin(TestCase):
         self.browser.implicitly_wait(1)
 
     def test_join_ride(self):
+
+        self.setUp()
+
+        # ride details
+        result = self.browser.find_element_by_xpath("/html/body/div/div[2]/div/div[1]/div[1]/div[2]/div[3]/div[4]/i")
+        result.click()
+        self.browser.implicitly_wait(1)
 
         # send form data
         self.browser.find_element_by_css_selector('#joinRideButton').click()
