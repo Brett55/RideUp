@@ -74,8 +74,6 @@ class MainTest(TestCase):
         # close popup
         self.browser.find_element_by_css_selector('.btn-primary').click()
 
-        self.tearDown()
-
 
 class CheckRideDetailsandJoin(TestCase):
     '''test the ability to view ride details, and join the ride'''
@@ -132,7 +130,6 @@ class CheckRideDetailsandJoin(TestCase):
 
         self.browser.implicitly_wait(1)
 
-        self.tearDown()
 
     def test_join_ride(self):
 
@@ -174,8 +171,6 @@ class CheckRideDetailsandJoin(TestCase):
         self.browser.find_element_by_css_selector('#id_password').send_keys("blah1234")
         self.browser.implicitly_wait(1)
         self.browser.find_element_by_css_selector('#submitJoinRideForm').click()
-
-        self.tearDown()
 
 
 class GroupRideDirtTestCase(TestCase):
