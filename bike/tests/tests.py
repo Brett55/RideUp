@@ -11,7 +11,6 @@ import django
 
 django.setup()
 
-
 class MainTest(TestCase):
     """test basic parts of the main page to ensure elements are present"""
 
