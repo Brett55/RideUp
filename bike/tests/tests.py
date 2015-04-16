@@ -174,6 +174,8 @@ class CheckRideDetailsandJoin(TestCase):
 
 
 class GroupRideDirtTestCase(TestCase):
+    '''tests the creation of objects in DB'''
+
     def setUp(self):
         RideLocation.objects.create(
             name="test",
