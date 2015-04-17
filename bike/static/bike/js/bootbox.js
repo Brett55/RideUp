@@ -686,7 +686,7 @@
         $(options.container).append(dialog);
 
         dialog.modal({
-            backdrop: options.backdrop,
+            backdrop: true,
             keyboard: false,
             show: false
         });

@@ -145,7 +145,7 @@ function onEachFeature(feature, layer) {
 }
 
 //close modal window when clicked Off
-$(document).on('click', '.modal', function (event) {
+$(document).on('click', '.modal-backdrop', function (event) {
     var classname = event.target.className;
     if (classname && !$('.' + classname).parents('.modal-dialog').length)
         bootbox.hideAll();

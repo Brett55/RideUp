@@ -7,6 +7,7 @@ var editJoinRideForm = (function () {
 
     return {
         change: function (event) {
+            event.stopPropagation();
             ajax_URL = event.data.param1;
             var editRideButton = $("#editRideButton");
             $("<a class='edit-tag' href='#'><span class='glyphicon glyphicon-edit'>&nbsp</span></a").prependTo(".editable");
@@ -19,8 +20,6 @@ var editJoinRideForm = (function () {
         },
 
         submit: function () {
-            editJoinRideForm.reset();
-            $(".edit-tag").remove();
             editJoinRideForm.save(ajax_URL);
         },
 
