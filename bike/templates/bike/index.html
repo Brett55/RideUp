@@ -141,13 +141,9 @@
 </div>
 
 {#vendor JS files#}
-<script src={% static "bike/js/jquery.js" %}></script>
-<script src={% static "bike/js/bootstrap.min.js" %}></script>
-<script src={% static "bike/js/leaflet.js" %}></script>
+<script src={% static "bike/prod/js/vendor.min.js" %}></script>
 <script src={% static "bike/js/Control.OSMGeocoder.js" %}></script>
-<script src={% static "bike/css/leaflet.awesome-markers.js" %}></script>
-<script src={% static "bike/datetimepicker-master/jquery.datetimepicker.js" %}></script>
-<script src={% static "bike/js/bootbox.js" %}></script>
+
 
 <script>
     // Set CSRF Cookie
@@ -203,12 +199,7 @@
 </script>
 
 {#custom JS files#}
-<script src={% static "bike/scripts/map.js" %}></script>
-<script src={% static "bike/scripts/joinRide.js" %}></script>
-<script src={% static "bike/scripts/getRiderInfo.js" %}></script>
-<script src={% static "bike/scripts/createRide.js" %}></script>
-<script src={% static "bike/scripts/editRide.js" %}></script>
-<script src={% static "bike/scripts/navBar.js" %}></script>
+<script src={% static "bike/prod/scripts/app.min.js" %}></script>
 
 </body>
 </html>
