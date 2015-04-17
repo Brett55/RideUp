@@ -24,7 +24,7 @@ var editJoinRideForm = (function () {
             editJoinRideForm.save(ajax_URL);
         },
 
-        reset: function() {
+        reset: function () {
             var editRideButton = $("#editRideButton");
             editRideButton.removeClass("btn-success");
             editRideButton.removeClass("editSubmit");

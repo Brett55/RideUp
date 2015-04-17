@@ -1,12 +1,12 @@
 //set map
-var map = L.map('map').setView([39.0407056,-76.8590506], 9);
+var map = L.map('map').setView([39.0407056, -76.8590506], 9);
 
 var osmGeocoder = new L.Control.OSMGeocoder();
 
 map.addControl(osmGeocoder);
 
 L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
-	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
 
@@ -22,7 +22,7 @@ function onMapClick(event) {
     if (typeof newMarker != 'undefined') {
         map.removeLayer(newMarker);  // delete previous marker
         newMarker = L.marker([lat, lng]).addTo(map);  // add new marker
-        bootbox.confirm("<h4>Create Ride Event?</h4>", function(result){
+        bootbox.confirm("<h4>Create Ride Event?</h4>", function (result) {
             if (result === true) {
                 modalCreateRide(coords); //function located in createRide.js
                 return false;
@@ -31,7 +31,7 @@ function onMapClick(event) {
     }
     else {
         newMarker = L.marker([lat, lng]).addTo(map);  // add new marker
-        bootbox.confirm("<h4>Create Ride Event?</h4>", function(result){
+        bootbox.confirm("<h4>Create Ride Event?</h4>", function (result) {
             if (result === true) {
                 modalCreateRide(coords);//function located in createRide.js
                 return false;
@@ -134,7 +134,8 @@ function loadGeoJSON() {
                 }).addTo(map);
             });
         }
-    }).error(function () {});
+    }).error(function () {
+    });
 }
 
 //Marker click handler
@@ -144,11 +145,11 @@ function onEachFeature(feature, layer) {
 }
 
 //close modal window when clicked Off
-$(document).on('click', '.modal-backdrop', function(event){
+$(document).on('click', '.modal', function (event) {
     var classname = event.target.className;
     if (classname && !$('.' + classname).parents('.modal-dialog').length)
         bootbox.hideAll();
-        editJoinRideForm.reset();
+    editJoinRideForm.reset();
 });
 
 // when user click the map, it drops a marker and gets (x,y) coordinates
