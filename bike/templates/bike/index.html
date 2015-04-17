@@ -141,13 +141,13 @@
 </div>
 
 {#vendor JS files#}
-<script src={% static "bike/js/vendor/leaflet.js" %}></script>
-<script src={% static "bike/js/vendor/Control.OSMGeocoder.js" %}></script>
-<script src={% static "bike/datetimepicker-master/jquery.js" %}></script>
-<script src={% static "bike/datetimepicker-master/jquery.datetimepicker.js" %}></script>
-<script src={% static "bike/js/vendor/bootbox.js" %}></script>
+<script src={% static "bike/js/jquery.js" %}></script>
 <script src={% static "bike/js/bootstrap.min.js" %}></script>
+<script src={% static "bike/js/leaflet.js" %}></script>
+<script src={% static "bike/js/Control.OSMGeocoder.js" %}></script>
 <script src={% static "bike/css/leaflet.awesome-markers.js" %}></script>
+<script src={% static "bike/datetimepicker-master/jquery.datetimepicker.js" %}></script>
+<script src={% static "bike/js/bootbox.js" %}></script>
 
 <script>
     // Set CSRF Cookie
@@ -181,7 +181,7 @@
     });
 
     $.ajaxSetup({
-        data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
     });
 </script>
 <script>
@@ -203,12 +203,12 @@
 </script>
 
 {#custom JS files#}
-<script src={% static "bike/js/map.js" %}></script>
-<script src={% static "bike/js/joinRide.js" %}></script>
-<script src={% static "bike/js/getRiderInfo.js" %}></script>
-<script src={% static "bike/js/createRide.js" %}></script>
-<script src={% static "bike/js/editRide.js" %}></script>
-<script src={% static "bike/js/navBar.js" %}></script>
+<script src={% static "bike/scripts/map.js" %}></script>
+<script src={% static "bike/scripts/joinRide.js" %}></script>
+<script src={% static "bike/scripts/getRiderInfo.js" %}></script>
+<script src={% static "bike/scripts/createRide.js" %}></script>
+<script src={% static "bike/scripts/editRide.js" %}></script>
+<script src={% static "bike/scripts/navBar.js" %}></script>
 
 </body>
 </html>
