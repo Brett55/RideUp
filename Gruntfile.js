@@ -14,6 +14,10 @@ module.exports = function (grunt) {
                 src: ['bike/static/bike/scripts/map.js', 'bike/static/bike/scripts/joinRide.js', 'bike/static/bike/scripts/getRiderInfo.js',
                     'bike/static/bike/scripts/createRide.js', 'bike/static/bike/scripts/editRide.js', 'bike/static/bike/scripts/navBar.js'],
                 dest: 'bike/static/bike/prod/scripts/app.js'
+            },
+            vendorCSS: {
+                src: ['bike/static/bike/css/**/*.css'],
+                dest: 'bike/static/bike/prod/css/vendor.css'
             }
         },
         uglify: {
@@ -30,6 +34,14 @@ module.exports = function (grunt) {
                     'bike/static/bike/prod/js/vendor.min.js': ['bike/static/bike/prod/js/vendor.js']
                 }
             }
+        },
+        cssmin: {
+            target: {
+                files: {
+                    'bike/static/bike/prod/css/vendor.min.css': ['bike/static/bike/prod/css/vendor.css']
+                }
+            }
+
         }
     });
 
@@ -39,8 +51,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
 
     // Register tasks here.
-    grunt.registerTask('default', ['concat', 'uglify']);
+    grunt.registerTask('default', ['concat', 'uglify', 'cssmin']);
 
 };
