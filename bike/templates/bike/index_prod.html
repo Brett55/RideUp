@@ -7,15 +7,7 @@
     <link rel="shortcut icon" href="{% static 'bike/css/favicon.ico' %}" type="image/x-icon"/>
     <link rel="icon" href="{% static 'bike/css/favicon.ico' %}" type="image/x-icon"/>
     <link rel="stylesheet" href="{% static 'bike/datetimepicker-master/jquery.datetimepicker.css' %}"/>
-    <link rel="stylesheet" href="{% static 'bike/css/Control.OSMGeocoder.css' %}"/>
-    <link rel="stylesheet" href="{% static 'bike/css/leaflet.awesome-markers.css' %}"/>
-    <link rel="stylesheet" href="{% static 'bike/css/leaflet.css' %}"/>
-    <link rel="stylesheet" href="{% static 'bike/css/jQueryv1.10.3.css' %}"/>
-    <link rel="stylesheet" href="{% static 'bike/css/ion_icons.css' %}"/>
-    <link rel="stylesheet" href="{% static 'bike/css/google_font1.css' %}"/>
-    <link rel="stylesheet" href="{% static 'bike/css/font-awesome.min.css' %}"/>
-    <link rel="stylesheet" href="{% static 'bike/css/bootstrap.min.css' %}"/>
-    <link rel="stylesheet" href="{% static 'bike/css/bootstrap-theme.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'bike/prod/css/vendor.min.css' %}"/>
 
     <!-- may remove this below -->
 
@@ -141,13 +133,8 @@
 </div>
 
 {#vendor JS files#}
-<script src={% static "bike/js/jquery.js" %}></script>
-<script src={% static "bike/js/bootstrap.min.js" %}></script>
-<script src={% static "bike/js/leaflet.js" %}></script>
+<script src={% static "bike/prod/js/vendor.min.js" %}></script>
 <script src={% static "bike/js/Control.OSMGeocoder.js" %}></script>
-<script src={% static "bike/js/leaflet.awesome-markers.js" %}></script>
-<script src={% static "bike/datetimepicker-master/jquery.datetimepicker.js" %}></script>
-<script src={% static "bike/js/bootbox.js" %}></script>
 
 
 <script>
@@ -204,13 +191,7 @@
 </script>
 
 {#custom JS files#}
-<script src={% static "bike/scripts/map.js" %}></script>
-<script src={% static "bike/scripts/joinRide.js" %}></script>
-<script src={% static "bike/scripts/getRiderInfo.js" %}></script>
-<script src={% static "bike/scripts/createRide.js" %}></script>
-<script src={% static "bike/scripts/editRide.js" %}></script>
-<script src={% static "bike/scripts/navBar.js" %}></script>
-
+<script src={% static "bike/prod/scripts/app.min.js" %}></script>
 
 </body>
 </html>
