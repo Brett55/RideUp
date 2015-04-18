@@ -4,5 +4,4 @@ staticfiles
 local_settings.py
 node_modules
 admin.json
-prod
 npm-debug.log
