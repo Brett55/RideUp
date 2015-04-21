@@ -69,6 +69,7 @@ def get_form_and_model(req, model_name, update=False):
 
     return cd, model
 
+
 def update_event(request, model_name, key):
     if request.method == "PUT":
         req = QueryDict(request.body)
@@ -79,6 +80,7 @@ def update_event(request, model_name, key):
     query_set = model.objects.filter(location_id=key)
     query_set.update(**cd)
     return HttpResponse("Updated Event!")
+
 
 def form_updater(request, form_type):
     args = {}
@@ -96,43 +98,43 @@ def form_updater(request, form_type):
 
     t = Template('{% load bootstrap3 %}' +
                  '{% bootstrap_form ' + form_type + ' %}'
-                    +'<div class="form-group" style="display: block;">'
-                        +'<label class="control-label" for="id_description">How often will this Ride/Event occur?</label>'
-                        +'<div class="radio">'
-                            +'<label>'
-                                +'<input type="radio" name="event_Frequency" id="id_event_Frequency1" value="Every Week" checked>'
-                                +'Every Week'
-                            +'</label>'
-                        +'</div>'
-                        +'<div class="radio">'
-                            +'<label>'
-                                +'<input type="radio" name="event_Frequency" id="id_event_Frequency2" value="Every Other Week">'
-                                +'Every Other Week'
-                            +'</label>'
-                        +'</div>'
-                        +'<div class="radio">'
-                            +'<label>'
-                                +'<input type="radio" name="event_Frequency" id="id_event_Frequency3" value="Just Once for Now">'
-                                +'Just Once for Now'
-                            +'</label>'
-                        +'</div>'
-                    +'</div>'
-                    +'<div class="form-group" style="display: block;">'
-                        +'<label class="control-label" for="id_description">Allow Others to Edit this Event?</label>'
-                        +'<div class="radio">'
-                            +'<label>'
-                                +'<input type="radio" name="editable" id="id_editable_yes" value="Yes" checked>'
-                                +'Yes'
-                            +'</label>'
-                        +'</div>'
-                        +'<div class="radio">'
-                            +'<label>'
-                                +'<input type="radio" name="editable" id="id_editable_no" value="No">'
-                                +'No'
-                            +'</label>'
-                        +'</div>'
-                    +'</div>'
-                    +'<input type="submit" name="submit" id="nextSubmit" class="btn btn-default form-group btn-primary" value="Submit">')
+                 + '<div class="form-group" style="display: block;">'
+                 + '<label class="control-label" for="id_description">How often will this Ride/Event occur?</label>'
+                 + '<div class="radio">'
+                 + '<label>'
+                 + '<input type="radio" name="event_Frequency" id="id_event_Frequency1" value="Every Week" checked>'
+                 + 'Every Week'
+                 + '</label>'
+                 + '</div>'
+                 + '<div class="radio">'
+                 + '<label>'
+                 + '<input type="radio" name="event_Frequency" id="id_event_Frequency2" value="Every Other Week">'
+                 + 'Every Other Week'
+                 + '</label>'
+                 + '</div>'
+                 + '<div class="radio">'
+                 + '<label>'
+                 + '<input type="radio" name="event_Frequency" id="id_event_Frequency3" value="Just Once for Now">'
+                 + 'Just Once for Now'
+                 + '</label>'
+                 + '</div>'
+                 + '</div>'
+                 + '<div class="form-group" style="display: block;">'
+                 + '<label class="control-label" for="id_description">Allow Others to Edit this Event?</label>'
+                 + '<div class="radio">'
+                 + '<label>'
+                 + '<input type="radio" name="editable" id="id_editable_yes" value="Yes" checked>'
+                 + 'Yes'
+                 + '</label>'
+                 + '</div>'
+                 + '<div class="radio">'
+                 + '<label>'
+                 + '<input type="radio" name="editable" id="id_editable_no" value="No">'
+                 + 'No'
+                 + '</label>'
+                 + '</div>'
+                 + '</div>'
+                 + '<input type="submit" name="submit" id="nextSubmit" class="btn btn-default form-group btn-primary" value="Submit">')
     c = Context({str(form_type): args[str(form_type)]})
     html = t.render(c)
 
