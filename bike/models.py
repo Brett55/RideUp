@@ -63,6 +63,7 @@ class RideLocation(models.Model):
 class NonMembers(models.Model):
     name = models.CharField(max_length=50, blank=False, null=False)
 
+
 class RideUpEvent(models.Model):
     location = models.ForeignKey(RideLocation)
     riders = models.ManyToManyField(User)
