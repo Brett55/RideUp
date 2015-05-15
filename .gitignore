@@ -5,5 +5,5 @@ local_settings.py
 node_modules
 admin.json
 npm-debug.log
-
+settings.py
 
