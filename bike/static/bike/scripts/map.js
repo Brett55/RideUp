@@ -1,5 +1,5 @@
 //set map
-var map = L.map('map').setView([39.0407056, -76.8590506], 9);
+var map = L.map('map').setView([39.7677126,-104.974399], 9);
 
 var osmGeocoder = new L.Control.OSMGeocoder();
 

@@ -114,6 +114,3 @@ class BikeSwap(RideUpEvent):
 
 class Conference(RideUpEvent):
     objects = models.GeoManager()
-
-
-
