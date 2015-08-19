@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET")
+SECRET_KEY = 'fw)=z%4xxf(lz+5-ex2g=8&keh6(l%#zli&6jc0=q6is2zv%v4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -64,13 +64,13 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        "NAME": "bicycle_app",
-        'USER': os.environ.get("LOGIN"),
-        'PASSWORD': os.environ.get("PASS"),
-        "HOST": "localhost",
-        "PORT": "5432",
-    }
+         'ENGINE': 'django.contrib.gis.db.backends.postgis',
+         "NAME": "bicycle_app",
+         'USER': 'postgres',
+         'PASSWORD': 'abc123',
+         "HOST": "localhost",
+         "PORT": "5432",
+     }
 }
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -111,7 +111,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/home/ubuntu/django.log',
+            'filename': '/path/to/django/debug.log',
         },
     },
     'loggers': {
@@ -122,3 +122,4 @@ LOGGING = {
         },
     },
 }
+
