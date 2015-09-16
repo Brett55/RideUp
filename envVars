@@ -1,0 +1,5 @@
+export HOST="thedb.c2tobspkhwuk.us-east-1.rds.amazonaws.com"
+export USERNAME="brettster55"
+export PASSWORD="cullebj1"
+export DJANGO_SETTINGS_MODULE="mysite.settings"
+export SECRET="fw)\=z%4xxf(lz+5-ex2g\=8&keh6(l%#zli&6jc0\=q6is2zv%v4"
