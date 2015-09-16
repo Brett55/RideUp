@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ./envVars
+
 set -e
 
 LOGFILE=/hello.log
