@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'djgeojson',
-    'bike',
+    'RideUp.apps.bike',
     'leaflet',
     'bootstrap3',
     'rest_framework'
