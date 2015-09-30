@@ -16,12 +16,14 @@ SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+print BASE_DIR
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+
+SECRET_KEY = "fw)=z%4xxf(lz+5-ex2g=8&keh6(l%#zli&6jc0=q6is2zv%v4"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -102,7 +104,7 @@ STATIC_ROOT = os.getenv('STATIC_ROOT',
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, '../../static'),
+    os.path.join(BASE_DIR, 'static'),
 )
 
 # LOGGING = {
