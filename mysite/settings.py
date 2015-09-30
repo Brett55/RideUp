@@ -96,7 +96,8 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
 
-STATIC_ROOT = 'static'
+STATIC_ROOT = os.getenv('STATIC_ROOT',
+                        os.path.join(BASE_DIR, 'collected_static'))
 
 STATIC_URL = '/static/'
 
