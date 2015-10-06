@@ -26,7 +26,7 @@ print BASE_DIR
 SECRET_KEY = "fw)=z%4xxf(lz+5-ex2g=8&keh6(l%#zli&6jc0=q6is2zv%v4"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 TEMPLATE_DEBUG = True
 
