@@ -23,7 +23,7 @@ print BASE_DIR
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = "fw)=z%4xxf(lz+5-ex2g=8&keh6(l%#zli&6jc0=q6is2zv%v4"
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
