@@ -6,3 +6,5 @@ node_modules
 admin.json
 npm-debug.log
 envVars
+ansible_deploy
+
